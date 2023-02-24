@@ -29,7 +29,7 @@ app = FastAPI()
 chatbot = Chatbot(config={"email": email, "password": password})
 
 
-@app.post("/generate")
+@app.post("/chat")
 def read_root(prompt: Prompt):
     for data in chatbot.ask(prompt.text, prompt.conversation_id, prompt.parent_id):
         response = data
