@@ -13,8 +13,8 @@ export const Carousel = ({ labels, children }: Props) => {
   const childrenArray = Children.toArray(children);
   const [index, setIndex] = useState(0);
 
-  const isFirst = (i) => i === 0;
-  const isLast = (i) => i === childrenArray.length - 1;
+  const isFirst = (i: number) => i === 0;
+  const isLast = (i: number) => i === childrenArray.length - 1;
 
   const nextCard = () => {
     if (!isLast(index)) {
@@ -62,8 +62,6 @@ export const Carousel = ({ labels, children }: Props) => {
             </div>
             <span className={styles.dotLabel}>{label}</span>
           </div>
-
-          {}
         ))}
       </div>
     </div>
