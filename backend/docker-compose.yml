@@ -1,3 +1,4 @@
+version: '3.7'
 services:
   chatgpt_api:
     build: chatgpt_api/
