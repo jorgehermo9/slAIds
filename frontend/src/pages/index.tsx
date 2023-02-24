@@ -13,6 +13,9 @@ import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
 import DoneRoundedIcon from "@mui/icons-material/DoneRounded";
 import PresentationFile from "@/entities/PresentationFile";
 import { Preview } from "@/components/Preview/Preview";
+import { AnimatePresence } from "framer-motion";
+import Head from "next/head";
+import NotificationManager from "@/components/NotificationManager/NotificationManager";
 
 export default function Home() {
   const [slideRequest, setSlideRequest] = useState<SlideRequest>(
@@ -43,37 +46,48 @@ export default function Home() {
 
   return (
     <>
-      {isPreviewOpen && presentationFile && (
-        <Preview
-          presentationFile={presentationFile}
-          onClose={() => setIsPreviewOpen(false)}
-        />
-      )}
-      <div className={styles.externalContainer}>
-        <div className={styles.title}>
-          <span className={styles.bold}>Create</span>
-          <span className={styles.thin}>your</span>
-          <span className={styles.bold}>slides</span>
+      <Head>
+        <title>slAIds</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
+
+      <NotificationManager>
+        <AnimatePresence>
+          {isPreviewOpen && presentationFile && (
+            <Preview
+              presentationFile={presentationFile}
+              onClose={() => setIsPreviewOpen(false)}
+            />
+          )}
+        </AnimatePresence>
+        <div className={styles.externalContainer}>
+          <div className={styles.title}>
+            <span className={styles.bold}>Create</span>
+            <span className={styles.thin}>your</span>
+            <span className={styles.bold}>slides</span>
+          </div>
+          <Carousel properties={properties}>
+            <ResumeCard
+              slideRequest={slideRequest}
+              setSlideRequest={setSlideRequest}
+            />
+            <StyleCard
+              slideRequest={slideRequest}
+              setSlideRequest={setSlideRequest}
+            />
+            <OptionsCard
+              slideRequest={slideRequest}
+              setSlideRequest={setSlideRequest}
+            />
+            <GenerateCard
+              slideRequest={slideRequest}
+              setSlideRequest={setSlideRequest}
+              setPresentationFile={setPresentationFile}
+              setIsPreviewOpen={setIsPreviewOpen}
+            />
+          </Carousel>
         </div>
-        <Carousel properties={properties}>
-          <ResumeCard
-            slideRequest={slideRequest}
-            setSlideRequest={setSlideRequest}
-          />
-          <StyleCard
-            slideRequest={slideRequest}
-            setSlideRequest={setSlideRequest}
-          />
-          <OptionsCard
-            slideRequest={slideRequest}
-            setSlideRequest={setSlideRequest}
-          />
-          <GenerateCard
-            slideRequest={slideRequest}
-            setSlideRequest={setSlideRequest}
-          />
-        </Carousel>
-      </div>
+      </NotificationManager>
     </>
   );
 }

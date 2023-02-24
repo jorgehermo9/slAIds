@@ -11,7 +11,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 2rem;
+  gap: 5rem;
   height: 100%;
 }
 
@@ -32,6 +32,10 @@
 
   transition: all 0.2s;
 
+  > svg {
+    transition: all 0.3s;
+  }
+
   &[data-is-enabled="true"] {
     cursor: pointer;
 
@@ -46,16 +50,29 @@
 
   &[data-is-enabled="false"] {
     > svg {
-      color: var(--fg-subtle);
+      color: var(--bg-subtle);
     }
   }
 }
 
 .carouselCardContainer {
+  position: relative;
+  width: 35vw;
   height: 100%;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  border-radius: var(--border-radius);
+}
+
+.carouselCardWrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
   display: flex;
-  justify-content: center;
   align-items: center;
+  height: 100%;
+
+  transition: all 0.2s;
 }
 
 .carouselDot {
@@ -70,7 +87,6 @@
   &[data-is-active="true"] {
     > .dotCircle {
       border: 1px solid var(--blue);
-      // background-color: var(--cyan-subtle);
     }
     > .dotLabel {
       color: var(--fg);
@@ -96,6 +112,7 @@
   height: 2.8rem;
   border-radius: 50%;
   border: 1px solid #ffffff00;
+  background-color: var(--bg);
 
   transition: all 0.3s;
 

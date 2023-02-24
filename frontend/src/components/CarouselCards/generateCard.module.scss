@@ -1,6 +1,4 @@
 .resumeCard {
-  border-radius: var(--border-radius);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   height: 100%;
   width: 35vw;
   padding: 2rem;
@@ -18,7 +16,7 @@
   align-items: center;
   justify-content: center;
   gap: 1rem;
-  background-color: var(--blue); 
+  background-color: var(--blue);
   border-radius: var(--border-radius);
   width: 20rem;
   height: 5rem;
@@ -26,9 +24,9 @@
   padding: 15px 32px;
   transition: all 0.3s;
   cursor: pointer;
-  &:hover {
-    transform: scale(1.1);
-  }
+  // &:hover {
+  //   transform: scale(1.1);
+  // }
 }
 
 .icon {
