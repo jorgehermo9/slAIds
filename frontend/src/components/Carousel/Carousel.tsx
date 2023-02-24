@@ -13,17 +13,17 @@ export const Carousel = ({ labels, children }: Props) => {
   const childrenArray = Children.toArray(children);
   const [index, setIndex] = useState(0);
 
-  const isFirst = () => index === 0;
-  const isLast = () => index === childrenArray.length - 1;
+  const isFirst = (i) => i === 0;
+  const isLast = (i) => i === childrenArray.length - 1;
 
   const nextCard = () => {
-    if (!isLast()) {
+    if (!isLast(index)) {
       setIndex(index + 1);
     }
   };
 
   const prevCard = () => {
-    if (!isFirst()) {
+    if (!isFirst(index)) {
       setIndex(index - 1);
     }
   };
@@ -33,7 +33,7 @@ export const Carousel = ({ labels, children }: Props) => {
       <div className={styles.carouselContainer}>
         <div
           className={styles.arrowCircle}
-          data-is-enabled={!isFirst()}
+          data-is-enabled={!isFirst(index)}
           onClick={() => prevCard()}
         >
           <ArrowBckIcon />
@@ -43,7 +43,7 @@ export const Carousel = ({ labels, children }: Props) => {
         </div>
         <div
           className={styles.arrowCircle}
-          data-is-enabled={!isLast()}
+          data-is-enabled={!isLast(index)}
           onClick={() => nextCard()}
         >
           <ArrowFwdIcon />
@@ -62,6 +62,8 @@ export const Carousel = ({ labels, children }: Props) => {
             </div>
             <span className={styles.dotLabel}>{label}</span>
           </div>
+
+          {}
         ))}
       </div>
     </div>

@@ -12,9 +12,9 @@ export default function Home() {
   return (
     <div className={styles.center}>
       <div className={styles.title}>
-        <h1>Create</h1>
-        <h2>your</h2>
-        <h1>slides</h1>
+        <span className={styles.bold}>Create</span>
+        <span className={styles.thin}>your</span>
+        <span className={styles.bold}>slides</span>
       </div>
       <Carousel labels={["Resume", "Resume"]}>
         <ResumeCard
