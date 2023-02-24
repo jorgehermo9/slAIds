@@ -1,6 +1,6 @@
 services:
   chatgpt_api:
-    build: ../chatgpt/
+    build: chatgpt_api/
     image: slaids/chatgpt_api
     container_name: chatgpt_api
     environment:
