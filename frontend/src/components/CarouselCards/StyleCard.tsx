@@ -9,36 +9,45 @@ interface Props {
 export const StyleCard = ({ slideRequest, setSlideRequest }: Props) => {
   return (
     <div className={styles.resumeCard}>
-      <label htmlFor="titleInput" className={styles.title}>
-        Font family name
-      </label>
-      <input
-        value={slideRequest.fontFamily}
-        type="text"
-        id="titleInput"
-        className={`${styles.input} ${styles.marginBottom}`}
-        placeholder="FIC slides for 2023"
-        onChange={(e) => {
-          setSlideRequest({ ...slideRequest, fontFamily: e.target.value });
-        }}
-      />
-      <label htmlFor="primaryColor" className={styles.title}>
-        Color Palette
-      </label>
+      <div className={styles.formField}>
+        <label htmlFor="titleInput" className={styles.title}>
+          Font family name
+        </label>
+        <input
+          value={slideRequest.fontFamily}
+          type="text"
+          id="titleInput"
+          className={`${styles.input} ${styles.marginBottom}`}
+          placeholder="Poppins"
+          onChange={(e) => {
+            setSlideRequest({ ...slideRequest, fontFamily: e.target.value });
+          }}
+        />
+      </div>
 
-      <div className="colorSelector">
-        <label htmlFor="primaryColor" className={styles.title}>
-          Primary color
-        </label>
-        <input type="color" id="primaryColor" />
-        <label htmlFor="secondaryColor" className={styles.title}>
-          Secondary Color
-        </label>
-        <input type="color" id="secondaryColor" />
-        <label htmlFor="tertiaryColor" className={styles.title}>
-          Secondary Color
-        </label>
-        <input type="color" id="tertiaryColor" />
+      <label className={styles.title}>Color Palette</label>
+
+      <div className={styles.colorSelector}>
+        <div className={styles.colorInputContainer}>
+          <span className={styles.subTitle}>Primary color</span>
+          <input className={styles.colorInput} type="color" id="primaryColor" />
+        </div>
+        <div className={styles.colorInputContainer}>
+          <span className={styles.subTitle}>Secondary Color</span>
+          <input
+            className={styles.colorInput}
+            type="color"
+            id="secondaryColor"
+          />
+        </div>
+        <div className={styles.colorInputContainer}>
+          <span className={styles.subTitle}>Tertiary Color</span>
+          <input
+            className={styles.colorInput}
+            type="color"
+            id="tertiaryColor"
+          />
+        </div>
       </div>
     </div>
   );
