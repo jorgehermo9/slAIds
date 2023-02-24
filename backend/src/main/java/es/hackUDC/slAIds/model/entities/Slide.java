@@ -22,6 +22,12 @@ public class Slide {
 	
 	public Slide () {}
 
+	public Slide(String title, String text, int number) {
+		this.title = title;
+		this.text = text;
+		this.number = number;
+	}
+	
 	public Slide(Long id, String title, String text, int number) {
 		this.id = id;
 		this.title = title;

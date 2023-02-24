@@ -22,7 +22,7 @@ public class GenerationService {
 	@Autowired
 	private ChatService chatService;
 
-	public Index generateIndex(String indexPrompt, int numSlides) {
+	public PromptResponse<Index> generateIndex(String indexPrompt, int numSlides) {
 		
 		String requestIndexPrompt = "Genera un indice para una presentación sobre " 
 							+ indexPrompt 
@@ -32,42 +32,51 @@ public class GenerationService {
 		
 		Optional<PromptResponse<Index>> optIndex = chatService.execute(requestIndexPrompt, Index.class);
 		
-		Index index = optIndex.get().response();
+		PromptResponse<Index> index = optIndex.get();
 		
 		return index;
 		
 	}
 	
-	public Slide generateSlide(String slideTitle, String slidePrompt, int numSlide) {
+	public PromptResponse<SlideText> generateSlideText(String slideTitle, String slidePrompt, String conversationId, String parentId ) {
 		
 		String requestSlidePrompt = "Genera un parrafo informativo, de entre 50 y 60 palabras,"
 				+ " de título " + slideTitle + " a cerca de " + slidePrompt + ".";
-		
-		
-		Slide slide = new Slide();
-		
-		slide.setNumber(numSlide);
-		slide.setTitle(slideTitle);
-		slide.setText(chatService.execute(requestSlidePrompt, SlideText.class).get().response().getText());
-		
-		return slide;
+				
+		return (chatService.executeWithConversation(requestSlidePrompt,  SlideText.class, conversationId, parentId).get());
 				
 	}
 	
 	public Presentation generatePresentation(String presentationTitle, String presentationPrompt, int numSlides) {
 		
 		Presentation presentation = new Presentation();
+		String parentId;
+		String conversationId ;
 		
 		presentation.setTitle(presentationTitle);
 		presentation.setDescriptionPrompt(presentationPrompt);
-		presentation.setIndex(generateIndex(presentationPrompt, numSlides));
+		
+		PromptResponse<Index> responseIndex = generateIndex(presentationPrompt, numSlides);
+		
+		presentation.setIndex(responseIndex.response());
+		parentId = responseIndex.parentId();
+		conversationId = responseIndex.conversationId();
 		
 		List<Slide> slides = new ArrayList<Slide>();
+		PromptResponse<SlideText> responseSlideText;
 		
-		for(int i = 0; i<=numSlides; i++) {
-			slides.add(generateSlide(presentation.getIndex().getSlideTitles().get(i),
-									presentation.getIndex().getSlideDescriptions().get(i),
-									i));
+		for(int i = 0; i<numSlides; i++) {
+			
+			String slideTitle = presentation.getIndex().getSlideTitles().get(i);
+			String slideDescription = presentation.getIndex().getSlideDescriptions().get(i);
+			
+			responseSlideText = generateSlideText(slideTitle, slideDescription, conversationId, parentId);
+			slides.add(new Slide(presentation.getIndex().getSlideTitles().get(i), 
+					presentation.getIndex().getSlideDescriptions().get(i),
+					(i+1)));
+			
+			parentId = responseSlideText.parentId();
+			conversationId = responseSlideText.conversationId();
 		}
 		
 		presentation.setSlides(slides);
