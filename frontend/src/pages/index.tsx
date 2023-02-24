@@ -1,11 +1,16 @@
 import { Carousel } from "@/components/Carousel/Carousel";
 import { ResumeCard } from "@/components/CarouselCards/ResumeCard";
 import { StyleCard } from "@/components/CarouselCards/StyleCard";
+import { OptionsCard } from "@/components/CarouselCards/OptionsCard";
+import { GenerateCard } from "@/components/CarouselCards/GenerateCard";
+
 import SlideRequest, { getDefaultSlideRequest } from "@/entities/SlideRequest";
 import { useState } from "react";
 import styles from "./styles/home.module.scss";
 import NotesIcon from "@mui/icons-material/Notes";
 import ColorLensIcon from "@mui/icons-material/ColorLens";
+import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
+import DoneRoundedIcon from "@mui/icons-material/DoneRounded";
 import PresentationFile from "@/entities/PresentationFile";
 import { Preview } from "@/components/Preview/Preview";
 
@@ -13,7 +18,7 @@ export default function Home() {
   const [slideRequest, setSlideRequest] = useState<SlideRequest>(
     getDefaultSlideRequest()
   );
-  const [isPreviewOpen, setIsPreviewOpen] = useState(true);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [presentationFile, setPresentationFile] =
     useState<PresentationFile | null>(new Blob());
 
@@ -25,6 +30,14 @@ export default function Home() {
     {
       label: "Style",
       icon: <ColorLensIcon />,
+    },
+    {
+      label: "Options",
+      icon: <SettingsRoundedIcon />,
+    },
+    {
+      label: "Generate",
+      icon: <DoneRoundedIcon />,
     },
   ];
 
@@ -48,6 +61,14 @@ export default function Home() {
             setSlideRequest={setSlideRequest}
           />
           <StyleCard
+            slideRequest={slideRequest}
+            setSlideRequest={setSlideRequest}
+          />
+          <OptionsCard
+            slideRequest={slideRequest}
+            setSlideRequest={setSlideRequest}
+          />
+          <GenerateCard
             slideRequest={slideRequest}
             setSlideRequest={setSlideRequest}
           />

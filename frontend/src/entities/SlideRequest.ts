@@ -8,6 +8,7 @@ export const SlideRequestSchema = z
     primaryColor: z.string(),
     secondaryColor: z.string().nullable(),
     tertiaryColor: z.string().nullable(),
+    maxSlides: z.number().nullable(),
   })
   .strict();
 
@@ -22,5 +23,6 @@ export const getDefaultSlideRequest = (): SlideRequest => {
     primaryColor: "",
     secondaryColor: null,
     tertiaryColor: null,
+    maxSlides: null
   };
 };
