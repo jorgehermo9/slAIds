@@ -4,6 +4,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import es.hackUDC.slAIds.model.services.ChatService;
+
 @RestController
 @RequestMapping("/chat")
 public class ChatController {
@@ -11,6 +13,6 @@ public class ChatController {
     @GetMapping("/prompt")
     public String prompt() {
 
-        return "Hello World!";
+        return ChatService.execute()
     }
 }

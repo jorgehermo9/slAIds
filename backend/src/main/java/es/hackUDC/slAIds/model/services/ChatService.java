@@ -7,6 +7,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class ChatService {
     private final String ChatAPIURL = "localhost:8000";
 
+    public static String execute() {
+        PromptRequest request = new PromptRequest("text", "conversationId", "parentId");
+        PromptResponse response = request.executeRequest();
+        return response.response();
+    }
 }
 
 record PromptRequest(
@@ -15,6 +20,8 @@ record PromptRequest(
         @JsonProperty("parent_id") String parentId) {
 
     private String httpRequest(String json) {
+
+        return "hello"
         // Send request to ChatAPIURL, to the endpoint /chat
     }
 
