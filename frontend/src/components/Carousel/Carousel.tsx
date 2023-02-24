@@ -10,21 +10,11 @@ interface Props {
 }
 
 export const Carousel = ({ labels, children }: Props) => {
+  const childrenArray = Children.toArray(children);
   const [index, setIndex] = useState(0);
-  const [slideRequest, setSlideRequest] = useState<SlideRequest>(
-    getDefaultSlideRequest()
-  );
-
-  const childrenWithProps =
-    Children.map(children, (child) => {
-      if (isValidElement(child)) {
-        return cloneElement(child, { setSlideRequest });
-      }
-      return child;
-    }) ?? [];
 
   const isFirst = () => index === 0;
-  const isLast = () => index === childrenWithProps.length - 1;
+  const isLast = () => index === childrenArray.length - 1;
 
   const nextCard = () => {
     if (!isLast()) {
@@ -49,7 +39,7 @@ export const Carousel = ({ labels, children }: Props) => {
           <ArrowBckIcon />
         </div>
         <div className={styles.carouselCardContainer}>
-          {childrenWithProps[index]}
+          {childrenArray[index]}
         </div>
         <div
           className={styles.arrowCircle}

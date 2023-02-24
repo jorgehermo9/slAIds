@@ -1,6 +1,12 @@
+import SlideRequest from "@/entities/SlideRequest";
 import styles from "./carouselCard.module.scss";
 
-export const ResumeCard = () => {
+interface Props {
+  slideRequest: SlideRequest;
+  setSlideRequest: (slideRequest: SlideRequest) => void;
+}
+
+export const ResumeCard = ({ slideRequest, setSlideRequest }: Props) => {
   return (
     <div className={styles.resumeCard}>
       <label htmlFor="titleInput" className={styles.title}>
