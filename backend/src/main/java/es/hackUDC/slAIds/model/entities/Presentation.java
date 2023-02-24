@@ -11,7 +11,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 
-
+@Entity
 public class Presentation {
 
 	@Id
@@ -48,5 +48,30 @@ public class Presentation {
 	public void setDescriptionPrompt(String descriptionPrompt) {
 		this.descriptionPrompt = descriptionPrompt;
 	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Index getIndex() {
+		return index;
+	}
+
+	public void setIndex(Index index) {
+		this.index = index;
+	}
+
+	public List<Slide> getSlides() {
+		return slides;
+	}
+
+	public void setSlides(List<Slide> slides) {
+		this.slides = slides;
+	}
+	
 
 }

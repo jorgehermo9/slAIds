@@ -14,14 +14,12 @@ public class Index {
 
 	private List<String> slideTitle;
 	private List<String> slideDescription;
-	private Presentation presentation;
 	
 	
-	public Index(List<String> slideTitle, List<String> slideDescription, Presentation presentation) {
+	public Index(List<String> slideTitle, List<String> slideDescription) {
 
 		this.slideTitle = slideTitle;
 		this.slideDescription = slideDescription;
-		this.presentation = presentation;
 	}
 
 
@@ -41,12 +39,5 @@ public class Index {
 		this.slideDescription = slideDescription;
 	}
 
-	public Presentation getPresentation() {
-		return presentation;
-	}
-
-	public void setPresentation(Presentation presentation) {
-		this.presentation = presentation;
-	}
 	
 }

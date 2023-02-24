@@ -7,13 +7,17 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 
+@Entity
 public class Slide {
 
 	@Id
-	@
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
+	
 	private String title;
+	
 	private String text;
+	
 	private int number;
 	
 
