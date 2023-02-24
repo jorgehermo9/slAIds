@@ -29,8 +29,8 @@ record PromptRequest<T>(String promptText, Class<T> target_class, String convers
         this.parentId = parentId;
     }
 
-    private static <T> String generateJsonPromptText(Class<T> target_class) {
-        Field[] fields = target_class.getDeclaredFields();
+    private static <T> String generateJsonPromptText(Class<T> targetClass) {
+        Field[] fields = targetClass.getDeclaredFields();
         String basePrompt = "Your response should be only in JSON format and should have the following keys " +
                 fields.length + " : ";
 
@@ -75,10 +75,10 @@ record PromptRequest<T>(String promptText, Class<T> target_class, String convers
                 .POST(HttpRequest.BodyPublishers.ofString(json))
                 .build();
         HttpResponse<String> response = client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-        
+
         System.out.println(json);
         System.out.println(response.body());
-        
+
         PromptResponseDto responseDto = mapper.readValue(response.body(), PromptResponseDto.class);
         return PromptResponse.parse(responseDto, response.body(), request.target_class);
     }

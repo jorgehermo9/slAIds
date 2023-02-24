@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public record PromptResponse<T>(
         T response,
-        String response_raw_text,
+        String responseRawText,
         String conversationId, String parentId) {
 
     record PromptResponseDto(String response, @JsonProperty("conversation_id") String conversationId,
@@ -15,12 +15,12 @@ public record PromptResponse<T>(
 
     }
 
-    public static <T> Optional<PromptResponse<T>> parse(PromptResponseDto dto, String json_raw_text,
-            Class<T> target_class) {
+    public static <T> Optional<PromptResponse<T>> parse(PromptResponseDto dto, String jsonRawText,
+            Class<T> targetClass) {
         ObjectMapper mapper = new ObjectMapper();
         try {
-            T response = mapper.readValue(dto.response(), target_class);
-            PromptResponse<T> promptResponse = new PromptResponse<T>(response, json_raw_text, dto.conversationId(),
+            T response = mapper.readValue(dto.response(), targetClass);
+            PromptResponse<T> promptResponse = new PromptResponse<T>(response, jsonRawText, dto.conversationId(),
                     dto.parentId());
             return Optional.of(promptResponse);
         } catch (Exception e) {
