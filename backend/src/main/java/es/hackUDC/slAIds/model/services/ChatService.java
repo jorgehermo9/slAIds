@@ -7,6 +7,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ch.qos.logback.core.net.server.Client;
 
@@ -27,7 +28,7 @@ record PromptRequest(
 
     private static final String ChatAPIURL = null;
 
-    private String httpRequest(String json) throws IOException, InterruptedException {
+    private static String httpRequest(String json) throws IOException, InterruptedException {
         // Send request to ChatAPIURL, to the endpoint /chat, with the json string as
         // body
 
@@ -46,8 +47,16 @@ record PromptRequest(
     }
 
     public PromptResponse executeRequest() {
-
-        return new PromptResponse("response", "conversationId", "parentId");
+        PromptResponse response = null;
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            String json = mapper.writeValueAsString(this);
+            String responseJson = PromptRequest.httpRequest(json);
+            response = mapper.readValue(responseJson, PromptResponse.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return response;
     }
 }
 
