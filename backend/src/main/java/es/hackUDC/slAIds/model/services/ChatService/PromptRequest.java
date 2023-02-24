@@ -31,8 +31,8 @@ record PromptRequest<T>(String promptText, Class<T> targetClass, String conversa
 
     private static <T> String generateJsonPromptText(Class<T> targetClass) {
         Field[] fields = targetClass.getDeclaredFields();
-        String basePrompt = "Your response should be only in JSON format and should have the following keys " +
-                fields.length + " : ";
+        String basePrompt = "Your response should be only in JSON format and should have the following " +
+                fields.length + " key(s): ";
 
         String fieldsPrompt = "";
         if (fields.length > 0) {
