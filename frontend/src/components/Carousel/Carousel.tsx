@@ -53,9 +53,8 @@ export const Carousel = ({ properties, children }: Props) => {
       </div>
       <div className={styles.carouselDotsContainer}>
         {properties.map(({ label, icon }, i) => (
-          <>
+          <div key={i}>
             <div
-              key={i}
               data-is-active={i === index}
               className={styles.carouselDot}
               onClick={() => setIndex(i)}
@@ -65,7 +64,7 @@ export const Carousel = ({ properties, children }: Props) => {
             </div>
 
             {!isLast(i) && <div className={styles.dotSeparator} />}
-          </>
+          </div>
         ))}
       </div>
     </div>
