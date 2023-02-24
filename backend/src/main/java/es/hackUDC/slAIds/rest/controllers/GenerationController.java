@@ -8,20 +8,24 @@ import org.springframework.web.bind.annotation.RestController;
 
 import es.hackUDC.slAIds.model.entities.Presentation;
 import es.hackUDC.slAIds.model.services.GenerationService;
+import es.hackUDC.slAIds.rest.dtos.generationRequestDto;
 
 @RestController
 @RequestMapping("/generate")
 public class GenerationController {
-	
-	@Autowired
-	private GenerationService generationService;
-	
-	@PostMapping("")
-	public Presentation generatePresentation(@RequestBody es.hackUDC.slAIds.rest.dtos.generationRequestDto generationRequestDto) {
-		
-		return(generationService.generatePresentation( generationRequestDto.title(), generationRequestDto.prompt(), generationRequestDto.numSlides()));
-			
-	}
-	
+
+    @Autowired
+    private GenerationService generationService;
+
+    @PostMapping("")
+    public Presentation generatePresentation(
+            @RequestBody generationRequestDto generationRequestDto) {
+
+        Presentation presentation = generationService.generatePresentation(generationRequestDto.title(),
+                generationRequestDto.prompt(),
+                generationRequestDto.numSlides());
+        return presentation;
+
+    }
 
 }
