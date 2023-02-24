@@ -2,8 +2,13 @@
   border-radius: var(--border-radius);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   height: 100%;
-  width: 80%;
+  width: 100%;
   padding: 2rem;
+  background-color: var(--bg);
+}
+
+.inputField {
+  margin: 3rem;
 }
 
 .title {
@@ -11,15 +16,29 @@
   color: var(--fg);
 }
 
-.input {
+.titleInput {
   width: 100%;
-  padding: 12px 20px;
+  padding: 1rem 1rem;
   display: inline-block;
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
 }
 
-.input:focus {
+.textArea {
+  width: 100%;
+  height: 70%;
+  padding: 1rem 1rem;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.input:focus, .textArea:focus {
   border: 1px solid var(--blue);
+}
+
+.marginBottom {
+  margin-bottom: 1rem;
 }

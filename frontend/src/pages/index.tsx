@@ -1,5 +1,6 @@
 import { Carousel } from "@/components/Carousel/Carousel";
 import { ResumeCard } from "@/components/CarouselCards/ResumeCard";
+import { StyleCard } from "@/components/CarouselCards/StyleCard";
 import SlideRequest, { getDefaultSlideRequest } from "@/entities/SlideRequest";
 import { useState } from "react";
 import styles from "./styles/home.module.scss";
@@ -21,10 +22,7 @@ export default function Home() {
           slideRequest={slideRequest}
           setSlideRequest={setSlideRequest}
         />
-        <ResumeCard
-          slideRequest={slideRequest}
-          setSlideRequest={setSlideRequest}
-        />
+        <StyleCard />
       </Carousel>
     </div>
   );
