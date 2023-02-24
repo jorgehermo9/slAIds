@@ -14,17 +14,17 @@ import es.hackUDC.slAIds.model.services.ChatService.PromptResponse.PromptRespons
 
 import java.util.Optional;
 
-record PromptRequest<T>(String promptText, Class<T> target_class, String conversationId,
+record PromptRequest<T>(String promptText, Class<T> targetClass, String conversationId,
         String parentId) {
 
-    public PromptRequest(String promptText, Class<T> target_class) {
-        this(promptText, target_class, null, null);
+    public PromptRequest(String promptText, Class<T> targetClass) {
+        this(promptText, targetClass, null, null);
     }
 
-    public PromptRequest(String promptText, Class<T> target_class, String conversationId, String parentId) {
-        String finalPromptText = promptText + "\n" + generateJsonPromptText(target_class);
+    public PromptRequest(String promptText, Class<T> targetClass, String conversationId, String parentId) {
+        String finalPromptText = promptText + "\n" + generateJsonPromptText(targetClass);
         this.promptText = finalPromptText;
-        this.target_class = target_class;
+        this.targetClass = targetClass;
         this.conversationId = conversationId;
         this.parentId = parentId;
     }
@@ -80,7 +80,7 @@ record PromptRequest<T>(String promptText, Class<T> target_class, String convers
         System.out.println(response.body());
 
         PromptResponseDto responseDto = mapper.readValue(response.body(), PromptResponseDto.class);
-        return PromptResponse.parse(responseDto, response.body(), request.target_class);
+        return PromptResponse.parse(responseDto, response.body(), request.targetClass);
     }
 
     public Optional<PromptResponse<T>> execute() {
