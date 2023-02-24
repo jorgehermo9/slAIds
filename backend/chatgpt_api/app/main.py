@@ -30,7 +30,10 @@ chatbot = Chatbot(config={"email": email, "password": password})
 
 
 @app.post("/chat")
-def read_root(prompt: Prompt):
+def conversation(prompt: Prompt):
+    if prompt.conversation_id is None:
+        chatbot.clear_conversations()
+        
     for data in chatbot.ask(prompt.text, prompt.conversation_id, prompt.parent_id):
         response = data
 
@@ -41,3 +44,5 @@ def read_root(prompt: Prompt):
         response=text_response, conversation_id=conversation_id, parent_id=parent_id
     )
     return chat_response
+
+@app.post()

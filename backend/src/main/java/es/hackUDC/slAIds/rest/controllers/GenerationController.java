@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import es.hackUDC.slAIds.model.entities.Presentation;
+import es.hackUDC.slAIds.model.services.BuildPptService;
 import es.hackUDC.slAIds.model.services.GenerationService;
 import es.hackUDC.slAIds.rest.dtos.generationRequestDto;
 
@@ -17,6 +18,9 @@ public class GenerationController {
     @Autowired
     private GenerationService generationService;
 
+    @Autowired
+    private BuildPptService buildPptService;
+
     @PostMapping("")
     public Presentation generatePresentation(
             @RequestBody generationRequestDto generationRequestDto) {
@@ -24,9 +28,10 @@ public class GenerationController {
         Presentation presentation = generationService.generatePresentation(generationRequestDto.title(),
                 generationRequestDto.prompt(),
                 generationRequestDto.numSlides());
+        buildPptService.buildPpt(presentation);
+
         return presentation;
 
     }
-
 
 }
