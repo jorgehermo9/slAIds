@@ -8,6 +8,11 @@ body {
   background-color: var(--bg);
 }
 
+#__next {
+  min-height: 100vh;
+  width: 100%;
+}
+
 input {
   display: block;
   outline: none;
@@ -57,4 +62,16 @@ input::-webkit-inner-spin-button {
 
 input[type="number"] {
   -moz-appearance: textfield;
+}
+
+textarea {
+  border: none;
+  overflow: auto;
+  outline: none;
+
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+
+  resize: none; /*remove the resize handle on the bottom right*/
 }

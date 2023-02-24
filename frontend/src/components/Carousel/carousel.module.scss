@@ -1,0 +1,110 @@
+.externalContainer {
+  width: 60%;
+  height: 50vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0 auto;
+  gap: 2rem;
+}
+
+.carouselContainer {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.carouselDotsContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5rem;
+}
+
+.arrowCircle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+
+  transition: all 0.2s;
+
+  &[data-is-enabled="true"] {
+    cursor: pointer;
+
+    > svg {
+      color: var(--fg);
+    }
+
+    &:hover {
+      background-color: var(--bg-subtle);
+    }
+  }
+
+  &[data-is-enabled="false"] {
+    > svg {
+      color: var(--fg-subtle);
+    }
+  }
+}
+
+.carouselCardContainer {
+  width: 40%;
+}
+
+.carouselDot {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+  user-select: none;
+
+  &[data-is-active="true"] {
+    > .dotCircle {
+      border: 1px solid var(--fg);
+      // background-color: var(--cyan-subtle);
+    }
+    > .dotLabel {
+      color: var(--fg);
+    }
+  }
+
+  &:hover {
+    > .dotCircle {
+      border: 1px solid var(--fg);
+    }
+    > .dotLabel {
+      color: var(--fg);
+    }
+  }
+}
+
+.dotCircle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  border: 1px solid #ffffff00;
+
+  transition: all 0.3s;
+}
+
+.dotNumber {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--fg);
+  transition: all 0.3s;
+}
+
+.dotLabel {
+  color: var(--fg-subtle);
+  transition: all 0.3s;
+}
