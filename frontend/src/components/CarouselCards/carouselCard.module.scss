@@ -1,0 +1,25 @@
+.resumeCard {
+  border-radius: var(--border-radius);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  height: 40rem;
+  width: 500px;
+  padding: 2rem;
+}
+
+.title {
+  font-size: 2rem;
+  color: var(--fg);
+}
+
+.input {
+  width: 100%;
+  padding: 12px 20px;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.input:focus {
+  border: 1px solid var(--blue);
+}
