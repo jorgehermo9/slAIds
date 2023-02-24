@@ -19,69 +19,69 @@ import es.hackUDC.slAIds.model.services.transferObjects.SlideText;
 @Transactional
 public class GenerationService {
 
-	@Autowired
-	private ChatService chatService;
+    @Autowired
+    private ChatService chatService;
 
-	public PromptResponse<Index> generateIndex(String indexPrompt, int numSlides) {
-		
-		String requestIndexPrompt = "Genera un indice para una presentación sobre " 
-							+ indexPrompt 
-							+ " de longitud " 
-							+ numSlides 
-							+ " paginas.";
-		
-		Optional<PromptResponse<Index>> optIndex = chatService.execute(requestIndexPrompt, Index.class);
-		
-		PromptResponse<Index> index = optIndex.get();
-		
-		return index;
-		
-	}
-	
-	public PromptResponse<SlideText> generateSlideText(String slideTitle, String slidePrompt, String conversationId, String parentId ) {
-		
-		String requestSlidePrompt = "Genera un parrafo informativo, de entre 50 y 60 palabras,"
-				+ " de título " + slideTitle + " a cerca de " + slidePrompt + ".";
-				
-		return (chatService.executeWithConversation(requestSlidePrompt,  SlideText.class, conversationId, parentId).get());
-				
-	}
-	
-	public Presentation generatePresentation(String presentationTitle, String presentationPrompt, int numSlides) {
-		
-		Presentation presentation = new Presentation();
-		String parentId;
-		String conversationId ;
-		
-		presentation.setTitle(presentationTitle);
-		presentation.setDescriptionPrompt(presentationPrompt);
-		
-		PromptResponse<Index> responseIndex = generateIndex(presentationPrompt, numSlides);
-		
-		presentation.setIndex(responseIndex.response());
-		parentId = responseIndex.parentId();
-		conversationId = responseIndex.conversationId();
-		
-		List<Slide> slides = new ArrayList<Slide>();
-		PromptResponse<SlideText> responseSlideText;
-		
-		for(int i = 0; i<numSlides; i++) {
-			
-			String slideTitle = presentation.getIndex().getSlideTitles().get(i);
-			String slideDescription = presentation.getIndex().getSlideDescriptions().get(i);
-			
-			responseSlideText = generateSlideText(slideTitle, slideDescription, conversationId, parentId);
-			slides.add(new Slide(slideTitle, responseSlideText.response().getText(),(i+1)));
-			
-			parentId = responseSlideText.parentId();
-			conversationId = responseSlideText.conversationId();
-		}
-		
-		presentation.setSlides(slides);
-		
-		return presentation;		
-	}
-	
-	
-	
+    public PromptResponse<Index> generateIndex(String indexPrompt, int numSlides) {
+
+        String requestIndexPrompt = "Genera un indice para una presentación sobre "
+                + indexPrompt
+                + " de longitud "
+                + numSlides
+                + " paginas.";
+
+        Optional<PromptResponse<Index>> optIndex = chatService.execute(requestIndexPrompt, Index.class);
+
+        PromptResponse<Index> index = optIndex.get();
+
+        return index;
+
+    }
+
+    public PromptResponse<SlideText> generateSlideText(String slideTitle, String slidePrompt, String conversationId,
+            String parentId) {
+
+        String requestSlidePrompt = "Genera un parrafo informativo, de entre 50 y 60 palabras,"
+                + " de título " + slideTitle + " a cerca de " + slidePrompt + ".";
+
+        return (chatService.executeWithConversation(requestSlidePrompt, SlideText.class, conversationId, parentId)
+                .get());
+
+    }
+
+    public Presentation generatePresentation(String presentationTitle, String presentationPrompt, int numSlides) {
+
+        Presentation presentation = new Presentation();
+        String parentId;
+        String conversationId;
+
+        presentation.setTitle(presentationTitle);
+        presentation.setDescriptionPrompt(presentationPrompt);
+
+        PromptResponse<Index> responseIndex = generateIndex(presentationPrompt, numSlides);
+
+        presentation.setIndex(responseIndex.response());
+        parentId = responseIndex.parentId();
+        conversationId = responseIndex.conversationId();
+
+        List<Slide> slides = new ArrayList<Slide>();
+        PromptResponse<SlideText> responseSlideText;
+
+        for (int i = 0; i < numSlides; i++) {
+
+            String slideTitle = presentation.getIndex().getSlideTitles().get(i);
+            String slideDescription = presentation.getIndex().getSlideDescriptions().get(i);
+
+            responseSlideText = generateSlideText(slideTitle, slideDescription, conversationId, parentId);
+            slides.add(new Slide(slideTitle, responseSlideText.response().getText(), (i + 1)));
+
+            parentId = responseSlideText.parentId();
+            conversationId = responseSlideText.conversationId();
+        }
+
+        presentation.setSlides(slides);
+
+        return presentation;
+    }
+
 }
