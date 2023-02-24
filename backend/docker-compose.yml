@@ -11,9 +11,11 @@ services:
       - 8000:80
 
   postgres:
-    image: postgres
+    image: postgres:12.2
     container_name: postgres
     environment:
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: slaids
     ports:
       - 5432:5432
