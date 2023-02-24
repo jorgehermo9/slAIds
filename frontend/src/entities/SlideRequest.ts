@@ -4,6 +4,7 @@ export const SlideRequestSchema = z
   .object({
     title: z.string(),
     description: z.string(),
+    fontFamily: z.string(),
     primaryColor: z.string(),
     secondaryColor: z.string().nullable(),
     tertiaryColor: z.string().nullable(),
@@ -17,6 +18,7 @@ export const getDefaultSlideRequest = (): SlideRequest => {
   return {
     title: "",
     description: "",
+    fontFamily: "",
     primaryColor: "",
     secondaryColor: null,
     tertiaryColor: null,

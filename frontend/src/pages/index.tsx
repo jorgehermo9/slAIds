@@ -17,12 +17,15 @@ export default function Home() {
         <span className={styles.thin}>your</span>
         <span className={styles.bold}>slides</span>
       </div>
-      <Carousel labels={["Resume", "Resume"]}>
+      <Carousel labels={["Resume", "Style"]}>
         <ResumeCard
           slideRequest={slideRequest}
           setSlideRequest={setSlideRequest}
         />
-        <StyleCard />
+        <StyleCard
+          slideRequest={slideRequest}
+          setSlideRequest={setSlideRequest}
+        />
       </Carousel>
     </div>
   );
