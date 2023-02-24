@@ -13,6 +13,7 @@ import es.hackUDC.slAIds.model.entities.Presentation;
 import es.hackUDC.slAIds.model.entities.Slide;
 import es.hackUDC.slAIds.model.services.ChatService.ChatService;
 import es.hackUDC.slAIds.model.services.ChatService.PromptResponse;
+import es.hackUDC.slAIds.model.services.transferObjects.IndexTransfer;
 import es.hackUDC.slAIds.model.services.transferObjects.SlideText;
 
 @Service
@@ -22,7 +23,7 @@ public class GenerationService {
     @Autowired
     private ChatService chatService;
 
-    public PromptResponse<Index> generateIndex(String indexPrompt, int numSlides) {
+    public PromptResponse<IndexTransfer> generateIndex(String indexPrompt, int numSlides) {
 
         String requestIndexPrompt = "Genera un indice para una presentación sobre "
                 + indexPrompt
@@ -30,9 +31,9 @@ public class GenerationService {
                 + numSlides
                 + " paginas.";
 
-        Optional<PromptResponse<Index>> optIndex = chatService.execute(requestIndexPrompt, Index.class);
+        Optional<PromptResponse<IndexTransfer>> optIndex = chatService.execute(requestIndexPrompt, IndexTransfer.class);
 
-        PromptResponse<Index> index = optIndex.get();
+        PromptResponse<IndexTransfer> index = optIndex.get();
 
         return index;
 
@@ -58,9 +59,9 @@ public class GenerationService {
         presentation.setTitle(presentationTitle);
         presentation.setDescriptionPrompt(presentationPrompt);
 
-        PromptResponse<Index> responseIndex = generateIndex(presentationPrompt, numSlides);
+        PromptResponse<IndexTransfer> responseIndex = generateIndex(presentationPrompt, numSlides);
 
-        presentation.setIndex(responseIndex.response());
+        presentation.setIndex(new Index(responseIndex.response().getSlideTitles(),responseIndex.response().getSlideDescriptions()));
         parentId = responseIndex.parentId();
         conversationId = responseIndex.conversationId();
 

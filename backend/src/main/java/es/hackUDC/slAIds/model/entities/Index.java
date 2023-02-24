@@ -12,6 +12,9 @@ import jakarta.persistence.OneToOne;
 @Entity
 public class Index {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
 	private List<String> slideTitles;
 	private List<String> slideDescriptions;
 	
