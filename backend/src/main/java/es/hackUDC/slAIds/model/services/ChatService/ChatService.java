@@ -13,8 +13,8 @@ public class ChatService {
         return request.execute();
     }
 
-    public <T> Optional<PromptResponse<T>> execute_with_conversation(String prompt, Class<T> target_class,
-            PromptResponse<T> previous_response) {
+    public <T, U> Optional<PromptResponse<T>> execute_with_conversation(String prompt, Class<T> target_class,
+            PromptResponse<U> previous_response) {
 
         PromptRequest<T> request = new PromptRequest<T>(prompt, target_class, previous_response.conversationId(),
                 previous_response.parentId());
