@@ -1,4 +1,5 @@
 .overlay {
+  z-index: 10;
   position: absolute;
   top: 0;
   left: 0;
@@ -12,6 +13,8 @@
 
 .modal {
   position: relative;
+  display: flex;
+  flex-direction: column;
   width: 95%;
   height: 92%;
   border-radius: var(--border-radius);
@@ -25,11 +28,71 @@
 }
 
 .viewContainer {
+  max-height: 100%;
   display: flex;
   width: 100%;
   gap: 5rem;
+  overflow: hidden;
 }
 
 .previewSlidesContainer {
-  width: 20%;
+  padding: 0 2rem;
+  max-height: 100%;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.smallPreviewSlide {
+  cursor: pointer;
+  border-radius: var(--border-radius);
+  width: min-content;
+
+  canvas {
+    border-radius: var(--border-radius) !important;
+  }
+
+  &[data-is-selected="true"] {
+    border: 2px solid var(--blue);
+  }
+
+  &[data-is-selected="false"] {
+    border: 2px solid #ffffff00;
+  }
+
+  transition: all 0.2s;
+}
+
+.bigPreviewContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bigPreviewSlide {
+  canvas {
+    border-radius: var(--border-radius) !important;
+  }
+}
+
+.closeButton {
+  width: 2.5rem;
+  height: 2.5rem;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 50%;
+  cursor: pointer;
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: var(--bg-subtle);
+  }
 }

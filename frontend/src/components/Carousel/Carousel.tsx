@@ -41,7 +41,12 @@ export const Carousel = ({ properties, children }: Props) => {
           <ArrowBckIcon />
         </div>
         <div className={styles.carouselCardContainer}>
-          {childrenArray[index]}
+          <div
+            className={styles.carouselCardWrapper}
+            style={{ left: `-${index * 100}%` }}
+          >
+            {children}
+          </div>
         </div>
         <div
           className={styles.arrowCircle}
@@ -53,8 +58,9 @@ export const Carousel = ({ properties, children }: Props) => {
       </div>
       <div className={styles.carouselDotsContainer}>
         {properties.map(({ label, icon }, i) => (
-          <div key={i}>
+          <>
             <div
+              key={i}
               data-is-active={i === index}
               className={styles.carouselDot}
               onClick={() => setIndex(i)}
@@ -63,8 +69,8 @@ export const Carousel = ({ properties, children }: Props) => {
               <span className={styles.dotLabel}>{label}</span>
             </div>
 
-            {!isLast(i) && <div className={styles.dotSeparator} />}
-          </div>
+            {!isLast(i) && <div key={i} className={styles.dotSeparator} />}
+          </>
         ))}
       </div>
     </div>
