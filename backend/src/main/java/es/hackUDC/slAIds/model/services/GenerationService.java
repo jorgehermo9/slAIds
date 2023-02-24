@@ -1,12 +1,8 @@
 package es.hackUDC.slAIds.model.services;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 import es.hackUDC.slAIds.model.entities.Index;
 import es.hackUDC.slAIds.model.entities.Presentation;
 import es.hackUDC.slAIds.model.entities.Slide;
+import es.hackUDC.slAIds.model.services.ChatService.ChatService;
+import es.hackUDC.slAIds.model.services.ChatService.PromptResponse;
+import es.hackUDC.slAIds.model.services.transferObjects.SlideText;
 
 @Service
 @Transactional
@@ -29,9 +28,11 @@ public class GenerationService {
 							+ indexPrompt 
 							+ " de longitud " 
 							+ numSlides 
-							+ " paginas";
+							+ " paginas.";
 		
-		Index index = null;;
+		Optional<PromptResponse<Index>> optIndex = chatService.execute(requestIndexPrompt, Index.class);
+		
+		Index index = optIndex.get().response();
 		
 		return index;
 		
@@ -40,15 +41,14 @@ public class GenerationService {
 	public Slide generateSlide(String slideTitle, String slidePrompt, int numSlide) {
 		
 		String requestSlidePrompt = "Genera un parrafo informativo, de entre 50 y 60 palabras,"
-				+ " de título " + slideTitle + " a cerca de " + slidePrompt;
+				+ " de título " + slideTitle + " a cerca de " + slidePrompt + ".";
 		
 		
 		Slide slide = new Slide();
 		
 		slide.setNumber(numSlide);
 		slide.setTitle(slideTitle);
-		slide.setText("respuestaGPT");
-		
+		slide.setText(chatService.execute(requestSlidePrompt, SlideText.class).get().response().getText());
 		
 		return slide;
 				

@@ -75,7 +75,10 @@ record PromptRequest<T>(String promptText, Class<T> target_class, String convers
                 .POST(HttpRequest.BodyPublishers.ofString(json))
                 .build();
         HttpResponse<String> response = client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-
+        
+        System.out.println(json);
+        System.out.println(response.body());
+        
         PromptResponseDto responseDto = mapper.readValue(response.body(), PromptResponseDto.class);
         return PromptResponse.parse(responseDto, response.body(), request.target_class);
     }
