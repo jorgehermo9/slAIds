@@ -1,15 +1,17 @@
-import { Children, cloneElement, isValidElement, useState } from "react";
+import { Children, useState } from "react";
 import styles from "./carousel.module.scss";
 import ArrowFwdIcon from "@mui/icons-material/ArrowForwardIosRounded";
 import ArrowBckIcon from "@mui/icons-material/ArrowBackIosRounded";
-import SlideRequest, { getDefaultSlideRequest } from "@/entities/SlideRequest";
 
 interface Props {
-  labels: string[];
-  children: React.ReactNode;
+  properties: {
+    label: string;
+    icon: JSX.Element;
+  }[];
+  children: JSX.Element | JSX.Element[];
 }
 
-export const Carousel = ({ labels, children }: Props) => {
+export const Carousel = ({ properties, children }: Props) => {
   const childrenArray = Children.toArray(children);
   const [index, setIndex] = useState(0);
 
@@ -50,7 +52,7 @@ export const Carousel = ({ labels, children }: Props) => {
         </div>
       </div>
       <div className={styles.carouselDotsContainer}>
-        {labels.map((label, i) => (
+        {properties.map(({ label, icon }, i) => (
           <>
             <div
               key={i}
@@ -58,9 +60,7 @@ export const Carousel = ({ labels, children }: Props) => {
               className={styles.carouselDot}
               onClick={() => setIndex(i)}
             >
-              <div className={styles.dotCircle}>
-                <span className={styles.dotNumber}>{i}</span>
-              </div>
+              <div className={styles.dotCircle}>{icon}</div>
               <span className={styles.dotLabel}>{label}</span>
             </div>
 

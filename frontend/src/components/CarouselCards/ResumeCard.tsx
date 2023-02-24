@@ -23,19 +23,23 @@ export const ResumeCard = ({ slideRequest, setSlideRequest }: Props) => {
             setSlideRequest({ ...slideRequest, title: e.target.value });
           }}
         />
+      </div>
+
+      <div className={`${styles.formField} ${styles.textAreaContainer}`}>
         <label htmlFor="descriptionTextArea" className={styles.title}>
           Description
         </label>
+
+        <textarea
+          value={slideRequest.description}
+          id="descriptionTextArea"
+          className={styles.textArea}
+          placeholder="This slides are for the FIC database department, they will be used to teach the new interns how to use sql."
+          onChange={(e) => {
+            setSlideRequest({ ...slideRequest, description: e.target.value });
+          }}
+        />
       </div>
-      <textarea
-        value={slideRequest.description}
-        id="descriptionTextArea"
-        className={styles.textArea}
-        placeholder="This slides are for the FIC database department, they will be used to teach the new interns how to use sql."
-        onChange={(e) => {
-          setSlideRequest({ ...slideRequest, description: e.target.value });
-        }}
-      />
     </div>
   );
 };
