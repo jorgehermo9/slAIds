@@ -13,6 +13,6 @@ public class ChatController {
     @GetMapping("/prompt")
     public String prompt() {
 
-        return ChatService.execute()
+        return ChatService.execute();
     }
 }
