@@ -20,6 +20,7 @@ public class Slide {
 	
 	private int number;
 	
+	public Slide () {}
 
 	public Slide(Long id, String title, String text, int number) {
 		this.id = id;

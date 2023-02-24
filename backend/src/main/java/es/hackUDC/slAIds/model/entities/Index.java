@@ -12,31 +12,32 @@ import jakarta.persistence.OneToOne;
 @Entity
 public class Index {
 
-	private List<String> slideTitle;
-	private List<String> slideDescription;
+	private List<String> slideTitles;
+	private List<String> slideDescriptions;
 	
+	public Index() {}
 	
-	public Index(List<String> slideTitle, List<String> slideDescription) {
+	public Index(List<String> slideTitles, List<String> slideDescriptions) {
 
-		this.slideTitle = slideTitle;
-		this.slideDescription = slideDescription;
+		this.slideTitles = slideTitles;
+		this.slideDescriptions = slideDescriptions;
 	}
 
 
-	public List<String> getSlideTitle() {
-		return slideTitle;
+	public List<String> getSlideTitles() {
+		return slideTitles;
 	}
 
-	public void setSlideTitle(List<String> slideTitle) {
-		this.slideTitle = slideTitle;
+	public void setSlideTitle(List<String> slideTitles) {
+		this.slideTitles = slideTitles;
 	}
 
-	public List<String> getSlideDescription() {
-		return slideDescription;
+	public List<String> getSlideDescriptions() {
+		return slideDescriptions;
 	}
 
-	public void setSlideDescription(List<String> slideDescription) {
-		this.slideDescription = slideDescription;
+	public void setSlideDescriptions(List<String> slideDescriptions) {
+		this.slideDescriptions = slideDescriptions;
 	}
 
 	

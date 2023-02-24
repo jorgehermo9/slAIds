@@ -28,6 +28,7 @@ public class Presentation {
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="presentation")
 	private List<Slide> slides;
 	
+	public Presentation() {}
 	
 	public Presentation(String title, String descriptionPrompt, Index index, List<Slide> slides) {
 		this.title = title;
