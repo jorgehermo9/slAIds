@@ -71,9 +71,7 @@ public class GenerationService {
 			String slideDescription = presentation.getIndex().getSlideDescriptions().get(i);
 			
 			responseSlideText = generateSlideText(slideTitle, slideDescription, conversationId, parentId);
-			slides.add(new Slide(presentation.getIndex().getSlideTitles().get(i), 
-					presentation.getIndex().getSlideDescriptions().get(i),
-					(i+1)));
+			slides.add(new Slide(slideTitle, responseSlideText.response().getText(),(i+1)));
 			
 			parentId = responseSlideText.parentId();
 			conversationId = responseSlideText.conversationId();

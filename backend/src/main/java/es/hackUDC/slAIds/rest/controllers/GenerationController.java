@@ -19,7 +19,7 @@ public class GenerationController {
 	@PostMapping("")
 	public Presentation generatePresentation(@RequestBody es.hackUDC.slAIds.rest.dtos.generationRequestDto generationRequestDto) {
 		
-		return(generationService.generatePresentation( generationRequestDto.getTitle(), generationRequestDto.getPrompt(), generationRequestDto.getNumSlides()));
+		return(generationService.generatePresentation( generationRequestDto.title(), generationRequestDto.prompt(), generationRequestDto.numSlides()));
 			
 	}
 	
