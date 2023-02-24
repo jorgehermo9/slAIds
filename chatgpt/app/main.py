@@ -37,9 +37,7 @@ def read_root(prompt: Prompt):
     text_response = response["message"]
     conversation_id = response["conversation_id"]
     parent_id = response["parent_id"]
-
-    return {
-        "response": text_response,
-        "conversation_id": conversation_id,
-        "parent_id": parent_id,
-    }
+    chat_response = PromptResponse(
+        response=text_response, conversation_id=conversation_id, parent_id=parent_id
+    )
+    return chat_response
