@@ -4,6 +4,8 @@ public record generationRequestDto (
 
 	String title,
 	String prompt,
-	int numSlides
-
+	int numSlides,
+	int minWords,
+	int maxWords,
+	String font
 ) {}

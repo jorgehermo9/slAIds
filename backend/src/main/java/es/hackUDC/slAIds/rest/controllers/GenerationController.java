@@ -23,7 +23,9 @@ public class GenerationController {
 
         Presentation presentation = generationService.generatePresentation(generationRequestDto.title(),
                 generationRequestDto.prompt(),
-                generationRequestDto.numSlides());
+                generationRequestDto.numSlides(),
+                generationRequestDto.minWords(),
+                generationRequestDto.maxWords());
         return presentation;
 
     }

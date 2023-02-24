@@ -25,11 +25,11 @@ public class GenerationService {
 
     public PromptResponse<IndexTransfer> generateIndex(String indexPrompt, int numSlides) {
 
-        String requestIndexPrompt = "Genera un indice para una presentación sobre "
+        String requestIndexPrompt = "Generate an index for a presentations about "
                 + indexPrompt
-                + " de longitud "
+                + " of length "
                 + numSlides
-                + " paginas.";
+                + " pages.";
 
         Optional<PromptResponse<IndexTransfer>> optIndex = chatService.execute(requestIndexPrompt, IndexTransfer.class);
 
@@ -40,17 +40,19 @@ public class GenerationService {
     }
 
     public PromptResponse<SlideText> generateSlideText(String slideTitle, String slidePrompt, String conversationId,
-            String parentId) {
+            String parentId, int minWords, int maxWords) {
 
-        String requestSlidePrompt = "Genera un parrafo informativo, de entre 50 y 60 palabras,"
-                + " de título " + slideTitle + " a cerca de " + slidePrompt + ".";
+        String requestSlidePrompt = "Generate and informative, condensed, direct, without repeating information "
+        		+ "already given in this conversation, paragraph, between " 
+        		+ minWords + " and " + maxWords + " words,"
+                + " with the title \"" + slideTitle + "\" about: " + slidePrompt + ".";
 
         return (chatService.executeWithConversation(requestSlidePrompt, SlideText.class, conversationId, parentId)
                 .get());
 
     }
 
-    public Presentation generatePresentation(String presentationTitle, String presentationPrompt, int numSlides) {
+    public Presentation generatePresentation(String presentationTitle, String presentationPrompt, int numSlides, int minWords, int maxWords) {
 
         Presentation presentation = new Presentation();
         String parentId;
@@ -73,7 +75,7 @@ public class GenerationService {
             String slideTitle = presentation.getIndex().getSlideTitles().get(i);
             String slideDescription = presentation.getIndex().getSlideDescriptions().get(i);
 
-            responseSlideText = generateSlideText(slideTitle, slideDescription, conversationId, parentId);
+            responseSlideText = generateSlideText(slideTitle, slideDescription, conversationId, parentId, minWords, maxWords);
             slides.add(new Slide(slideTitle, responseSlideText.response().getText(), (i + 1)));
 
             parentId = responseSlideText.parentId();
