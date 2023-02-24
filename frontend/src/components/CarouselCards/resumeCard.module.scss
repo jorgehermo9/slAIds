@@ -2,7 +2,7 @@
   border-radius: var(--border-radius);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   height: 100%;
-  width: 100%;
+  width: 35vw;
   padding: 2rem;
   background-color: var(--bg);
 }
@@ -11,31 +11,44 @@
   margin: 3rem;
 }
 
+.formField {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
 .title {
-  font-size: 2rem;
+  font-size: 1.4rem;
+  font-weight: 600;
   color: var(--fg);
 }
 
-.titleInput {
+.input {
   width: 100%;
-  padding: 1rem 1rem;
+  padding: 0.8rem;
   display: inline-block;
-  border: 1px solid #ccc;
+  border: 1px solid var(--bg-subtle);
   border-radius: 4px;
-  box-sizing: border-box;
+  font-size: 0.9rem;
+
+  transition: all 0.2s;
 }
 
 .textArea {
   width: 100%;
   height: 70%;
-  padding: 1rem 1rem;
+  padding: 0.8rem;
   display: inline-block;
-  border: 1px solid #ccc;
+  border: 1px solid var(--bg-subtle);
   border-radius: 4px;
-  box-sizing: border-box;
+  font-size: 0.9rem;
+
+  transition: all 0.2s;
 }
 
-.input:focus, .textArea:focus {
+.input:focus,
+.textArea:focus {
   border: 1px solid var(--blue);
 }
 

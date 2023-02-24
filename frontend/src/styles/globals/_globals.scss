@@ -26,6 +26,11 @@ input {
   }
 }
 
+input::placeholder,
+textarea::placeholder {
+  color: var(--fg-subtle);
+}
+
 a {
   color: inherit;
   text-decoration: none;

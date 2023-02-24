@@ -1,5 +1,5 @@
 import SlideRequest from "@/entities/SlideRequest";
-import styles from "./carouselCard.module.scss";
+import styles from "./resumeCard.module.scss";
 
 interface Props {
   slideRequest: SlideRequest;
@@ -9,22 +9,24 @@ interface Props {
 export const ResumeCard = ({ slideRequest, setSlideRequest }: Props) => {
   return (
     <div className={styles.resumeCard}>
-      <label htmlFor="titleInput" className={styles.title}>
-        Title
-      </label>
-      <input
-        value={slideRequest.title}
-        type="text"
-        id="titleInput"
-        className={`${styles.titleInput} ${styles.marginBottom}`}
-        placeholder="FIC slides for 2023"
-        onChange={(e) => {
-          setSlideRequest({ ...slideRequest, title: e.target.value });
-        }}
-      />
-      <label htmlFor="descriptionTextArea" className={styles.title}>
-        Description
-      </label>
+      <div className={styles.formField}>
+        <label htmlFor="titleInput" className={styles.title}>
+          Title
+        </label>
+        <input
+          value={slideRequest.title}
+          type="text"
+          id="titleInput"
+          className={styles.input}
+          placeholder="FIC slides for 2023"
+          onChange={(e) => {
+            setSlideRequest({ ...slideRequest, title: e.target.value });
+          }}
+        />
+        <label htmlFor="descriptionTextArea" className={styles.title}>
+          Description
+        </label>
+      </div>
       <textarea
         value={slideRequest.description}
         id="descriptionTextArea"

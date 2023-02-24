@@ -51,17 +51,21 @@ export const Carousel = ({ labels, children }: Props) => {
       </div>
       <div className={styles.carouselDotsContainer}>
         {labels.map((label, i) => (
-          <div
-            key={i}
-            data-is-active={i === index}
-            className={styles.carouselDot}
-            onClick={() => setIndex(i)}
-          >
-            <div className={styles.dotCircle}>
-              <span className={styles.dotNumber}>{i}</span>
+          <>
+            <div
+              key={i}
+              data-is-active={i === index}
+              className={styles.carouselDot}
+              onClick={() => setIndex(i)}
+            >
+              <div className={styles.dotCircle}>
+                <span className={styles.dotNumber}>{i}</span>
+              </div>
+              <span className={styles.dotLabel}>{label}</span>
             </div>
-            <span className={styles.dotLabel}>{label}</span>
-          </div>
+
+            {!isLast(i) && <div className={styles.dotSeparator} />}
+          </>
         ))}
       </div>
     </div>
