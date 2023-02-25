@@ -33,11 +33,7 @@ public class ImageServiceStableDiffusion implements ImageService {
 
 record StableDiffusionRequest(String prompt, int batch_size, int n_iter, int steps, float width, float height) {
 
-<<<<<<< HEAD
-    private static final String STABLE_DIFFUSION_URL = "http://172.20.10.6:7860/sdapi/v1/txt2img";
-=======
   private static final String STABLE_DIFFUSION_URL = "http://localhost:7860/sdapi/v1/txt2img";
->>>>>>> 74d6b30 (Fast committed)
 
     public StableDiffusionResponse executePostRequest(String prompt)
             throws IOException, InterruptedException {
