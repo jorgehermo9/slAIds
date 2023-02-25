@@ -8,11 +8,12 @@ payload = {
     "steps": 10,
 }
 
-
 response = requests.post(url=f"http://localhost:7860/sdapi/v1/txt2img", json=payload)
 
 r = response.json()
 
 for i in r['images']:
-  image = Image.open(io.BytesIO(base64.b64decode(i.split(",", 1)[0])))
-  image.show()
+    splitted = i.split(",", 1)
+    print(splitted)
+    image = Image.open(io.BytesIO(base64.b64decode(i.split(",", 1)[0])))
+    image.show()

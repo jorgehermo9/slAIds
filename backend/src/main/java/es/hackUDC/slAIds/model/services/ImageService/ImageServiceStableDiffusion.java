@@ -18,9 +18,9 @@ public class ImageServiceStableDiffusion implements ImageService {
 
     @Override
     public Optional<byte[]> getImage(String prompt, float width, float height) {
-        StableDiffusionRequest stableDiffusionRequest = new StableDiffusionRequest(prompt, 1, 1, 20, width, height);
+        StableDiffusionRequest stableDiffusionRequest = new StableDiffusionRequest(prompt, 1, 1, 30, 7,width, height);
         try {
-            StableDiffusionResponse stableDiffusionResponse = stableDiffusionRequest.executePostRequest(prompt);
+            StableDiffusionResponse stableDiffusionResponse = stableDiffusionRequest.executePostRequest();
 
             return Optional.of(stableDiffusionResponse.getImage());
         } catch (IOException | InterruptedException e) {
@@ -31,11 +31,11 @@ public class ImageServiceStableDiffusion implements ImageService {
 
 }
 
-record StableDiffusionRequest(String prompt, int batch_size, int n_iter, int steps, float width, float height) {
+record StableDiffusionRequest(String prompt, int batch_size, int n_iter, int steps, int cfg_scale,float width, float height) {
 
     private static final String STABLE_DIFFUSION_URL = "http://localhost:7860/sdapi/v1/txt2img";
 
-    public StableDiffusionResponse executePostRequest(String prompt)
+    public StableDiffusionResponse executePostRequest()
             throws IOException, InterruptedException {
 
         ObjectMapper mapper = new ObjectMapper();
@@ -47,6 +47,8 @@ record StableDiffusionRequest(String prompt, int batch_size, int n_iter, int ste
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(json))
                 .build();
+
+        System.out.println(json);
         HttpResponse<String> response = client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
         StableDiffusionResponse stableDiffusionResponse = mapper.readValue(response.body(),
                 StableDiffusionResponse.class);
@@ -63,7 +65,7 @@ record StableDiffusionResponse(List<String> images) {
         // get first element of images array and decode base64 string to byte array
         String base64Image = images.get(0);
 
-        String image = base64Image.split(",", 2)[1];
+        String image = base64Image.split(",", 2)[0];
         return java.util.Base64.getDecoder().decode(image);
     }
 }

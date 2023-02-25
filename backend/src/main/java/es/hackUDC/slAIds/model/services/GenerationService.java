@@ -121,7 +121,7 @@ public class GenerationService {
       responseSlideText = generateSlide(slideTitle, slideDescription, conversationId, parentId, minWords,
           maxWords, bulletPoints);
 
-      String imagePrompt = slideTitle;
+      String imagePrompt = "Inspirative beautiful photo about "+presentation.getTitle()+", "+ slideTitle;
       img = imageService.getImage(imagePrompt, imgWidth, imgHeight).get();
 
       slides.add(new Slide(slideTitle, responseSlideText.response().getText(), (i + 1), img));
