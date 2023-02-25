@@ -1,5 +1,4 @@
 import { Nav } from "@/components/Nav/Nav";
-import { useStorage } from "@/hooks/useStorage";
 import UserService from "@/services/UserService";
 import { Router, useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -9,14 +8,20 @@ export default function Signup() {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [token, setToken] = useState("");
+  const [tokenSetter, setTokenSetter] = useState("");
   const router = useRouter();
 
   useEffect(() => {
-    if (token !== "") {
-      sessionStorage.setItem("serviceToken", token);
+    if (sessionStorage.getItem("serviceToken") !== null) {
+      router.push("/");
     }
-  }, [token]);
+  }, [router]);
+
+  useEffect(() => {
+    if (tokenSetter !== "") {
+      sessionStorage.setItem("serviceToken", tokenSetter);
+    }
+  }, [tokenSetter]);
 
   const handleSubmit = () => {
     const user = {
@@ -26,7 +31,7 @@ export default function Signup() {
     };
 
     UserService.signup(user).then((res) => {
-      setToken(res);
+      setTokenSetter(res);
       router.push("/");
     });
   };
@@ -82,7 +87,7 @@ export default function Signup() {
             />
           </div>
 
-          <button className={styles.buttonSignup} onClick={handleSubmit}>
+          <button className={styles.button} onClick={handleSubmit}>
             Create account
           </button>
         </div>

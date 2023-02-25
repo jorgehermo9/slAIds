@@ -8,7 +8,12 @@ export const Nav = () => {
 
   useEffect(() => {
     setToken(sessionStorage.getItem("serviceToken"));
-  }, []);
+  }, [token]);
+
+  const handleClick = () => {
+    sessionStorage.removeItem("serviceToken");
+    setToken(null);
+  };
 
   return (
     <nav className={styles.navbar}>
@@ -24,6 +29,11 @@ export const Nav = () => {
         {!token && (
           <Link className={styles.buttonSignup} href="/signup">
             Sign Up
+          </Link>
+        )}
+        {token && (
+          <Link className={styles.buttonLogin} href="/" onClick={handleClick}>
+            Log out
           </Link>
         )}
       </div>
