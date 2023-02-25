@@ -15,6 +15,8 @@ import es.hackUDC.slAIds.model.entities.Slide;
 import es.hackUDC.slAIds.model.services.ChatService.ChatService;
 import es.hackUDC.slAIds.model.services.ChatService.ChatServiceMock;
 import es.hackUDC.slAIds.model.services.ChatService.PromptResponse;
+import es.hackUDC.slAIds.model.services.ImageService.ImageService;
+import es.hackUDC.slAIds.model.services.ImageService.ImageServiceBasic;
 import es.hackUDC.slAIds.model.services.TransferObjects.ImagePrompt;
 import es.hackUDC.slAIds.model.services.TransferObjects.IndexTransfer;
 import es.hackUDC.slAIds.model.services.TransferObjects.SlideText;
@@ -24,8 +26,11 @@ import es.hackUDC.slAIds.model.services.TransferObjects.SlideText;
 public class GenerationService {
 
     @Autowired
-    private ChatService chatService;
-    // private ChatServiceMock chatService;
+    //private ChatService chatService;
+    private ChatServiceMock chatService;
+    
+    @Autowired
+    private ImageServiceBasic imageService;
     
     @Autowired
     private PresentationDao presentationDao;
@@ -83,7 +88,7 @@ public class GenerationService {
     	
     }
     
-    public PromptResponse<ImagePrompt> generateImagePrompt(String slideText, String conversationId, String parentId) {
+   /* public PromptResponse<ImagePrompt> generateImagePrompt(String slideText, String conversationId, String parentId) {
     	
     	String requestImagePrompt = "Generate a text to give as input to a Image generative Artificial"
     			+ " Intelligence, to generate an image for a presentation to ilustrate the following text : "
@@ -93,11 +98,7 @@ public class GenerationService {
     	
     	return null;
     	
-    }
-    
-    public byte[] generateImg(String imgPrompt) {
-    	return null;
-    }
+    }*/
 
     public Presentation generatePresentation(String presentationTitle, String presentationPrompt, int numSlides,
             int minWords, int maxWords, boolean bulletPoints, Presentation presentation) {
@@ -109,7 +110,10 @@ public class GenerationService {
 
         presentation.setTitle(presentationTitle);
         presentation.setDescriptionPrompt(presentationPrompt);
-
+        
+        img = imageService.getImage(presentationPrompt).get(); 
+        presentation.setFrontImg(img);
+        
         PromptResponse<IndexTransfer> responseIndex = generateIndex(presentationPrompt, numSlides);
 
         presentation.setIndex(
@@ -128,7 +132,7 @@ public class GenerationService {
             responseSlideText = generateSlide(slideTitle, slideDescription, conversationId, parentId, minWords,
                     maxWords, bulletPoints);
             
-            img = generateImg(slideTitle);
+            img = imageService.getImage(slideTitle).get();
             
             slides.add(new Slide(slideTitle, responseSlideText.response().getText(), (i + 1), img));
 

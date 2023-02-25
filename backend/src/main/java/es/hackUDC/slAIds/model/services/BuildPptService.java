@@ -4,8 +4,11 @@ import java.awt.Dimension;
 import java.io.ByteArrayOutputStream;
 import java.util.List;
 
+import org.apache.poi.sl.usermodel.PictureData;
 import org.apache.poi.xslf.usermodel.SlideLayout;
 import org.apache.poi.xslf.usermodel.XMLSlideShow;
+import org.apache.poi.xslf.usermodel.XSLFPictureData;
+import org.apache.poi.xslf.usermodel.XSLFPictureShape;
 import org.apache.poi.xslf.usermodel.XSLFSlide;
 import org.apache.poi.xslf.usermodel.XSLFSlideLayout;
 import org.apache.poi.xslf.usermodel.XSLFSlideMaster;
@@ -29,7 +32,15 @@ public class BuildPptService {
         XMLSlideShow ppt = new XMLSlideShow();
         XSLFTextShape titleShape;
         XSLFTextShape contentShape;
+        XSLFPictureShape picture;
+        XSLFPictureData pictureData;
 
+        for(XSLFSlideMaster master : ppt.getSlideMasters()) {
+        	for(XSLFSlideLayout layout : master.getSlideLayouts()) {
+        		System.out.println(layout.getType());
+        	}
+        }
+                
         XSLFSlideMaster defaultMaster = ppt.getSlideMasters().get(0);
 
         XSLFSlideLayout frontPageLayout = defaultMaster.getLayout(SlideLayout.TITLE_ONLY);
@@ -45,9 +56,6 @@ public class BuildPptService {
         contentShape = slide.getPlaceholder(1);
         titleShape.setText("Index").setFontSize(40.0);
         Index index = presentation.getIndex();
-        //List<String> titles = index.getSlideTitles();
-        //titles.add("");
-        //index.setSlideTitle(titles);
         StringBuilder indexText = new StringBuilder();
         for (String slideTitle : index.getSlideTitles()) {
             indexText.append(slideTitle).append("\n");
@@ -58,7 +66,10 @@ public class BuildPptService {
         for (Slide modelSlide : presentation.getSlides()) {
             slide = ppt.createSlide(slidesLayout);
             titleShape = slide.getPlaceholder(0);
-            contentShape = slide.getPlaceholder(1);
+            contentShape = slide.getPlaceholder(2);
+            pictureData = ppt.addPicture(modelSlide.getImg(), PictureData.PictureType.PNG);
+            picture = slide.createPicture(pictureData);
+            picture.setAnchor(new Rectangle(320, 230, 100, 92));
             titleShape.setText(modelSlide.getTitle()).setFontSize(40.0);
             contentShape.setText(modelSlide.getText()).setFontSize(20.0);
         }

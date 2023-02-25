@@ -3,6 +3,9 @@ package es.hackUDC.slAIds.model.services.ImageService;
 import java.io.FileInputStream;
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class ImageServiceBasic implements ImageService {
 
     private final String IMAGE_PATH = "src/main/resources/static/images/no_image.png";
