@@ -62,6 +62,8 @@ record StableDiffusionResponse(List<String> images) {
     public byte[] getImage() {
         // get first element of images array and decode base64 string to byte array
         String base64Image = images.get(0);
-        return java.util.Base64.getDecoder().decode(base64Image);
+
+        String image = base64Image.split(",", 2)[1];
+        return java.util.Base64.getDecoder().decode(image);
     }
 }
