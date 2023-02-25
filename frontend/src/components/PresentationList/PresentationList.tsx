@@ -63,7 +63,7 @@ export const PresentationList = () => {
                   <a
                     className={`${styles.pdfButton} ${styles.downloadsButton}`}
                     href={`/api/presentations/${presentation.id}/pdf`}
-                    download="bill.pdf"
+                    download={`${presentation.title}.pdf`}
                     target="_blank"
                     rel="noreferrer"
                   >
@@ -72,8 +72,8 @@ export const PresentationList = () => {
                   </a>
                   <a
                     className={`${styles.pptButton} ${styles.downloadsButton}`}
-                    href={`/api/bills/${presentation.id}/pptx`}
-                    download="bill.pdf"
+                    href={`/api/presentations/${presentation.id}/pptx`}
+                    download={`${presentation.title}.pptx`}
                     target="_blank"
                     rel="noreferrer"
                   >

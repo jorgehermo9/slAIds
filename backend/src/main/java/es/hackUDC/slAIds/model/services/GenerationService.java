@@ -24,9 +24,9 @@ import es.hackUDC.slAIds.model.services.TransferObjects.SlideText;
 @Transactional
 public class GenerationService {
 
-    // private ChatService chatService;
-    @Autowired
-    private ChatServiceMock chatService;
+  @Autowired
+  // private ChatService chatService;
+  private ChatServiceMock chatService;
 
     @Autowired
     private ImageServiceImpl imageService;
