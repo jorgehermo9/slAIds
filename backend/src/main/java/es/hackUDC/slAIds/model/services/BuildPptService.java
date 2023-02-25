@@ -35,20 +35,31 @@ public class BuildPptService {
 
         // Create index slide
         XSLFSlideLayout indexLayout = defaultMaster.getLayout(SlideLayout.TITLE_AND_CONTENT);
+        System.out.println("1");
         slide = ppt.createSlide(indexLayout);
+        System.out.println("2");
         titleShape = slide.getPlaceholder(0);
+        System.out.println("3");
         contentShape = slide.getPlaceholder(1);
+        System.out.println("4");
         titleShape.setText("Index").setFontSize(12.0);
+        System.out.println("5");
         Index index = presentation.getIndex();
+        System.out.println("6");
         String indexText = "";
+        System.out.println("7");
         for (String slideTitle : index.getSlideTitles()) {
+            System.out.println("8");
             // Create an index using bullet points
             indexText += "- " + slideTitle + "\n";
         }
+        System.out.println("9");
         contentShape.setText(indexText).setFontSize(12.0);
-
+        System.out.println("10");
         XSLFSlideLayout slidesLayout = defaultMaster.getLayout(SlideLayout.TITLE_AND_CONTENT);
+        int i = 0;
         for (Slide modelSlide : presentation.getSlides()) {
+            System.out.println("Slide " + i++);
             slide = ppt.createSlide(slidesLayout);
             titleShape = slide.getPlaceholder(0);
             contentShape = slide.getPlaceholder(1);
@@ -57,7 +68,8 @@ public class BuildPptService {
         }
 
         try {
-            ppt.write(new java.io.FileOutputStream("test.pptx"));
+            System.out.println("closing ppt");
+            ppt.write(new java.io.FileOutputStream("test2.pptx"));
             ppt.close();
         } catch (Exception e) {
             e.printStackTrace();
