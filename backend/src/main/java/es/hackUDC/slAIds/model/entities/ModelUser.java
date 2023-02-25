@@ -24,13 +24,13 @@ public class ModelUser {
     private String email;
     private RoleType role;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
-    private List<Presentation> presentations;
+    // @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    // @JoinColumn(name = "user_id")
+    // private List<Presentation> presentations;
 
-    public void setPresentations(List<Presentation> presentations) {
-        this.presentations = presentations;
-    }
+    // public void setPresentations(List<Presentation> presentations) {
+    // this.presentations = presentations;
+    // }
 
     public ModelUser() {
     }
@@ -43,9 +43,9 @@ public class ModelUser {
 
     }
 
-    public List<Presentation> getPresentations() {
-        return presentations;
-    }
+    // public List<Presentation> getPresentations() {
+    // return presentations;
+    // }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
