@@ -1,5 +1,5 @@
 import SlideRequest from "@/entities/SlideRequest";
-import styles from "./styleCard.module.scss";
+import styles from "./optionsCard.module.scss";
 
 interface Props {
   slideRequest: SlideRequest;
@@ -7,27 +7,64 @@ interface Props {
 }
 
 export const OptionsCard = ({ slideRequest, setSlideRequest }: Props) => {
-  const maxSlides = slideRequest.maxSlides ?? 0;
-
   return (
     <div className={styles.resumeCard}>
       <div className={styles.formField}>
-        <label htmlFor="maxSlides" className={styles.title}>
-          Number of maximum slides
+        <label htmlFor="numSlides" className={styles.title}>
+          Number of slides
         </label>
         <input
-          value={maxSlides}
+          value={slideRequest.numSlides}
           type="number"
           min="1"
-          id="maxSlides"
+          id="numSlides"
           className={styles.input}
           onChange={(e) => {
             setSlideRequest({
               ...slideRequest,
-              maxSlides: parseInt(e.target.value),
+              numSlides: parseInt(e.target.value),
             });
           }}
         />
+      </div>
+
+      <div className={styles.wordsContainer}>
+        <div className={styles.formField}>
+          <label htmlFor="minWords" className={styles.title}>
+            Minimum words
+          </label>
+          <input
+            value={slideRequest.minWords}
+            type="number"
+            min="1"
+            id="minWords"
+            className={styles.input}
+            onChange={(e) => {
+              setSlideRequest({
+                ...slideRequest,
+                minWords: parseInt(e.target.value),
+              });
+            }}
+          />
+        </div>
+        <div className={styles.formField}>
+          <label htmlFor="maxWords" className={styles.title}>
+            Maximum words
+          </label>
+          <input
+            value={slideRequest.maxWords}
+            type="number"
+            min="1"
+            id="maxWords"
+            className={styles.input}
+            onChange={(e) => {
+              setSlideRequest({
+                ...slideRequest,
+                maxWords: parseInt(e.target.value),
+              });
+            }}
+          />
+        </div>
       </div>
     </div>
   );

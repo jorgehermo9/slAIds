@@ -39,3 +39,10 @@
 
   transition: all 0.2s;
 }
+
+.wordsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 3rem;
+}

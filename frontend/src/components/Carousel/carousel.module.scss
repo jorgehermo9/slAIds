@@ -93,6 +93,12 @@
     }
   }
 
+  &[data-is-active="false"] {
+    > .dotCircle {
+      border: 1px solid var(--bg-subtle);
+    }
+  }
+
   &:hover {
     > .dotCircle {
       border: 1px solid var(--blue);

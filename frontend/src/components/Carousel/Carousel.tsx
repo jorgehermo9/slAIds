@@ -60,7 +60,7 @@ export const Carousel = ({ properties, children }: Props) => {
         {properties.map(({ label, icon }, i) => (
           <>
             <div
-              key={i}
+              key={`circle-${i}`}
               data-is-active={i === index}
               className={styles.carouselDot}
               onClick={() => setIndex(i)}
@@ -69,7 +69,9 @@ export const Carousel = ({ properties, children }: Props) => {
               <span className={styles.dotLabel}>{label}</span>
             </div>
 
-            {!isLast(i) && <div key={i} className={styles.dotSeparator} />}
+            {!isLast(i) && (
+              <div key={`sep-${i}`} className={styles.dotSeparator} />
+            )}
           </>
         ))}
       </div>
