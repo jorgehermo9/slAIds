@@ -94,11 +94,9 @@ public class SecurityConfig {
   @Bean
   @Order(1)
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    http
-        // you probably want a request matcher since you are using @Order
+    http.cors().and().csrf().disable()
         .authorizeHttpRequests((authorize) -> authorize
-            .requestMatchers(HttpMethod.GET, "/chat/prompt").permitAll()
-            .requestMatchers(HttpMethod.POST, "/users/signup").permitAll()
+            .requestMatchers("/users/**").permitAll()
             .anyRequest().authenticated())
         .apply(new MyCustomDsl());
     return http.build();
