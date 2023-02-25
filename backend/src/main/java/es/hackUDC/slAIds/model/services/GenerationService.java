@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import es.hackUDC.slAIds.model.entities.Index;
 import es.hackUDC.slAIds.model.entities.Presentation;
+import es.hackUDC.slAIds.model.entities.PresentationDao;
 import es.hackUDC.slAIds.model.entities.Slide;
 import es.hackUDC.slAIds.model.services.ChatService.ChatService;
 import es.hackUDC.slAIds.model.services.ChatService.PromptResponse;
@@ -22,6 +23,9 @@ public class GenerationService {
 
     @Autowired
     private ChatService chatService;
+    
+    @Autowired
+    private PresentationDao presentationDao;
 
     public PromptResponse<IndexTransfer> generateIndex(String indexPrompt, int numSlides) {
 
@@ -42,9 +46,9 @@ public class GenerationService {
     public PromptResponse<SlideText> generateSlideText(String slideTitle, String slidePrompt, String conversationId,
             String parentId, int minWords, int maxWords) {
 
-        String requestSlidePrompt = "Generate and informative, condensed, direct, without repeating information "
-        		+ "already given in this conversation, paragraph, between " 
-        		+ minWords + " and " + maxWords + " words,"
+        String requestSlidePrompt = "Generate 5 sentences informative, condensed, direct, without repeating information "
+        		+ "already given in this conversation, separated by \"/\" "//, between " 
+        		//+ minWords + " and " + maxWords + " words,"
                 + " with the title \"" + slideTitle + "\" about: " + slidePrompt + ".";
 
         return (chatService.executeWithConversation(requestSlidePrompt, SlideText.class, conversationId, parentId)
@@ -84,6 +88,8 @@ public class GenerationService {
 
         presentation.setSlides(slides);
 
+        presentationDao.save(presentation);
+        
         return presentation;
     }
 

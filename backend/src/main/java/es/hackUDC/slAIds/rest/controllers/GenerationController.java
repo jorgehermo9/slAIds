@@ -32,7 +32,7 @@ public class GenerationController {
                 generationRequestDto.minWords(),
                 generationRequestDto.maxWords());
                 
-                buildPptService.buildPpt(presentation);
+                //buildPptService.buildPpt(presentation);
 
         return presentation;
 

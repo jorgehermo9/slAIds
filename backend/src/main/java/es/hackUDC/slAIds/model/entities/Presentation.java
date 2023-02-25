@@ -2,6 +2,7 @@ package es.hackUDC.slAIds.model.entities;
 
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -23,10 +24,10 @@ public class Presentation {
 	
 	private String descriptionPrompt;
 	
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	private Index index;
 	
-	@OneToMany(fetch=FetchType.LAZY)
+	@OneToMany(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "presentation_id")
 	private List<Slide> slides;
 	
