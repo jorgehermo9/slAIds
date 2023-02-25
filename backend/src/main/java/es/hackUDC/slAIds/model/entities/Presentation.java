@@ -32,16 +32,19 @@ public class Presentation {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "presentation_id")
     private List<Slide> slides;
-
+    
+    private byte[] frontImg;
+    
     private Boolean isAvailable = false;
 
     private byte[] pptx;
-    private byte[] pdf;
 
     private Boolean error;
 
     @Column(columnDefinition = "TEXT")
     private String errorMessage;
+
+    private byte[] pdf;
 
     public Presentation() {
     }
@@ -132,5 +135,15 @@ public class Presentation {
     public void setPptx(byte[] pptx) {
         this.pptx = pptx;
     }
+
+	public byte[] getFrontImg() {
+		return frontImg;
+	}
+
+	public void setFrontImg(byte[] frontImg) {
+		this.frontImg = frontImg;
+	}
+    
+    
 
 }

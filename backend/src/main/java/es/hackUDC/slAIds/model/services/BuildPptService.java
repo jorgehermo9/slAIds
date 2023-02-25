@@ -36,27 +36,31 @@ public class BuildPptService {
         XSLFSlide slide = ppt.createSlide(frontPageLayout);
         titleShape = slide.getPlaceholder(0);
 
-        titleShape.setText(presentation.getTitle()).setFontSize(20.0);
+        titleShape.setText(presentation.getTitle()).setFontSize(60.0);
         ;
         // Create index slide
         XSLFSlideLayout indexLayout = defaultMaster.getLayout(SlideLayout.TITLE_AND_CONTENT);
         slide = ppt.createSlide(indexLayout);
         titleShape = slide.getPlaceholder(0);
         contentShape = slide.getPlaceholder(1);
-        titleShape.setText("Index").setFontSize(12.0);
+        titleShape.setText("Index").setFontSize(40.0);
         Index index = presentation.getIndex();
+        //List<String> titles = index.getSlideTitles();
+        //titles.add("");
+        //index.setSlideTitle(titles);
         StringBuilder indexText = new StringBuilder();
         for (String slideTitle : index.getSlideTitles()) {
             indexText.append(slideTitle).append("\n");
         }
-        contentShape.setText(indexText.toString()).setFontSize(12.0);
+        contentShape.setText(indexText.toString()).setFontSize(20.0);
+        
         XSLFSlideLayout slidesLayout = defaultMaster.getLayout(SlideLayout.TITLE_AND_CONTENT);
         for (Slide modelSlide : presentation.getSlides()) {
             slide = ppt.createSlide(slidesLayout);
             titleShape = slide.getPlaceholder(0);
             contentShape = slide.getPlaceholder(1);
-            titleShape.setText(modelSlide.getTitle()).setFontSize(20.0);
-            contentShape.setText(modelSlide.getText()).setFontSize(12.0);
+            titleShape.setText(modelSlide.getTitle()).setFontSize(40.0);
+            contentShape.setText(modelSlide.getText()).setFontSize(20.0);
         }
 
         try {

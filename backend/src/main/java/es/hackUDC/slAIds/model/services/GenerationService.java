@@ -15,6 +15,7 @@ import es.hackUDC.slAIds.model.entities.Slide;
 import es.hackUDC.slAIds.model.services.ChatService.ChatService;
 import es.hackUDC.slAIds.model.services.ChatService.ChatServiceMock;
 import es.hackUDC.slAIds.model.services.ChatService.PromptResponse;
+import es.hackUDC.slAIds.model.services.TransferObjects.ImagePrompt;
 import es.hackUDC.slAIds.model.services.TransferObjects.IndexTransfer;
 import es.hackUDC.slAIds.model.services.TransferObjects.SlideText;
 
@@ -81,6 +82,22 @@ public class GenerationService {
     	return (chatService.executeWithConversation(requestSlidePrompt, SlideText.class, conversationId, parentId).get());	
     	
     }
+    
+    public PromptResponse<ImagePrompt> generateImagePrompt(String slideText, String conversationId, String parentId) {
+    	
+    	String requestImagePrompt = "Generate a text to give as input to a Image generative Artificial"
+    			+ " Intelligence, to generate an image for a presentation to ilustrate the following text : "
+    			+ slideText;
+    	
+    	chatService.executeWithConversation(requestImagePrompt, ImagePrompt.class, conversationId, parentId).get();
+    	
+    	return null;
+    	
+    }
+    
+    public byte[] generateImg(String imgPrompt) {
+    	return null;
+    }
 
     public Presentation generatePresentation(String presentationTitle, String presentationPrompt, int numSlides,
             int minWords, int maxWords, boolean bulletPoints, Presentation presentation) {
@@ -88,6 +105,7 @@ public class GenerationService {
         // Presentation presentation = new Presentation();
         String parentId;
         String conversationId;
+        byte[] img = null;
 
         presentation.setTitle(presentationTitle);
         presentation.setDescriptionPrompt(presentationPrompt);
@@ -106,10 +124,13 @@ public class GenerationService {
 
             String slideTitle = presentation.getIndex().getSlideTitles().get(i);
             String slideDescription = presentation.getIndex().getSlideDescriptions().get(i);
-
+            
             responseSlideText = generateSlide(slideTitle, slideDescription, conversationId, parentId, minWords,
                     maxWords, bulletPoints);
-            slides.add(new Slide(slideTitle, responseSlideText.response().getText(), (i + 1)));
+            
+            img = generateImg(slideTitle);
+            
+            slides.add(new Slide(slideTitle, responseSlideText.response().getText(), (i + 1), img));
 
             parentId = responseSlideText.parentId();
             conversationId = responseSlideText.conversationId();

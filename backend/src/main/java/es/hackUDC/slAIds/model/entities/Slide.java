@@ -22,14 +22,17 @@ public class Slide {
     private String text;
 
     private int number;
+    
+    private byte[] img; 
 
     public Slide() {
     }
 
-    public Slide(String title, String text, int number) {
+    public Slide(String title, String text, int number, byte[] img) {
         this.title = title;
         this.text = text;
         this.number = number;
+        this.img = img;
     }
 
     public Slide(Long id, String title, String text, int number) {
@@ -69,6 +72,14 @@ public class Slide {
 
     public void setNumber(int number) {
         this.number = number;
+    }
+    
+    public void setImg(byte[] img) {
+    	this.img = img;
+    }
+    
+    public byte[] getImg() {
+    	return this.img;
     }
 
 }
