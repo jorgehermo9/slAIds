@@ -16,56 +16,56 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Service
 public class ImageServiceStableDiffusion implements ImageService {
 
-  @Override
-  public Optional<byte[]> getImage(String prompt) {
-    StableDiffusionRequest stableDiffusionRequest = new StableDiffusionRequest(prompt, 1, 1, 20, 720, 512);
-    try {
-      StableDiffusionResponse stableDiffusionResponse = stableDiffusionRequest.executePostRequest(prompt);
+    @Override
+    public Optional<byte[]> getImage(String prompt, float width, float height) {
+        StableDiffusionRequest stableDiffusionRequest = new StableDiffusionRequest(prompt, 1, 1, 20, width, height);
+        try {
+            StableDiffusionResponse stableDiffusionResponse = stableDiffusionRequest.executePostRequest(prompt);
 
-      return Optional.of(stableDiffusionResponse.getImage());
-    } catch (IOException | InterruptedException e) {
-      e.printStackTrace();
-      return Optional.empty();
+            return Optional.of(stableDiffusionResponse.getImage());
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+            return Optional.empty();
+        }
     }
-  }
 
 }
 
-record StableDiffusionRequest(String prompt, int batch_size, int n_iter, int steps, int width, int height) {
+record StableDiffusionRequest(String prompt, int batch_size, int n_iter, int steps, float width, float height) {
 
-  private static final String STABLE_DIFFUSION_URL = "http://172.20.10.6:7860/sdapi/v1/txt2img";
+    private static final String STABLE_DIFFUSION_URL = "http://172.20.10.6:7860/sdapi/v1/txt2img";
 
-  public StableDiffusionResponse executePostRequest(String prompt)
-      throws IOException, InterruptedException {
+    public StableDiffusionResponse executePostRequest(String prompt)
+            throws IOException, InterruptedException {
 
-    ObjectMapper mapper = new ObjectMapper();
-    String json = mapper.writeValueAsString(this);
-    HttpClient client = HttpClient.newHttpClient();
-    HttpRequest httpRequest = HttpRequest.newBuilder()
-        .version(HttpClient.Version.HTTP_1_1)
-        .uri(URI.create(STABLE_DIFFUSION_URL))
-        .header("Content-Type", "application/json")
-        .POST(HttpRequest.BodyPublishers.ofString(json))
-        .build();
-    HttpResponse<String> response = client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(this);
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest httpRequest = HttpRequest.newBuilder()
+                .version(HttpClient.Version.HTTP_1_1)
+                .uri(URI.create(STABLE_DIFFUSION_URL))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(json))
+                .build();
+        HttpResponse<String> response = client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
-    System.out.println(json);
-    System.out.println(response.body());
+        System.out.println(json);
+        System.out.println(response.body());
 
-    StableDiffusionResponse stableDiffusionResponse = mapper.readValue(response.body(),
-        StableDiffusionResponse.class);
+        StableDiffusionResponse stableDiffusionResponse = mapper.readValue(response.body(),
+                StableDiffusionResponse.class);
 
-    return stableDiffusionResponse;
-  }
+        return stableDiffusionResponse;
+    }
 
 }
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 record StableDiffusionResponse(List<String> images) {
 
-  public byte[] getImage() {
-    // get first element of images array and decode base64 string to byte array
-    String base64Image = images.get(0);
-    return java.util.Base64.getDecoder().decode(base64Image);
-  }
+    public byte[] getImage() {
+        // get first element of images array and decode base64 string to byte array
+        String base64Image = images.get(0);
+        return java.util.Base64.getDecoder().decode(base64Image);
+    }
 }
