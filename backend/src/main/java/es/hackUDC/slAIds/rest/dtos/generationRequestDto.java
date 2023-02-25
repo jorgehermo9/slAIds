@@ -7,5 +7,6 @@ public record generationRequestDto (
 	int numSlides,
 	int minWords,
 	int maxWords,
-	String font
+	String font,
+	boolean bulletPoints
 ) {}

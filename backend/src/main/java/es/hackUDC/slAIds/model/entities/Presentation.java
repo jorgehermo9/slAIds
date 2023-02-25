@@ -33,6 +33,16 @@ public class Presentation {
     @JoinColumn(name = "presentation_id")
     private List<Slide> slides;
 
+    public Presentation() {
+    }
+
+    public Presentation(String title, String descriptionPrompt, Index index, List<Slide> slides) {
+        this.title = title;
+        this.descriptionPrompt = descriptionPrompt;
+        this.index = index;
+        this.slides = slides;
+    }
+    
     private Boolean isAvailable = false;
 
     private byte[] pptx;
@@ -64,16 +74,6 @@ public class Presentation {
 
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
-    }
-
-    public Presentation() {
-    }
-
-    public Presentation(String title, String descriptionPrompt, Index index, List<Slide> slides) {
-        this.title = title;
-        this.descriptionPrompt = descriptionPrompt;
-        this.index = index;
-        this.slides = slides;
     }
 
     public String getTitle() {

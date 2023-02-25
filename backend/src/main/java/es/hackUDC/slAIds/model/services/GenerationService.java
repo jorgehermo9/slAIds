@@ -13,6 +13,7 @@ import es.hackUDC.slAIds.model.entities.Presentation;
 import es.hackUDC.slAIds.model.entities.PresentationDao;
 import es.hackUDC.slAIds.model.entities.Slide;
 import es.hackUDC.slAIds.model.services.ChatService.ChatService;
+import es.hackUDC.slAIds.model.services.ChatService.ChatServiceMock;
 import es.hackUDC.slAIds.model.services.ChatService.PromptResponse;
 import es.hackUDC.slAIds.model.services.TransferObjects.IndexTransfer;
 import es.hackUDC.slAIds.model.services.TransferObjects.SlideText;
@@ -22,8 +23,9 @@ import es.hackUDC.slAIds.model.services.TransferObjects.SlideText;
 public class GenerationService {
 
     @Autowired
-    private ChatService chatService;
-
+    //private ChatService chatService;
+    private ChatServiceMock chatService;
+    
     @Autowired
     private PresentationDao presentationDao;
 
@@ -46,7 +48,7 @@ public class GenerationService {
     public PromptResponse<SlideText> generateSlideText(String slideTitle, String slidePrompt, String conversationId,
             String parentId, int minWords, int maxWords) {
 
-        String requestSlidePrompt = "Generate and informative, condensed, direct, without repeating information "
+        String requestSlidePrompt = "Generate an informative, condensed, direct, without repeating information "
                 + "already given in this conversation, paragraph, between "
                 + minWords + " and " + maxWords + " words,"
                 + " with the title \"" + slideTitle + "\" about: " + slidePrompt + ".";
@@ -54,6 +56,19 @@ public class GenerationService {
         return (chatService.executeWithConversation(requestSlidePrompt, SlideText.class, conversationId, parentId)
                 .get());
 
+    }
+    
+    public PromptResponse<SlideText> generateSlideBullets(String slideTitle, String slidePrompt, String conversationId,
+    		String parentId, int minWords, int maxWords) {
+    	
+    	String requestSlidePrompt = "Generate between 3 and 5 informative, condense, direct, sentences,"
+    			+ "without reapeating any information already given in this conversation, with the title \""
+    			+ slideTitle + "\" and about: " + slidePrompt + ". In the text separate"
+    			+ " each sentence by a newline. The total length of the text must be between "
+    			+ minWords + " and " + maxWords + " words.";
+    			
+    	return (chatService.executeWithConversation(requestSlidePrompt, SlideText.class, conversationId, parentId).get());	
+    	
     }
 
     public Presentation generatePresentation(String presentationTitle, String presentationPrompt, int numSlides,
