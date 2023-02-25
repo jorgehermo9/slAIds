@@ -2,6 +2,7 @@ package es.hackUDC.slAIds.model.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,9 +57,9 @@ public class GenerationService {
 
     }
 
-    public Presentation generatePresentation(String presentationTitle, String presentationPrompt, int numSlides, int minWords, int maxWords) {
+    public Presentation generatePresentation(String presentationTitle, String presentationPrompt, int numSlides, int minWords, int maxWords, Presentation presentation) {
 
-        Presentation presentation = new Presentation();
+        //Presentation presentation = new Presentation();
         String parentId;
         String conversationId;
 
@@ -91,6 +92,21 @@ public class GenerationService {
         presentationDao.save(presentation);
         
         return presentation;
+    }
+    
+    public boolean isAvailable(Long presentationId) {
+    	
+    	Presentation presentation = presentationDao.findById(presentationId).get();
+    	
+    	return (Objects.isNull(presentation.getIndex()));
+    	
+    }
+    
+    public Presentation getGeneratedPresentation(Long presentationId) {
+    	
+    	Presentation presentation = presentationDao.findById(presentationId).get();
+    	
+    	return (presentation);
     }
 
 }
