@@ -1,4 +1,4 @@
-package es.hackUDC.slAIds.model.services.ImageService;
+package es.hackUDC.slAIds.model.services.ImageService.conditions;
 
 import org.springframework.context.annotation.Condition;
 import org.springframework.context.annotation.ConditionContext;
