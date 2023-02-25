@@ -42,7 +42,7 @@ record PromptRequest<T>(String promptText, Class<T> targetClass, String conversa
                 sb.append(", ");
             }
             sb.delete(sb.length() - 2, sb.length());
-            sb.append(".");
+            sb.append(". ");
             fieldsPrompt = sb.toString();
         }
 
