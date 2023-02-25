@@ -1,9 +1,9 @@
 import SlideRequest from "@/entities/SlideRequest";
-import styles from "./generateCard.module.scss";
+import styles from "./carouselCard.module.scss";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import PresentationFile from "@/entities/PresentationFile";
 import { NotificationContext } from "../NotificationManager/NotificationManager";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import SlideService from "@/services/SlideService";
 
 interface Props {
@@ -21,25 +21,39 @@ export const GenerateCard = ({
 }: Props) => {
   const { createSuccessNotification, createErrorNotification } =
     useContext(NotificationContext)!;
+  const [isGenerating, setIsGenerating] = useState(false);
+
+  function waitForPresentation(id: number) {
+    SlideService.isAvailable(id)
+      .then((isAvailable) => {
+        if (!isAvailable) {
+          setTimeout(() => waitForPresentation(id), 500);
+          return;
+        }
+        createSuccessNotification("SLides generated successfully", 5000);
+        // setBillId(id);
+        setIsGenerating(false);
+      })
+      .catch(() => {
+        setIsGenerating(false);
+        createErrorNotification("Error while generating slides", 5000);
+      });
+  }
+
+  const handleClick = () => {
+    if (isGenerating) return;
+    setIsGenerating(true);
+
+    SlideService.generatePresentation(slideRequest)
+      .then(() => {})
+      .catch(() =>
+        createErrorNotification("Error while generating presentation", 5000)
+      );
+  };
 
   return (
-    <div className={styles.resumeCard}>
-      <button
-        className={styles.generateButton}
-        onClick={() => {
-          SlideService.generatePresentation(slideRequest)
-            .then(() => {
-              createSuccessNotification("Presentation generated!");
-            })
-            .catch(() =>
-              createErrorNotification(
-                "Error while generating presentation",
-                5000
-              )
-            );
-          // setIsPreviewOpen(true);
-        }}
-      >
+    <div className={styles.cardContainer}>
+      <button className={styles.generateButton} onClick={() => {}}>
         Generate
         <SendRoundedIcon className={styles.icon} />
       </button>

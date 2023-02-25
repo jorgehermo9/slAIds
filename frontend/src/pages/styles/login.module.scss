@@ -1,0 +1,80 @@
+.cardContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.card {
+  height: 100%;
+  width: 35vw;
+  min-width: 35vw;
+  padding: 2rem;
+  background-color: var(--bg);
+  border-color: red;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  border-radius: var(--border-radius);
+
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.inputField {
+  margin: 3rem;
+}
+
+.formField {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.input {
+  width: 100%;
+  padding: 0.8rem;
+  display: inline-block;
+  border: 1px solid var(--bg-subtle);
+  border-radius: 4px;
+  font-size: 0.9rem;
+
+  transition: all 0.2s;
+}
+
+.linkWrapper {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.link {
+  color: var(--fg-subtle);
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    text-decoration: underline;
+    text-decoration-color: var(--fg-subtle);
+    text-decoration-thickness: 2px;
+  }
+}
+
+.buttonSignup {
+  height: 3rem;
+  background-color: var(--blue);
+  border-radius: calc(var(--border-radius) - 3px);
+  color: var(--bg);
+  cursor: pointer;
+  transition: all 0.3s;
+
+  &:hover {
+    box-shadow: 0 0 0.4rem var(--blue);
+  }
+}

@@ -11,6 +11,7 @@ export const SlideRequestDtoSchema = z
     numSlides: z.number(),
     minWords: z.number(),
     maxWords: z.number(),
+    bulletPoints: z.boolean(),
   })
   .strict();
 

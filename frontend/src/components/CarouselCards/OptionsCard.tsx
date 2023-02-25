@@ -1,5 +1,5 @@
 import SlideRequest from "@/entities/SlideRequest";
-import styles from "./optionsCard.module.scss";
+import styles from "./carouselCard.module.scss";
 
 interface Props {
   slideRequest: SlideRequest;
@@ -8,9 +8,9 @@ interface Props {
 
 export const OptionsCard = ({ slideRequest, setSlideRequest }: Props) => {
   return (
-    <div className={styles.resumeCard}>
+    <div className={styles.cardContainer}>
       <div className={styles.formField}>
-        <label htmlFor="numSlides" className={styles.title}>
+        <label htmlFor="numSlides" className={styles.inputLabel}>
           Number of slides
         </label>
         <input
@@ -30,7 +30,7 @@ export const OptionsCard = ({ slideRequest, setSlideRequest }: Props) => {
 
       <div className={styles.wordsContainer}>
         <div className={styles.formField}>
-          <label htmlFor="minWords" className={styles.title}>
+          <label htmlFor="minWords" className={styles.inputLabel}>
             Minimum words
           </label>
           <input
@@ -48,7 +48,7 @@ export const OptionsCard = ({ slideRequest, setSlideRequest }: Props) => {
           />
         </div>
         <div className={styles.formField}>
-          <label htmlFor="maxWords" className={styles.title}>
+          <label htmlFor="maxWords" className={styles.inputLabel}>
             Maximum words
           </label>
           <input
@@ -61,6 +61,26 @@ export const OptionsCard = ({ slideRequest, setSlideRequest }: Props) => {
               setSlideRequest({
                 ...slideRequest,
                 maxWords: parseInt(e.target.value),
+              });
+            }}
+          />
+        </div>
+      </div>
+
+      <div className={styles.checkboxWrapper}>
+        <div className={styles.checkboxContainer}>
+          <label htmlFor="bulletPoints" className={styles.inputLabel}>
+            Bullet points
+          </label>
+          <div className={styles.dottedLine} />
+          <input
+            type="checkbox"
+            id="bulletPoints"
+            className={styles.checkbox}
+            onChange={(e) => {
+              setSlideRequest({
+                ...slideRequest,
+                bulletPoints: e.target.checked,
               });
             }}
           />
