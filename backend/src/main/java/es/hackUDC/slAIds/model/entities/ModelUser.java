@@ -24,6 +24,9 @@ public class ModelUser {
     private String email;
     private RoleType role;
 
+    @OneToMany(mappedBy = "presentation_id", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Presentation> presentations;
+
     public ModelUser() {
     }
 

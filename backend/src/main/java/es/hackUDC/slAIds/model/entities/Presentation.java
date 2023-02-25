@@ -47,7 +47,7 @@ public class Presentation {
 
     private byte[] pdf;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne
     private ModelUser modelUser;
 
     public Presentation() {
