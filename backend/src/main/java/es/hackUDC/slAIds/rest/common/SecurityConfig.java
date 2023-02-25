@@ -91,31 +91,49 @@ import java.util.List;
 @Configuration
 public class SecurityConfig {
 
-    @Bean
-    @Order(1)
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable()
-                .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/users/**").permitAll()
-                        .requestMatchers("/chat/prompt").permitAll()
-                        .requestMatchers("/presentations/**").permitAll()
-                        .anyRequest().authenticated())
-                .apply(new MyCustomDsl());
-        return http.build();
-    }
+  @Bean
+  @Order(1)
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    http.cors().and().csrf().disable()
+        .authorizeHttpRequests((authorize) -> authorize
+            .requestMatchers("/users/**").permitAll()
+            .requestMatchers("/chat/prompt").permitAll()
+            .requestMatchers(HttpMethod.POST, "/presentations/**").hasRole("USER")
+            .anyRequest().authenticated())
+        .apply(new MyCustomDsl());
+    return http.build();
+  }
 }
 
 class MyCustomDsl extends AbstractHttpConfigurer<MyCustomDsl, HttpSecurity> {
-    @Autowired
-    private JwtGenerator jwtGenerator;
 
-    @Override
-    public void configure(HttpSecurity http) throws Exception {
-        AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
-        http.addFilter(new JwtFilter(authenticationManager, jwtGenerator));
-    }
+  @Autowired
+  private JwtGenerator jwtGenerator;
 
-    public static MyCustomDsl customDsl() {
-        return new MyCustomDsl();
-    }
+  @Override
+  public void configure(HttpSecurity http) throws Exception {
+    AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
+    http.addFilter(new JwtFilter(authenticationManager, jwtGenerator));
+  }
+
+  public static MyCustomDsl customDsl() {
+    return new MyCustomDsl();
+  }
+
+  @Bean
+  public CorsConfigurationSource corsConfigurationSource() {
+
+    CorsConfiguration config = new CorsConfiguration();
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+
+    config.setAllowCredentials(true);
+    config.setAllowedOriginPatterns(Arrays.asList("*"));
+    config.addAllowedHeader("*");
+    config.addAllowedMethod("*");
+
+    source.registerCorsConfiguration("/**", config);
+
+    return source;
+
+  }
 }

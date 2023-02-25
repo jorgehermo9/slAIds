@@ -17,6 +17,7 @@ public class ModelUser {
   private String password;
   private String email;
   private RoleType role;
+  private Presentation presentation;
 
   public ModelUser() {
   }

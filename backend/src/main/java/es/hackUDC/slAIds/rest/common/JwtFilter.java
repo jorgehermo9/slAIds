@@ -17,6 +17,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+
 public class JwtFilter extends BasicAuthenticationFilter {
 
   private JwtGenerator jwtGenerator;
@@ -35,6 +38,8 @@ public class JwtFilter extends BasicAuthenticationFilter {
 
     String authHeaderValue = request.getHeader(HttpHeaders.AUTHORIZATION);
 
+    System.out.println("authHeaderValue: " + authHeaderValue);
+
     if (authHeaderValue == null || !authHeaderValue.startsWith("Bearer ")) {
       filterChain.doFilter(request, response);
       return;
@@ -43,7 +48,16 @@ public class JwtFilter extends BasicAuthenticationFilter {
     try {
 
       String serviceToken = authHeaderValue.replace("Bearer ", "");
-      JwtInfo jwtInfo = jwtGenerator.getInfo(serviceToken);
+
+      Claims claims = Jwts.parser()
+          .setSigningKey("Bu:GW8bgPlEw".getBytes())
+          .parseClaimsJws(serviceToken)
+          .getBody();
+
+      JwtInfo jwtInfo = new JwtInfo(
+          ((Integer) claims.get("userId")).longValue(),
+          claims.getSubject(),
+          (String) claims.get("role"));
 
       request.setAttribute("serviceToken", serviceToken);
       request.setAttribute("userId", jwtInfo.getUserId());
@@ -51,6 +65,7 @@ public class JwtFilter extends BasicAuthenticationFilter {
       configureSecurityContext(jwtInfo.getUserName(), jwtInfo.getRole());
 
     } catch (Exception e) {
+      System.out.println("EXCEPTION: " + e.getMessage());
       response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
       return;
     }

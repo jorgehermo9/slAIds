@@ -10,140 +10,152 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 
 @Entity
 public class Presentation {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Long id;
 
-    @Column(columnDefinition = "TEXT")
-    private String title;
+  @Column(columnDefinition = "TEXT")
+  private String title;
 
-    @Column(columnDefinition = "TEXT")
-    private String descriptionPrompt;
+  @Column(columnDefinition = "TEXT")
+  private String descriptionPrompt;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private Index index;
+  @OneToOne(cascade = CascadeType.ALL)
+  private Index index;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "presentation_id")
-    private List<Slide> slides;
-    
-    private byte[] frontImg;
-    
-    private Boolean isAvailable = false;
+  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @JoinColumn(name = "presentation_id")
+  private List<Slide> slides;
 
-    private byte[] pptx;
+  private byte[] frontImg;
 
-    private Boolean error;
+  private Boolean isAvailable = false;
 
-    @Column(columnDefinition = "TEXT")
-    private String errorMessage;
+  private byte[] pptx;
 
-    private byte[] pdf;
+  private Boolean error;
 
-    public Presentation() {
-    }
+  @Column(columnDefinition = "TEXT")
+  private String errorMessage;
 
-    public Presentation(String title, String descriptionPrompt, Index index, List<Slide> slides) {
-        this.title = title;
-        this.descriptionPrompt = descriptionPrompt;
-        this.index = index;
-        this.slides = slides;
-    }
+  private byte[] pdf;
 
-    public byte[] getPdf() {
-        return pdf;
-    }
+  @ManyToOne(optional = false, fetch = FetchType.LAZY)
+  @JoinColumn(name = "userId")
+  private ModelUser modelUser;
 
-    public void setPdf(byte[] pdf) {
-        this.pdf = pdf;
-    }
+  public Presentation() {
+  }
 
-    public Boolean getIsAvailable() {
-        return isAvailable;
-    }
+  public Presentation(String title, String descriptionPrompt, Index index, List<Slide> slides, ModelUser modelUser) {
+    this.title = title;
+    this.descriptionPrompt = descriptionPrompt;
+    this.index = index;
+    this.slides = slides;
+    this.modelUser = modelUser;
+  }
 
-    public void setIsAvailable(Boolean isAvailable) {
-        this.isAvailable = isAvailable;
-    }
+  public byte[] getPdf() {
+    return pdf;
+  }
 
-    public Boolean getError() {
-        return error;
-    }
+  public void setPdf(byte[] pdf) {
+    this.pdf = pdf;
+  }
 
-    public void setError(Boolean error) {
-        this.error = error;
-    }
+  public Boolean getIsAvailable() {
+    return isAvailable;
+  }
 
-    public String getErrorMessage() {
-        return errorMessage;
-    }
+  public void setIsAvailable(Boolean isAvailable) {
+    this.isAvailable = isAvailable;
+  }
 
-    public void setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage;
-    }
+  public Boolean getError() {
+    return error;
+  }
 
-    public String getTitle() {
-        return title;
-    }
+  public void setError(Boolean error) {
+    this.error = error;
+  }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+  public String getErrorMessage() {
+    return errorMessage;
+  }
 
-    public String getDescriptionPrompt() {
-        return descriptionPrompt;
-    }
+  public void setErrorMessage(String errorMessage) {
+    this.errorMessage = errorMessage;
+  }
 
-    public void setDescriptionPrompt(String descriptionPrompt) {
-        this.descriptionPrompt = descriptionPrompt;
-    }
+  public String getTitle() {
+    return title;
+  }
 
-    public Long getId() {
-        return id;
-    }
+  public void setTitle(String title) {
+    this.title = title;
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public String getDescriptionPrompt() {
+    return descriptionPrompt;
+  }
 
-    public Index getIndex() {
-        return index;
-    }
+  public void setDescriptionPrompt(String descriptionPrompt) {
+    this.descriptionPrompt = descriptionPrompt;
+  }
 
-    public void setIndex(Index index) {
-        this.index = index;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public List<Slide> getSlides() {
-        return slides;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public void setSlides(List<Slide> slides) {
-        this.slides = slides;
-    }
+  public Index getIndex() {
+    return index;
+  }
 
-    public byte[] getPptx() {
-        return pptx;
-    }
+  public void setIndex(Index index) {
+    this.index = index;
+  }
 
-    public void setPptx(byte[] pptx) {
-        this.pptx = pptx;
-    }
+  public List<Slide> getSlides() {
+    return slides;
+  }
 
-	public byte[] getFrontImg() {
-		return frontImg;
-	}
+  public void setSlides(List<Slide> slides) {
+    this.slides = slides;
+  }
 
-	public void setFrontImg(byte[] frontImg) {
-		this.frontImg = frontImg;
-	}
-    
-    
+  public byte[] getPptx() {
+    return pptx;
+  }
+
+  public void setPptx(byte[] pptx) {
+    this.pptx = pptx;
+  }
+
+  public byte[] getFrontImg() {
+    return frontImg;
+  }
+
+  public void setFrontImg(byte[] frontImg) {
+    this.frontImg = frontImg;
+  }
+
+  public ModelUser getModelUser() {
+    return modelUser;
+  }
+
+  public void setModelUser(ModelUser modelUser) {
+    this.modelUser = modelUser;
+  }
 
 }
