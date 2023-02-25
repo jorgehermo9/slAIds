@@ -1,0 +1,27 @@
+services:
+  db:
+    image: postgres
+    container_name: slides-database
+    environment:
+      POSTGRES_PASSWORD: postgres
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 1s
+      timeout: 1s
+      retries: 10
+      start_period: 30s
+
+  backend:
+    depends_on:
+      db:
+        condition: service_healthy
+    build: backend/
+    image: slides/backend
+    container_name: slides-backend
+
+  frontend:
+    build: frontend/
+    image: slides/frontend
+    container_name: slides-frontend
+    ports:
+      - 3000:3000
