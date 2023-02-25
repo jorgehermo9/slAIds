@@ -16,6 +16,8 @@ import { Preview } from "@/components/Preview/Preview";
 import { AnimatePresence } from "framer-motion";
 import Head from "next/head";
 import NotificationManager from "@/components/NotificationManager/NotificationManager";
+import { Nav } from "@/components/Nav/Nav";
+import { Login } from "@/components/Login/Login";
 
 export default function Home() {
   const [slideRequest, setSlideRequest] = useState<SlideRequest>(
@@ -50,6 +52,8 @@ export default function Home() {
         <title>slAIds</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
+
+      <Nav />
 
       <NotificationManager>
         <AnimatePresence>
