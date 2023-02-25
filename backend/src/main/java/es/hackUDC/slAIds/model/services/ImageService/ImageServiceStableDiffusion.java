@@ -48,10 +48,6 @@ record StableDiffusionRequest(String prompt, int batch_size, int n_iter, int ste
                 .POST(HttpRequest.BodyPublishers.ofString(json))
                 .build();
         HttpResponse<String> response = client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-
-        System.out.println(json);
-        System.out.println(response.body());
-
         StableDiffusionResponse stableDiffusionResponse = mapper.readValue(response.body(),
                 StableDiffusionResponse.class);
 
