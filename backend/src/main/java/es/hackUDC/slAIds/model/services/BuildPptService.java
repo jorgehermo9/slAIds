@@ -28,111 +28,109 @@ import com.lowagie.text.pdf.PdfWriter;
 @Service
 public class BuildPptService {
 
-    public Presentation buildPpt(Presentation presentation) {
+  public Presentation buildPpt(Presentation presentation) {
 
-    	float imgWidth = 360;
-    	float imgHeight = 220;
-    	
-        XMLSlideShow ppt = new XMLSlideShow();
-        XSLFTextShape titleShape;
-        XSLFTextShape contentShape;
-        XSLFPictureShape picture;
-        XSLFPictureData pictureData;
+    float imgWidth = 360;
+    float imgHeight = 220;
 
-        XSLFSlideMaster defaultMaster = ppt.getSlideMasters().get(0);
+    XMLSlideShow ppt = new XMLSlideShow();
+    XSLFTextShape titleShape;
+    XSLFTextShape contentShape;
+    XSLFPictureShape picture;
+    XSLFPictureData pictureData;
 
-        XSLFSlideLayout frontPageLayout = defaultMaster.getLayout(SlideLayout.TITLE_ONLY);
-        XSLFSlide slide = ppt.createSlide(frontPageLayout);
-        titleShape = slide.getPlaceholder(0);
+    XSLFSlideMaster defaultMaster = ppt.getSlideMasters().get(0);
 
-        titleShape.setText(presentation.getTitle()).setFontSize(60.0);
-        ;
-        // Create index slide
-        XSLFSlideLayout indexLayout = defaultMaster.getLayout(SlideLayout.TITLE_AND_CONTENT);
-        slide = ppt.createSlide(indexLayout);
-        titleShape = slide.getPlaceholder(0);
-        contentShape = slide.getPlaceholder(1);
-        titleShape.setText("Index").setFontSize(40.0);
-        Index index = presentation.getIndex();
-        StringBuilder indexText = new StringBuilder();
-        for (String slideTitle : index.getSlideTitles()) {
-            indexText.append(slideTitle).append("\n");
-        }
-        contentShape.setText(indexText.toString()).setFontSize(20.0);
+    XSLFSlideLayout frontPageLayout = defaultMaster.getLayout(SlideLayout.TITLE_ONLY);
+    XSLFSlide slide = ppt.createSlide(frontPageLayout);
+    titleShape = slide.getPlaceholder(0);
 
-        XSLFSlideLayout slidesLayout = defaultMaster.getLayout(SlideLayout.TITLE_AND_CONTENT);
-        for (Slide modelSlide : presentation.getSlides()) {
-            slide = ppt.createSlide(slidesLayout);
-            titleShape = slide.getPlaceholder(0);
-            contentShape = slide.getPlaceholder(1);
-            pictureData = ppt.addPicture(modelSlide.getImg(), PictureData.PictureType.PNG);
-            picture = slide.createPicture(pictureData);
-            Rectangle2D.Float rect = new Rectangle2D.Float(360-(imgWidth/2), 540-imgHeight-10, imgWidth, imgHeight);
-            picture.setAnchor(rect);
-            titleShape.setText(modelSlide.getTitle()).setFontSize(40.0);
-            contentShape.setText(modelSlide.getText()).setFontSize(20.0);
-        }
+    titleShape.setText(presentation.getTitle()).setFontSize(60.0);
+    ;
+    // Create index slide
+    XSLFSlideLayout indexLayout = defaultMaster.getLayout(SlideLayout.TITLE_AND_CONTENT);
+    slide = ppt.createSlide(indexLayout);
+    titleShape = slide.getPlaceholder(0);
+    contentShape = slide.getPlaceholder(1);
+    titleShape.setText("Index").setFontSize(40.0);
+    Index index = presentation.getIndex();
+    StringBuilder indexText = new StringBuilder();
+    for (String slideTitle : index.getSlideTitles()) {
+      indexText.append(slideTitle).append("\n");
+    }
+    contentShape.setText(indexText.toString()).setFontSize(20.0);
 
-        Dimension pgsize = ppt.getPageSize();
-        System.out.println(pgsize.width);
-        System.out.println(pgsize.height);
-        
-        try {
-            // Create a binary Data structure to store the pptx
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            ppt.write(out);
-            out.close();
-            ppt.close();
-            byte[] pptx = out.toByteArray();
-            presentation.setPptx(pptx);
-
-            // convert pptx to pdf
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
-            presentation.setError(true);
-            presentation.setErrorMessage("Error while generating the presentation .pptx file");
-            return presentation;
-        }
-
-        pptToPdf(presentation, ppt);
-
-        return presentation;
+    XSLFSlideLayout slidesLayout = defaultMaster.getLayout(SlideLayout.TITLE_AND_CONTENT);
+    for (Slide modelSlide : presentation.getSlides()) {
+      slide = ppt.createSlide(slidesLayout);
+      titleShape = slide.getPlaceholder(0);
+      contentShape = slide.getPlaceholder(1);
+      pictureData = ppt.addPicture(modelSlide.getImg(), PictureData.PictureType.PNG);
+      picture = slide.createPicture(pictureData);
+      Rectangle2D.Float rect = new Rectangle2D.Float(360 - (imgWidth / 2), 540 - imgHeight - 10, imgWidth, imgHeight);
+      picture.setAnchor(rect);
+      titleShape.setText(modelSlide.getTitle()).setFontSize(40.0);
+      contentShape.setText(modelSlide.getText()).setFontSize(20.0);
     }
 
-    public Presentation pptToPdf(Presentation presentation, XMLSlideShow ppt) {
-        try {
-            // getting the dimensions and size of the slide
-            Dimension pgsize = ppt.getPageSize();
-            List<XSLFSlide> slides = ppt.getSlides();
+    Dimension pgsize = ppt.getPageSize();
 
-            // take first slide and draw it directly into PDF via awt.Graphics2D interface.
-            Document document = new Document();
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            PdfWriter pdfWriter = PdfWriter.getInstance(document, out);
-            document.setPageSize(new Rectangle((float) pgsize.getWidth(), (float) pgsize.getHeight()));
-            document.open();
+    try {
+      // Create a binary Data structure to store the pptx
+      ByteArrayOutputStream out = new ByteArrayOutputStream();
+      ppt.write(out);
+      out.close();
+      ppt.close();
+      byte[] pptx = out.toByteArray();
+      presentation.setPptx(pptx);
 
-            for (XSLFSlide slide : slides) {
-                PdfGraphics2D graphics = (PdfGraphics2D) pdfWriter.getDirectContent()
-                        .createGraphics((float) pgsize.getWidth(), (float) pgsize.getHeight());
-                slide.draw(graphics);
-                graphics.dispose();
-                document.newPage();
-            }
+      // convert pptx to pdf
 
-            document.close();
-            out.close();
-            byte[] pdf = out.toByteArray();
-            presentation.setPdf(pdf);
+    } catch (Exception e) {
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            presentation.setError(true);
-            presentation.setErrorMessage("Error while generating the presentation .pdf file");
-        }
-
-        return presentation;
+      e.printStackTrace();
+      presentation.setError(true);
+      presentation.setErrorMessage("Error while generating the presentation .pptx file");
+      return presentation;
     }
+
+    pptToPdf(presentation, ppt);
+
+    return presentation;
+  }
+
+  public Presentation pptToPdf(Presentation presentation, XMLSlideShow ppt) {
+    try {
+      // getting the dimensions and size of the slide
+      Dimension pgsize = ppt.getPageSize();
+      List<XSLFSlide> slides = ppt.getSlides();
+
+      // take first slide and draw it directly into PDF via awt.Graphics2D interface.
+      Document document = new Document();
+      ByteArrayOutputStream out = new ByteArrayOutputStream();
+      PdfWriter pdfWriter = PdfWriter.getInstance(document, out);
+      document.setPageSize(new Rectangle((float) pgsize.getWidth(), (float) pgsize.getHeight()));
+      document.open();
+
+      for (XSLFSlide slide : slides) {
+        PdfGraphics2D graphics = (PdfGraphics2D) pdfWriter.getDirectContent()
+            .createGraphics((float) pgsize.getWidth(), (float) pgsize.getHeight());
+        slide.draw(graphics);
+        graphics.dispose();
+        document.newPage();
+      }
+
+      document.close();
+      out.close();
+      byte[] pdf = out.toByteArray();
+      presentation.setPdf(pdf);
+
+    } catch (Exception e) {
+      e.printStackTrace();
+      presentation.setError(true);
+      presentation.setErrorMessage("Error while generating the presentation .pdf file");
+    }
+
+    return presentation;
+  }
 }
