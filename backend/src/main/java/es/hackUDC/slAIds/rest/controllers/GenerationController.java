@@ -25,6 +25,8 @@ import es.hackUDC.slAIds.model.entities.PresentationDao;
 import es.hackUDC.slAIds.model.exceptions.InstanceNotFoundException;
 import es.hackUDC.slAIds.model.services.BuildPptService;
 import es.hackUDC.slAIds.model.services.GenerationService;
+import es.hackUDC.slAIds.rest.dtos.PresentationConversor;
+import es.hackUDC.slAIds.rest.dtos.PresentationDto;
 import es.hackUDC.slAIds.rest.dtos.generationRequestDto;
 
 @RestController
@@ -196,11 +198,11 @@ public class GenerationController {
     }
 
     @GetMapping("")
-    public List<Presentation> getAllPresentations(@RequestAttribute Long userId)
+    public List<PresentationDto> getAllPresentations(@RequestAttribute Long userId)
             throws IOException, InstanceNotFoundException {
 
-        List<Presentation> userList = presentationDao.findByModelUserId(userId);
+        List<Presentation> presentationList = presentationDao.findByModelUserId(userId);
 
-        return userList;
+        return PresentationConversor.toPresentationDtoList(presentationList);
     }
 }
