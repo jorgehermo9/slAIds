@@ -4,7 +4,7 @@ import PresentationDto, {
   toPresentation,
 } from "@/entities/PresentationDto";
 import PresentationFile from "@/entities/PresentationFile";
-import PresentationListDto from "@/entities/PresentationListDto";
+import PresentationListDto, { PresentationListDtoSchema } from "@/entities/PresentationListDto";
 import PresentationRequest, {
   toPresentationRequestDto,
 } from "@/entities/PresentationRequest";
@@ -71,7 +71,7 @@ export default abstract class PresentationSerivce {
       .then((res) => res.json())
       .then((res) => {
         const presentationDtos: PresentationListDto[] = res.map(
-          (presentationDto: any) => PresentationDtoSchema.parse(presentationDto)
+          (presentationDto: any) => PresentationListDtoSchema.parse(presentationDto)
         );
         return presentationDtos;
       });
@@ -81,6 +81,17 @@ export default abstract class PresentationSerivce {
     id: Presentation["id"]
   ): Promise<PresentationFile> {
     return fetch(`${this.endpoint}/presentations/${id}/pdf`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("serviceToken")}`,
+      },
+    })
+      .then((res) => res.blob())
+      .then((res) => res);
+  }
+
+  static async getPresentationDownloadPdf(id): Promise<PresentationFile> {
+    return fetch(`/api/presentations/${id}/download/pdf`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${sessionStorage.getItem("serviceToken")}`,

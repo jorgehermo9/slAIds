@@ -9,6 +9,7 @@ import { Preview } from "../Preview/Preview";
 import PresentationFile from "@/entities/PresentationFile";
 import DownloadIcon from "@mui/icons-material/Download";
 import PresentationListDto from "@/entities/PresentationListDto";
+import { useRouter } from "next/router";
 
 export const PresentationList = () => {
   const { createErrorNotification } = useContext(NotificationContext)!;
@@ -16,6 +17,7 @@ export const PresentationList = () => {
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [presentationFile, setPresentationFile] =
     useState<PresentationFile | null>();
+  const router = useRouter();
 
   const handleClickPreview = (presentation: PresentationListDto) => {
     PresentationService.getPresentationFile(presentation.id)
@@ -38,6 +40,13 @@ export const PresentationList = () => {
       );
   }, [createErrorNotification]);
 
+  const handleClickDownloadButton = (id) => {
+    PresentationService.getPresentationDownloadPdf(id).then((res) => {
+      const file = URL.createObjectURL(res);
+      location.assign(file);
+    });
+  };
+
   return (
     <>
       <AnimatePresence>
@@ -50,42 +59,36 @@ export const PresentationList = () => {
       </AnimatePresence>
       <h1 className={styles.title}>Presentations</h1>
       <div className={styles.listContainer}>
-        {presentations.map((presentation, i) => (
-          <div key={i} className={styles.listItemContainer}>
-            <h2 className={styles.itemTitle}>{presentation.title}</h2>
-            <div className={styles.buttonsContainer}>
-              <VisibilityIcon
-                onClick={() => handleClickPreview(presentation)}
-                className={styles.itemIcon}
-              />
-              <div className={styles.downloadsWrapper}>
-                <span>Download</span>
-                <div className={styles.downloadsButtonContainer}>
-                  <a
-                    className={`${styles.pdfButton} ${styles.downloadsButton}`}
-                    href={`/api/presentations/${presentation.id}/pdf`}
-                    download={`${presentation.title}.pdf`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    <span>pdf</span>
-                    <DownloadIcon />
-                  </a>
-                  <a
-                    className={`${styles.pptButton} ${styles.downloadsButton}`}
-                    href={`/api/presentations/${presentation.id}/pptx`}
-                    download={`${presentation.title}.pptx`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    <span>ppt</span>
-                    <DownloadIcon />
-                  </a>
-                </div>
+        {presentations.length === 0 ? (
+          <div className={styles.noPresentationsContainer}>
+            <h2 className={styles.noPresentationsText}>
+              You have no presentations yet
+            </h2>
+          </div>
+        ) : (
+          presentations.map((presentation, i) => (
+            <div key={i} className={styles.listItemContainer}>
+              <h2 className={styles.itemTitle}>{presentation.title}</h2>
+              <div className={styles.buttonsContainer}>
+                <VisibilityIcon
+                  onClick={() => handleClickPreview(presentation)}
+                  className={styles.itemIcon}
+                />
+                <button
+                  onClick={() => handleClickDownloadButton(presentation.id)}
+                  className={`${styles.pdfButton} ${styles.downloadsButton}`}
+                >
+                  <span>pdf</span>
+                  <DownloadIcon />
+                </button>
+                <a className={`${styles.pptButton} ${styles.downloadsButton}`}>
+                  <span>ppt</span>
+                  <DownloadIcon />
+                </a>
               </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
     </>
   );

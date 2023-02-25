@@ -4,7 +4,7 @@ import { StyleCard } from "@/components/CarouselCards/StyleCard";
 import { OptionsCard } from "@/components/CarouselCards/OptionsCard";
 import { GenerateCard } from "@/components/CarouselCards/GenerateCard";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "../styles/home.module.scss";
 import NotesIcon from "@mui/icons-material/Notes";
 import ColorLensIcon from "@mui/icons-material/ColorLens";
@@ -17,6 +17,7 @@ import NotificationManager from "@/components/NotificationManager/NotificationMa
 import PresentationRequest, {
   getDefaultPresentationRequest,
 } from "@/entities/PresentationRequest";
+import { useRouter } from "next/router";
 
 export default function Home() {
   const [presentationRequest, setPresentationRequest] =
@@ -24,6 +25,13 @@ export default function Home() {
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [presentationFile, setPresentationFile] =
     useState<PresentationFile | null>(null);
+  const router = useRouter();
+
+  // useEffect(() => {
+  //   if (sessionStorage.getItem("presentationRequest") === null) {
+  //     router.push("/");
+  //   }
+  // }, [router]);
 
   const properties = [
     {

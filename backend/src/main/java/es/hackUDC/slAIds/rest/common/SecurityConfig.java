@@ -97,6 +97,8 @@ public class SecurityConfig {
     http.cors().and().csrf().disable()
         .authorizeHttpRequests((authorize) -> authorize
             .requestMatchers("/users/**").permitAll()
+            .requestMatchers("**/pptx").permitAll()
+            .requestMatchers("**/pdf").permitAll()
             .requestMatchers("/chat/prompt").permitAll()
             .requestMatchers(HttpMethod.POST, "/presentations/**").hasRole("USER")
             .anyRequest().authenticated())

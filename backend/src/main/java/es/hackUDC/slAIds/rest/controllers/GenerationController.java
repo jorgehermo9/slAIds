@@ -33,175 +33,155 @@ import es.hackUDC.slAIds.rest.dtos.generationRequestDto;
 @RequestMapping("/presentations")
 public class GenerationController {
 
-    @Autowired
-    private GenerationService generationService;
+  @Autowired
+  private GenerationService generationService;
 
-    @Autowired
-    private PresentationDao presentationDao;
+  @Autowired
+  private PresentationDao presentationDao;
 
-    @Autowired
-    private BuildPptService buildPptService;
+  @Autowired
+  private BuildPptService buildPptService;
 
-    @Autowired
-    private ModelUserDao modelUserDao;
+  @Autowired
+  private ModelUserDao modelUserDao;
 
-    @PostMapping("/generate")
-    public Long generatePresentation(
-            @RequestAttribute Long userId,
-            @RequestBody generationRequestDto generationRequestDto) throws InstanceNotFoundException {
+  @PostMapping("/generate")
+  public Long generatePresentation(
+      @RequestAttribute Long userId,
+      @RequestBody generationRequestDto generationRequestDto) throws InstanceNotFoundException {
 
-        float imgWidth = 360;
-        float imgHeight = 220;
+    float imgWidth = 360;
+    float imgHeight = 220;
 
-        Optional<ModelUser> modelUser = modelUserDao.findById(userId);
-        if (!modelUser.isPresent()) {
-            throw new InstanceNotFoundException("User not found", userId);
-        }
-
-        Presentation presentation = new Presentation();
-        presentation.setModelUser(modelUser.get());
-        presentationDao.save(presentation);
-
-        // Start a new thread to generate the presentation asynchronously
-        Thread t1 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Presentation generatedPresentation = generationService.generatePresentation(
-                        generationRequestDto.title(),
-                        generationRequestDto.prompt(),
-                        generationRequestDto.numSlides(),
-                        generationRequestDto.minWords(),
-                        generationRequestDto.maxWords(),
-                        generationRequestDto.bulletPoints(),
-                        imgWidth,
-                        imgHeight,
-                        presentation);
-                Presentation builtPresentation = buildPptService.buildPpt(generatedPresentation, imgWidth, imgHeight);
-                presentation.setIsAvailable(true);
-                presentationDao.save(builtPresentation);
-            }
-        });
-        t1.start();
-
-        return presentation.getId();
-
+    Optional<ModelUser> modelUser = modelUserDao.findById(userId);
+    if (!modelUser.isPresent()) {
+      throw new InstanceNotFoundException("User not found", userId);
     }
 
-    @GetMapping("/{presentationId}")
-    public Presentation getGeneratedPresentation(@RequestAttribute Long userId,
-            @PathVariable Long presentationId) throws InstanceNotFoundException {
+    Presentation presentation = new Presentation();
+    presentation.setModelUser(modelUser.get());
+    presentationDao.save(presentation);
 
-        Optional<ModelUser> modelUser = modelUserDao.findById(userId);
-        if (!modelUser.isPresent()) {
-            throw new InstanceNotFoundException("User not found", userId);
-        }
+    // Start a new thread to generate the presentation asynchronously
+    Thread t1 = new Thread(new Runnable() {
+      @Override
+      public void run() {
+        Presentation generatedPresentation = generationService.generatePresentation(
+            generationRequestDto.title(),
+            generationRequestDto.prompt(),
+            generationRequestDto.numSlides(),
+            generationRequestDto.minWords(),
+            generationRequestDto.maxWords(),
+            generationRequestDto.bulletPoints(),
+            imgWidth,
+            imgHeight,
+            presentation);
+        Presentation builtPresentation = buildPptService.buildPpt(generatedPresentation, imgWidth, imgHeight);
+        presentation.setIsAvailable(true);
+        presentationDao.save(builtPresentation);
+      }
+    });
+    t1.start();
 
-        Presentation presentation = generationService.getGeneratedPresentation(presentationId);
+    return presentation.getId();
 
-        if (presentation.getModelUser().getId() != userId) {
-            throw new InstanceNotFoundException("User unhautorized", userId);
-        }
+  }
 
-        return presentation;
+  @GetMapping("/{presentationId}")
+  public Presentation getGeneratedPresentation(@RequestAttribute Long userId,
+      @PathVariable Long presentationId) throws InstanceNotFoundException {
+
+    Optional<ModelUser> modelUser = modelUserDao.findById(userId);
+    if (!modelUser.isPresent()) {
+      throw new InstanceNotFoundException("User not found", userId);
     }
 
-    @GetMapping("/{presentationId}/is-available")
-    public boolean isAvailable(
-            @RequestAttribute Long userId,
-            @PathVariable Long presentationId) throws InstanceNotFoundException {
+    Presentation presentation = generationService.getGeneratedPresentation(presentationId);
 
-        Optional<ModelUser> modelUser = modelUserDao.findById(userId);
-        if (!modelUser.isPresent()) {
-            throw new InstanceNotFoundException("User not found", userId);
-        }
-
-        Presentation presentation = generationService.getGeneratedPresentation(presentationId);
-
-        if (presentation.getModelUser().getId() != userId) {
-            throw new InstanceNotFoundException("User unhautorized", userId);
-        }
-
-        return generationService.isAvailable(presentationId);
-
+    if (presentation.getModelUser().getId() != userId) {
+      throw new InstanceNotFoundException("User unhautorized", userId);
     }
 
-    @GetMapping("/{presentationId}/download/pptx")
-    public ResponseEntity<Resource> downloadPptx(
-            @RequestAttribute Long userId,
-            @PathVariable Long presentationId) throws IOException, InstanceNotFoundException {
-        Presentation presentation = generationService.getGeneratedPresentation(presentationId);
+    return presentation;
+  }
 
-        if (presentation.getModelUser().getId() != userId) {
-            throw new InstanceNotFoundException("Presentation unhautorized", userId);
-        }
+  @GetMapping("/{presentationId}/is-available")
+  public boolean isAvailable(
+      @RequestAttribute Long userId,
+      @PathVariable Long presentationId) throws InstanceNotFoundException {
 
-        byte[] pptx = presentation.getPptx();
-
-        InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(pptx));
-
-        return ResponseEntity.ok()
-                .contentLength(pptx.length)
-                .header("Content-Disposition", "attachment; filename=\"presentation.pptx\"")
-                .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                .body(resource);
-
+    Optional<ModelUser> modelUser = modelUserDao.findById(userId);
+    if (!modelUser.isPresent()) {
+      throw new InstanceNotFoundException("User not found", userId);
     }
 
-    @GetMapping("/{presentationId}/download/pdf")
-    public ResponseEntity<Resource> downloadPdf(
-            @RequestAttribute Long userId,
-            @PathVariable Long presentationId) throws IOException, InstanceNotFoundException {
-        Presentation presentation = generationService.getGeneratedPresentation(presentationId);
+    Presentation presentation = generationService.getGeneratedPresentation(presentationId);
 
-        if (presentation.getModelUser().getId() != userId) {
-            throw new InstanceNotFoundException("Presentation unhautorized", userId);
-        }
-
-        byte[] pdf = presentation.getPdf();
-
-        InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(pdf));
-
-        return ResponseEntity.ok()
-                .contentLength(pdf.length)
-                .header("Content-Disposition", "attachment; filename=\"presentation.pdf\"")
-                .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                .body(resource);
-
+    if (presentation.getModelUser().getId() != userId) {
+      throw new InstanceNotFoundException("User unhautorized", userId);
     }
 
-    @GetMapping("/{presentationId}/pdf")
-    public byte[] getPdf(
-            @RequestAttribute Long userId,
-            @PathVariable Long presentationId) throws IOException, InstanceNotFoundException {
-        Presentation presentation = generationService.getGeneratedPresentation(presentationId);
+    return generationService.isAvailable(presentationId);
 
-        if (presentation.getModelUser().getId() != userId) {
-            throw new InstanceNotFoundException("Presentation unhautorized", userId);
-        }
+  }
 
-        return presentation.getPdf();
+  @GetMapping("/{presentationId}/download/pptx")
+  public ResponseEntity<Resource> downloadPptx(
+      @PathVariable Long presentationId) throws IOException {
+    Presentation presentation = generationService.getGeneratedPresentation(presentationId);
 
-    }
+    byte[] pptx = presentation.getPptx();
 
-    @GetMapping("/{presentationId}/pptx")
-    public byte[] getPptx(
-            @RequestAttribute Long userId,
-            @PathVariable Long presentationId) throws IOException, InstanceNotFoundException {
-        Presentation presentation = generationService.getGeneratedPresentation(presentationId);
+    InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(pptx));
 
-        if (presentation.getModelUser().getId() != userId) {
-            throw new InstanceNotFoundException("Presentation unhautorized", userId);
-        }
+    return ResponseEntity.ok()
+        .contentLength(pptx.length)
+        .header("Content-Disposition", "attachment; filename=\"presentation.pptx\"")
+        .contentType(MediaType.APPLICATION_OCTET_STREAM)
+        .body(resource);
 
-        return presentation.getPptx();
-    }
+  }
 
-    @GetMapping("")
-    public List<PresentationDto> getAllPresentations(@RequestAttribute Long userId)
-            throws IOException, InstanceNotFoundException {
+  @GetMapping("/{presentationId}/download/pdf")
+  public ResponseEntity<Resource> downloadPdf(
+      @PathVariable Long presentationId) throws IOException {
+    Presentation presentation = generationService.getGeneratedPresentation(presentationId);
+    byte[] pdf = presentation.getPdf();
 
-        List<Presentation> presentationList = presentationDao.findByModelUserId(userId);
+    InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(pdf));
 
-        return PresentationConversor.toPresentationDtoList(presentationList);
-    }
+    return ResponseEntity.ok()
+        .contentLength(pdf.length)
+        .header("Content-Disposition", "attachment; filename=\"presentation.pdf\"")
+        .contentType(MediaType.APPLICATION_OCTET_STREAM)
+        .body(resource);
+
+  }
+
+  @GetMapping("/{presentationId}/pdf")
+  public byte[] getPdf(
+      @RequestAttribute Long userId,
+      @PathVariable Long presentationId) throws IOException {
+    Presentation presentation = generationService.getGeneratedPresentation(presentationId);
+
+    return presentation.getPdf();
+
+  }
+
+  @GetMapping("/{presentationId}/pptx")
+  public byte[] getPptx(
+      @PathVariable Long presentationId) throws IOException {
+    Presentation presentation = generationService.getGeneratedPresentation(presentationId);
+
+    return presentation.getPptx();
+  }
+
+  @GetMapping("")
+  public List<PresentationDto> getAllPresentations(@RequestAttribute Long userId)
+      throws IOException, InstanceNotFoundException {
+
+    List<Presentation> presentationList = presentationDao.findByModelUserId(userId);
+
+    return PresentationConversor.toPresentationDtoList(presentationList);
+  }
 }

@@ -1,7 +1,3 @@
-import PresentationFile from "@/entities/PresentationFile";
-import Slide from "@/entities/Slide";
-import { SlideDtoSchema, toSlide } from "@/entities/SlideDto";
-import SlideRequest, { toSlideRequestDto } from "@/entities/SlideRequest";
 import UserSignupRequest from "@/entities/UserSignupRequest";
 import UserLoginRequest from "@/entities/UserLoginRequest";
 
