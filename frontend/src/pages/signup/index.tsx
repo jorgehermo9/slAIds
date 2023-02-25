@@ -1,11 +1,22 @@
 import { Nav } from "@/components/Nav/Nav";
-import { useState } from "react";
+import { useStorage } from "@/hooks/useStorage";
+import UserService from "@/services/UserService";
+import { Router, useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import styles from "../styles/login.module.scss";
 
 export default function Signup() {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
+  const [token, setToken] = useState("");
+  const router = useRouter();
+
+  useEffect(() => {
+    if (token !== "") {
+      sessionStorage.setItem("serviceToken", token);
+    }
+  }, [token]);
 
   const handleSubmit = () => {
     const user = {
@@ -13,6 +24,11 @@ export default function Signup() {
       password,
       email,
     };
+
+    UserService.signup(user).then((res) => {
+      setToken(res);
+      router.push("/");
+    });
   };
 
   return (
