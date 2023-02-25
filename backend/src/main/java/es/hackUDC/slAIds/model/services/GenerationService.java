@@ -107,7 +107,7 @@ public class GenerationService {
    */
 
   public Presentation generatePresentation(String presentationTitle, String presentationPrompt, int numSlides,
-      int minWords, int maxWords, boolean bulletPoints, Presentation presentation) {
+      int minWords, int maxWords, boolean bulletPoints, float imgWidth, float imgHeight, Presentation presentation) {
 
     // Presentation presentation = new Presentation();
     String parentId;
@@ -117,7 +117,7 @@ public class GenerationService {
     presentation.setTitle(presentationTitle);
     presentation.setDescriptionPrompt(presentationPrompt);
 
-    img = imageService.getImage(presentationPrompt).get();
+    img = imageService.getImage(presentationPrompt,imgWidth,imgHeight).get();
     presentation.setFrontImg(img);
 
     PromptResponse<IndexTransfer> responseIndex = generateIndex(presentationPrompt, numSlides);
@@ -138,7 +138,7 @@ public class GenerationService {
       responseSlideText = generateSlide(slideTitle, slideDescription, conversationId, parentId, minWords,
           maxWords, bulletPoints);
 
-      img = imageService.getImage(slideTitle).get();
+      img = imageService.getImage(slideTitle,imgWidth,imgHeight).get();
 
       slides.add(new Slide(slideTitle, responseSlideText.response().getText(), (i + 1), img));
 

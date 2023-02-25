@@ -28,10 +28,10 @@ import com.lowagie.text.pdf.PdfWriter;
 @Service
 public class BuildPptService {
 
-    public Presentation buildPpt(Presentation presentation) {
+    public Presentation buildPpt(Presentation presentation, float imgWidth, float imgHeight) {
 
-    	float imgWidth = 360;
-    	float imgHeight = 220;
+    	//float imgWidth = 360;
+    	//float imgHeight = 220;
     	
         XMLSlideShow ppt = new XMLSlideShow();
         XSLFTextShape titleShape;

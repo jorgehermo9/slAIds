@@ -47,6 +47,9 @@ public class GenerationController {
       @RequestAttribute Long userId,
       @RequestBody generationRequestDto generationRequestDto) throws InstanceNotFoundException {
 
+	float imgWidth = 360;
+	float imgHeight = 220;
+	  
     Optional<ModelUser> modelUser = modelUserDao.findById(userId);
 
     if (!modelUser.isPresent()) {
@@ -68,8 +71,10 @@ public class GenerationController {
             generationRequestDto.minWords(),
             generationRequestDto.maxWords(),
             generationRequestDto.bulletPoints(),
+            imgWidth,
+            imgHeight,
             presentation);
-        Presentation builtPresentation = buildPptService.buildPpt(generatedPresentation);
+        Presentation builtPresentation = buildPptService.buildPpt(generatedPresentation, imgWidth, imgHeight);
         presentation.setIsAvailable(true);
         presentationDao.save(builtPresentation);
       }
