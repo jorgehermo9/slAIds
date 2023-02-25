@@ -58,6 +58,8 @@ public class BuildPptService {
         for (String slideTitle : index.getSlideTitles()) {
             indexText.append(slideTitle).append("\n");
         }
+        
+        indexText.append("\n");
         contentShape.setText(indexText.toString()).setFontSize(20.0);
 
         XSLFSlideLayout slidesLayout = defaultMaster.getLayout(SlideLayout.TITLE_AND_CONTENT);
