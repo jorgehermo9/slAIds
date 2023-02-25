@@ -23,8 +23,8 @@ import es.hackUDC.slAIds.model.services.TransferObjects.SlideText;
 public class GenerationService {
 
     @Autowired
-    //private ChatService chatService;
-    private ChatServiceMock chatService;
+    private ChatService chatService;
+    // private ChatServiceMock chatService;
     
     @Autowired
     private PresentationDao presentationDao;

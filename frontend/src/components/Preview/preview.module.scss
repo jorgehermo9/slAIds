@@ -58,7 +58,7 @@
   }
 
   &[data-is-selected="false"] {
-    border: 2px solid #ffffff00;
+    border: 2px solid var(--bg-subtle);
   }
 
   transition: all 0.2s;
@@ -74,6 +74,8 @@
   canvas {
     border-radius: var(--border-radius) !important;
   }
+  border: 2px solid var(--bg-subtle);
+  border-radius: var(--border-radius);
 }
 
 .closeButton {

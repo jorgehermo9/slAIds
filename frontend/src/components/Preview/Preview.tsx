@@ -1,6 +1,6 @@
 import PresentationFile from "@/entities/PresentationFile";
 import styles from "./preview.module.scss";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { pdfjs, Document, Page } from "react-pdf";
 import CloseIcon from "@mui/icons-material/Close";
 import { motion } from "framer-motion";
@@ -66,7 +66,7 @@ export const Preview = ({ presentationFile, onClose }: Props) => {
             <Page
               className={styles.bigPreviewSlide}
               pageNumber={pageNumber}
-              width={1200}
+              width={900}
               renderAnnotationLayer={false}
               renderTextLayer={false}
             />
