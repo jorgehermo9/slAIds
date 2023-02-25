@@ -35,12 +35,12 @@ public class BuildPptService {
         XSLFPictureShape picture;
         XSLFPictureData pictureData;
 
-        for(XSLFSlideMaster master : ppt.getSlideMasters()) {
-        	for(XSLFSlideLayout layout : master.getSlideLayouts()) {
-        		System.out.println(layout.getType());
-        	}
+        for (XSLFSlideMaster master : ppt.getSlideMasters()) {
+            for (XSLFSlideLayout layout : master.getSlideLayouts()) {
+                System.out.println(layout.getType());
+            }
         }
-                
+
         XSLFSlideMaster defaultMaster = ppt.getSlideMasters().get(0);
 
         XSLFSlideLayout frontPageLayout = defaultMaster.getLayout(SlideLayout.TITLE_ONLY);
@@ -61,7 +61,7 @@ public class BuildPptService {
             indexText.append(slideTitle).append("\n");
         }
         contentShape.setText(indexText.toString()).setFontSize(20.0);
-        
+
         XSLFSlideLayout slidesLayout = defaultMaster.getLayout(SlideLayout.TITLE_AND_CONTENT);
         for (Slide modelSlide : presentation.getSlides()) {
             slide = ppt.createSlide(slidesLayout);

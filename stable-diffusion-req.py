@@ -18,5 +18,5 @@ response = requests.post(url=f"http://172.20.10.6:7860/sdapi/v1/txt2img", json=p
 r = response.json()
 
 for i in r["images"]:
-    image = Image.open(io.BytesIO(base64.b64decode(i.split(",", 1)[0])))
+    image = Image.open(io.BytesIO(base64.b64decode(i)))
     image.show()
