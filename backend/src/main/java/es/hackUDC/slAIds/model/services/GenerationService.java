@@ -44,6 +44,17 @@ public class GenerationService {
         return index;
 
     }
+    
+    public PromptResponse<SlideText> generateSlide(String slideTitle, String slidePrompt, String conversationId,
+            String parentId, int minWords, int maxWords, boolean bulletPoints) {
+    	
+    	if(bulletPoints) {
+    		return generateSlideBullets(slideTitle, slidePrompt, conversationId, parentId, minWords, maxWords);
+    	}else {
+    		return generateSlideText(slideTitle, slidePrompt, conversationId, parentId, minWords, maxWords);
+    	}
+    	
+    }
 
     public PromptResponse<SlideText> generateSlideText(String slideTitle, String slidePrompt, String conversationId,
             String parentId, int minWords, int maxWords) {
@@ -72,7 +83,7 @@ public class GenerationService {
     }
 
     public Presentation generatePresentation(String presentationTitle, String presentationPrompt, int numSlides,
-            int minWords, int maxWords, Presentation presentation) {
+            int minWords, int maxWords, boolean bulletPoints, Presentation presentation) {
 
         // Presentation presentation = new Presentation();
         String parentId;
@@ -96,8 +107,8 @@ public class GenerationService {
             String slideTitle = presentation.getIndex().getSlideTitles().get(i);
             String slideDescription = presentation.getIndex().getSlideDescriptions().get(i);
 
-            responseSlideText = generateSlideText(slideTitle, slideDescription, conversationId, parentId, minWords,
-                    maxWords);
+            responseSlideText = generateSlide(slideTitle, slideDescription, conversationId, parentId, minWords,
+                    maxWords, bulletPoints);
             slides.add(new Slide(slideTitle, responseSlideText.response().getText(), (i + 1)));
 
             parentId = responseSlideText.parentId();

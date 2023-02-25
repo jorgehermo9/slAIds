@@ -54,6 +54,7 @@ public class GenerationController {
                         generationRequestDto.numSlides(),
                         generationRequestDto.minWords(),
                         generationRequestDto.maxWords(),
+                        generationRequestDto.bulletPoints(),
                         presentation);
                 Presentation builtPresentation = buildPptService.buildPpt(generatedPresentation);
                 presentation.setIsAvailable(true);
@@ -73,7 +74,7 @@ public class GenerationController {
         return generationService.getGeneratedPresentation(presentationId);
     }
 
-    @GetMapping("/{presentationId}/isAvailable")
+    @GetMapping("/{presentationId}/is-available")
     public boolean isAvailable(
             @PathVariable Long presentationId) {
 
