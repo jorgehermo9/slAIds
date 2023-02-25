@@ -12,6 +12,7 @@ export const SlideRequestSchema = z
     numSlides: z.number(),
     minWords: z.number(),
     maxWords: z.number(),
+    bulletPoints: z.boolean(),
   })
   .strict();
 
@@ -29,6 +30,7 @@ export const getDefaultSlideRequest = (): SlideRequest => {
     numSlides: 1,
     minWords: 50,
     maxWords: 60,
+    bulletPoints: false,
   };
 };
 

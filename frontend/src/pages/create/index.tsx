@@ -14,7 +14,6 @@ import DoneRoundedIcon from "@mui/icons-material/DoneRounded";
 import PresentationFile from "@/entities/PresentationFile";
 import { Preview } from "@/components/Preview/Preview";
 import { AnimatePresence } from "framer-motion";
-import Head from "next/head";
 import NotificationManager from "@/components/NotificationManager/NotificationManager";
 import { Nav } from "@/components/Nav/Nav";
 

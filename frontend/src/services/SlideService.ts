@@ -9,12 +9,10 @@ export default abstract class SlideService {
 
   static async generatePresentation(slideRequest: SlideRequest): Promise<void> {
     const slideRequestDto: SlideRequestDto = toSlideRequestDto(slideRequest);
-    return fetch(`${this.endpoint}/generate`, {
-      keepalive: true,
+    return fetch(`${this.endpoint}/presentations/generate`, {
       method: "POST",
       body: JSON.stringify(slideRequestDto),
       headers: {
-        "Keep-Alive": "timeout=1000, max=0",
         "Content-Type": "application/json",
       },
     })
@@ -23,6 +21,14 @@ export default abstract class SlideService {
         res.json();
       })
       .then((res) => console.log(res));
+  }
+
+  static async isAvailable(id: Slide["id"]): Promise<boolean> {
+    return fetch(`${this.endpoint}/presentations/${id}/is_available`, {
+      method: "GET",
+    })
+      .then((res) => res.json())
+      .then((res) => res.available);
   }
 
   static async getPresentation(id: Slide["id"]): Promise<Slide> {

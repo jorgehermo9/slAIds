@@ -1,5 +1,5 @@
 import SlideRequest from "@/entities/SlideRequest";
-import styles from "./resumeCard.module.scss";
+import styles from "./carouselCard.module.scss";
 
 interface Props {
   slideRequest: SlideRequest;
@@ -8,9 +8,9 @@ interface Props {
 
 export const ResumeCard = ({ slideRequest, setSlideRequest }: Props) => {
   return (
-    <div className={styles.resumeCard}>
+    <div className={styles.cardContainer}>
       <div className={styles.formField}>
-        <label htmlFor="titleInput" className={styles.title}>
+        <label htmlFor="titleInput" className={styles.inputLabel}>
           Title
         </label>
         <input
@@ -26,7 +26,7 @@ export const ResumeCard = ({ slideRequest, setSlideRequest }: Props) => {
       </div>
 
       <div className={`${styles.formField} ${styles.textAreaContainer}`}>
-        <label htmlFor="descriptionTextArea" className={styles.title}>
+        <label htmlFor="descriptionTextArea" className={styles.inputLabel}>
           Description
         </label>
 

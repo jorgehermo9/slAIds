@@ -1,5 +1,5 @@
 import SlideRequest from "@/entities/SlideRequest";
-import styles from "./styleCard.module.scss";
+import styles from "./carouselCard.module.scss";
 
 interface Props {
   slideRequest: SlideRequest;
@@ -11,9 +11,9 @@ export const StyleCard = ({ slideRequest, setSlideRequest }: Props) => {
   const tertiaryColor = slideRequest.tertiaryColor ?? "";
 
   return (
-    <div className={styles.resumeCard}>
+    <div className={styles.cardContainer}>
       <div className={styles.formField}>
-        <label htmlFor="titleInput" className={styles.title}>
+        <label htmlFor="titleInput" className={styles.inputLabel}>
           Font family name
         </label>
         <input
@@ -28,7 +28,7 @@ export const StyleCard = ({ slideRequest, setSlideRequest }: Props) => {
         />
       </div>
 
-      <label className={styles.title}>Color Palette</label>
+      <label className={styles.inputLabel}>Color Palette</label>
 
       <div className={styles.colorSelector}>
         <div className={styles.colorInputContainer}>
