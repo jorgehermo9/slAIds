@@ -13,6 +13,7 @@ import es.hackUDC.slAIds.model.entities.ModelUser;
 import es.hackUDC.slAIds.model.entities.Presentation;
 import es.hackUDC.slAIds.model.entities.PresentationDao;
 import es.hackUDC.slAIds.model.entities.Slide;
+import es.hackUDC.slAIds.model.services.ChatService.ChatService;
 import es.hackUDC.slAIds.model.services.ChatService.ChatServiceMock;
 import es.hackUDC.slAIds.model.services.ChatService.PromptResponse;
 import es.hackUDC.slAIds.model.services.ImageService.ImageServiceImpl;
@@ -24,8 +25,8 @@ import es.hackUDC.slAIds.model.services.TransferObjects.SlideText;
 public class GenerationService {
 
   @Autowired
-  // private ChatService chatService;
-  private ChatServiceMock chatService;
+  private ChatService chatService;
+  // private ChatServiceMock chatService;
 
   @Autowired
   private ImageServiceImpl imageService;

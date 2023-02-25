@@ -58,7 +58,6 @@ public class BuildPptService {
         for (String slideTitle : index.getSlideTitles()) {
             indexText.append(slideTitle).append("\n");
         }
-        
         indexText.append("\n");
         contentShape.setText(indexText.toString()).setFontSize(20.0);
 
@@ -75,9 +74,6 @@ public class BuildPptService {
             contentShape.setText(modelSlide.getText()).setFontSize(20.0);
         }
 
-        Dimension pgsize = ppt.getPageSize();
-        System.out.println(pgsize.width);
-        System.out.println(pgsize.height);
         
         try {
             // Create a binary Data structure to store the pptx
@@ -101,40 +97,41 @@ public class BuildPptService {
         pptToPdf(presentation, ppt);
 
         return presentation;
+
+  }
+
+  public Presentation pptToPdf(Presentation presentation, XMLSlideShow ppt) {
+    try {
+      // getting the dimensions and size of the slide
+      Dimension pgsize = ppt.getPageSize();
+      List<XSLFSlide> slides = ppt.getSlides();
+
+      // take first slide and draw it directly into PDF via awt.Graphics2D interface.
+      Document document = new Document();
+      ByteArrayOutputStream out = new ByteArrayOutputStream();
+      PdfWriter pdfWriter = PdfWriter.getInstance(document, out);
+      document.setPageSize(new Rectangle((float) pgsize.getWidth(), (float) pgsize.getHeight()));
+      document.open();
+
+      for (XSLFSlide slide : slides) {
+        PdfGraphics2D graphics = (PdfGraphics2D) pdfWriter.getDirectContent()
+            .createGraphics((float) pgsize.getWidth(), (float) pgsize.getHeight());
+        slide.draw(graphics);
+        graphics.dispose();
+        document.newPage();
+      }
+
+      document.close();
+      out.close();
+      byte[] pdf = out.toByteArray();
+      presentation.setPdf(pdf);
+
+    } catch (Exception e) {
+      e.printStackTrace();
+      presentation.setError(true);
+      presentation.setErrorMessage("Error while generating the presentation .pdf file");
     }
 
-    public Presentation pptToPdf(Presentation presentation, XMLSlideShow ppt) {
-        try {
-            // getting the dimensions and size of the slide
-            Dimension pgsize = ppt.getPageSize();
-            List<XSLFSlide> slides = ppt.getSlides();
-
-            // take first slide and draw it directly into PDF via awt.Graphics2D interface.
-            Document document = new Document();
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            PdfWriter pdfWriter = PdfWriter.getInstance(document, out);
-            document.setPageSize(new Rectangle((float) pgsize.getWidth(), (float) pgsize.getHeight()));
-            document.open();
-
-            for (XSLFSlide slide : slides) {
-                PdfGraphics2D graphics = (PdfGraphics2D) pdfWriter.getDirectContent()
-                        .createGraphics((float) pgsize.getWidth(), (float) pgsize.getHeight());
-                slide.draw(graphics);
-                graphics.dispose();
-                document.newPage();
-            }
-
-            document.close();
-            out.close();
-            byte[] pdf = out.toByteArray();
-            presentation.setPdf(pdf);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            presentation.setError(true);
-            presentation.setErrorMessage("Error while generating the presentation .pdf file");
-        }
-
-        return presentation;
-    }
+    return presentation;
+  }
 }

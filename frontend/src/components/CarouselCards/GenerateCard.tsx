@@ -1,22 +1,24 @@
-import SlideRequest from "@/entities/SlideRequest";
+import PresentationRequest from "@/entities/PresentationRequest";
 import styles from "./carouselCard.module.scss";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import PresentationFile from "@/entities/PresentationFile";
 import { NotificationContext } from "../NotificationManager/NotificationManager";
 import { useContext, useState } from "react";
-import SlideService from "@/services/SlideService";
-import Slide from "@/entities/Slide";
+import PresentationService from "@/services/PresentationService";
+import Presentation from "@/entities/Presentation";
+import CircularProgress from "@mui/material/CircularProgress";
+import { AnimatePresence, motion } from "framer-motion";
 
 interface Props {
-  slideRequest: SlideRequest;
-  setSlideRequest: (slideRequest: SlideRequest) => void;
+  presentationRequest: PresentationRequest;
+  setPresentationRequest: (presentationRequest: PresentationRequest) => void;
   setPresentationFile: (presentationFile: PresentationFile) => void;
   setIsPreviewOpen: (isPreviewOpen: boolean) => void;
 }
 
 export const GenerateCard = ({
-  slideRequest,
-  setSlideRequest,
+  presentationRequest,
+  setPresentationRequest,
   setIsPreviewOpen,
   setPresentationFile,
 }: Props) => {
@@ -24,23 +26,23 @@ export const GenerateCard = ({
     useContext(NotificationContext)!;
   const [isGenerating, setIsGenerating] = useState(false);
 
-  function waitForPresentation(id: Slide["id"]) {
-    SlideService.isAvailable(id)
+  function waitForPresentation(id: Presentation["id"]) {
+    PresentationService.isAvailable(id)
       .then((isAvailable) => {
         if (!isAvailable) {
-          setTimeout(() => waitForPresentation(id), 2000);
+          setTimeout(() => waitForPresentation(id), 5000);
           return;
         }
-        createSuccessNotification("Slides generated successfully", 5000);
+        createSuccessNotification("Presentations generated successfully", 5000);
         setIsGenerating(false);
-        SlideService.getPresentationFile(id).then((presentationFile) => {
+        PresentationService.getPresentationFile(id).then((presentationFile) => {
           setPresentationFile(presentationFile);
           setIsPreviewOpen(true);
         });
       })
       .catch(() => {
         setIsGenerating(false);
-        createErrorNotification("Error while generating slides", 5000);
+        createErrorNotification("Error while generating presentations", 5000);
       });
   }
 
@@ -48,18 +50,39 @@ export const GenerateCard = ({
     if (isGenerating) return;
     setIsGenerating(true);
 
-    SlideService.generatePresentation(slideRequest)
+    PresentationService.generatePresentation(presentationRequest)
       .then((id) => waitForPresentation(id))
-      .catch(() =>
-        createErrorNotification("Error while generating presentation", 5000)
-      );
+      .catch(() => {
+        setIsGenerating(false);
+        createErrorNotification("Error while generating presentation", 5000);
+      });
   };
 
   return (
     <div className={styles.cardContainer}>
       <button className={styles.generateButton} onClick={handleClick}>
-        Generate
-        <SendRoundedIcon className={styles.icon} />
+        <span>Generate</span>
+        <AnimatePresence>
+          {isGenerating ? (
+            <motion.div
+              transition={{ duration: 0.3 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <CircularProgress className={styles.spinner} />
+            </motion.div>
+          ) : (
+            <motion.div
+              transition={{ duration: 0.3 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <SendRoundedIcon className={styles.icon} />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </button>
     </div>
   );

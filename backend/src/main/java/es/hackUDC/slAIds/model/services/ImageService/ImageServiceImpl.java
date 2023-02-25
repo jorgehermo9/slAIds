@@ -19,11 +19,11 @@ public class ImageServiceImpl implements ImageService {
     Environment environment;
 
     @Override
-    public Optional<byte[]> getImage(String prompt) {
+    public Optional<byte[]> getImage(String prompt, float width, float height) {
         if (stableDiffusionCondition()) {
-            return imageServiceStableDiffusion.getImage(prompt);
+            return imageServiceStableDiffusion.getImage(prompt, width, height);
         } else {
-            return imageServiceBasic.getImage(prompt);
+            return imageServiceBasic.getImage(prompt, width, height);
         }
     }
 

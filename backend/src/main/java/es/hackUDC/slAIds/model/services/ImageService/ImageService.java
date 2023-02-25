@@ -4,5 +4,5 @@ import java.util.Optional;
 
 public interface ImageService {
 
-    public Optional<byte[]> getImage(String prompt);
+    public Optional<byte[]> getImage(String prompt, float width, float height);
 }

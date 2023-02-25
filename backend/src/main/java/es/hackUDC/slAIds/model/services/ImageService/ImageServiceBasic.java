@@ -11,7 +11,7 @@ public class ImageServiceBasic implements ImageService {
     private final String IMAGE_PATH = "src/main/resources/static/images/no_image.png";
 
     @Override
-    public Optional<byte[]> getImage(String prompt) {
+    public Optional<byte[]> getImage(String prompt, float width, float height) {
         // READ IMAGE FROM FILE
 
         try {

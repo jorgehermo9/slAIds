@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const UserSignupRequest = z
+export const UserSignupRequestSchema = z
   .object({
     userName: z.string(),
     password: z.string(),
@@ -8,5 +8,5 @@ export const UserSignupRequest = z
   })
   .strict();
 
-type User = z.infer<typeof UserSignupRequest>;
-export default User;
+type UserSignupRequest = z.infer<typeof UserSignupRequestSchema>;
+export default UserSignupRequest;

@@ -1,14 +1,17 @@
-import SlideRequest from "@/entities/SlideRequest";
+import PresentationRequest from "@/entities/PresentationRequest";
 import styles from "./carouselCard.module.scss";
 
 interface Props {
-  slideRequest: SlideRequest;
-  setSlideRequest: (slideRequest: SlideRequest) => void;
+  presentationRequest: PresentationRequest;
+  setPresentationRequest: (presentationRequest: PresentationRequest) => void;
 }
 
-export const StyleCard = ({ slideRequest, setSlideRequest }: Props) => {
-  const secondaryColor = slideRequest.secondaryColor ?? "";
-  const tertiaryColor = slideRequest.tertiaryColor ?? "";
+export const StyleCard = ({
+  presentationRequest,
+  setPresentationRequest,
+}: Props) => {
+  const secondaryColor = presentationRequest.secondaryColor ?? "";
+  const tertiaryColor = presentationRequest.tertiaryColor ?? "";
 
   return (
     <div className={styles.cardContainer}>
@@ -17,13 +20,16 @@ export const StyleCard = ({ slideRequest, setSlideRequest }: Props) => {
           Font family name
         </label>
         <input
-          value={slideRequest.fontFamily}
+          value={presentationRequest.fontFamily}
           type="text"
           id="titleInput"
           className={`${styles.input} ${styles.marginBottom}`}
           placeholder="Poppins"
           onChange={(e) => {
-            setSlideRequest({ ...slideRequest, fontFamily: e.target.value });
+            setPresentationRequest({
+              ...presentationRequest,
+              fontFamily: e.target.value,
+            });
           }}
         />
       </div>
@@ -34,13 +40,13 @@ export const StyleCard = ({ slideRequest, setSlideRequest }: Props) => {
         <div className={styles.colorInputContainer}>
           <span className={styles.subTitle}>Primary color</span>
           <input
-            value={slideRequest.primaryColor}
+            value={presentationRequest.primaryColor}
             className={styles.colorInput}
             type="color"
             id="primaryColor"
             onChange={(e) => {
-              setSlideRequest({
-                ...slideRequest,
+              setPresentationRequest({
+                ...presentationRequest,
                 primaryColor: e.target.value,
               });
             }}
@@ -54,8 +60,8 @@ export const StyleCard = ({ slideRequest, setSlideRequest }: Props) => {
             type="color"
             id="secondaryColor"
             onChange={(e) => {
-              setSlideRequest({
-                ...slideRequest,
+              setPresentationRequest({
+                ...presentationRequest,
                 secondaryColor: e.target.value,
               });
             }}
@@ -69,8 +75,8 @@ export const StyleCard = ({ slideRequest, setSlideRequest }: Props) => {
             type="color"
             id="tertiaryColor"
             onChange={(e) => {
-              setSlideRequest({
-                ...slideRequest,
+              setPresentationRequest({
+                ...presentationRequest,
                 tertiaryColor: e.target.value,
               });
             }}
