@@ -1,75 +1,92 @@
 package es.hackUDC.slAIds.model.entities;
 
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class ModelUser {
 
-  public enum RoleType {
-    USER
-  };
+    public enum RoleType {
+        USER
+    };
 
-  private Long id;
-  private String userName;
-  private String password;
-  private String email;
-  private RoleType role;
-  private Presentation presentation;
+    private Long id;
+    private String userName;
+    private String password;
+    private String email;
+    private RoleType role;
 
-  public ModelUser() {
-  }
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private List<Presentation> presentations;
 
-  public ModelUser(String userName, String password, String email) {
+    public void setPresentations(List<Presentation> presentations) {
+        this.presentations = presentations;
+    }
 
-    this.userName = userName;
-    this.password = password;
-    this.email = email;
+    public ModelUser() {
+    }
 
-  }
+    public ModelUser(String userName, String password, String email) {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  public Long getId() {
-    return id;
-  }
+        this.userName = userName;
+        this.password = password;
+        this.email = email;
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+    }
 
-  public String getUserName() {
-    return userName;
-  }
+    public List<Presentation> getPresentations() {
+        return presentations;
+    }
 
-  public void setUserName(String userName) {
-    this.userName = userName;
-  }
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long getId() {
+        return id;
+    }
 
-  public String getPassword() {
-    return password;
-  }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-  public void setPassword(String password) {
-    this.password = password;
-  }
+    public String getUserName() {
+        return userName;
+    }
 
-  public String getEmail() {
-    return email;
-  }
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
-  public void setEmail(String email) {
-    this.email = email;
-  }
+    public String getPassword() {
+        return password;
+    }
 
-  public RoleType getRole() {
-    return role;
-  }
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-  public void setRole(RoleType role) {
-    this.role = role;
-  }
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public RoleType getRole() {
+        return role;
+    }
+
+    public void setRole(RoleType role) {
+        this.role = role;
+    }
 
 }

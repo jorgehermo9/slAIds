@@ -17,7 +17,7 @@ public class ChatController {
     @GetMapping("/prompt")
     public String prompt() {
 
-        imageServiceStableDiffusion.getImage("maltese puppy");
+        imageServiceStableDiffusion.getImage("maltese puppy", 500, 500);
 
         return "Hello";
     }
