@@ -30,9 +30,9 @@ public class BuildPptService {
 
     public Presentation buildPpt(Presentation presentation, float imgWidth, float imgHeight) {
 
-    	//float imgWidth = 360;
-    	//float imgHeight = 220;
-    	
+        // float imgWidth = 360;
+        // float imgHeight = 220;
+
         XMLSlideShow ppt = new XMLSlideShow();
         XSLFTextShape titleShape;
         XSLFTextShape contentShape;
@@ -46,7 +46,7 @@ public class BuildPptService {
         titleShape = slide.getPlaceholder(0);
 
         titleShape.setText(presentation.getTitle()).setFontSize(60.0);
-        ;
+
         // Create index slide
         XSLFSlideLayout indexLayout = defaultMaster.getLayout(SlideLayout.TITLE_AND_CONTENT);
         slide = ppt.createSlide(indexLayout);
@@ -68,13 +68,13 @@ public class BuildPptService {
             contentShape = slide.getPlaceholder(1);
             pictureData = ppt.addPicture(modelSlide.getImg(), PictureData.PictureType.PNG);
             picture = slide.createPicture(pictureData);
-            Rectangle2D.Float rect = new Rectangle2D.Float(360-(imgWidth/2), 540-imgHeight-10, imgWidth, imgHeight);
+            Rectangle2D.Float rect = new Rectangle2D.Float(360 - (imgWidth / 2), 540 - imgHeight - 10, imgWidth,
+                    imgHeight);
             picture.setAnchor(rect);
             titleShape.setText(modelSlide.getTitle()).setFontSize(40.0);
             contentShape.setText(modelSlide.getText()).setFontSize(20.0);
         }
 
-        
         try {
             // Create a binary Data structure to store the pptx
             ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -98,40 +98,40 @@ public class BuildPptService {
 
         return presentation;
 
-  }
-
-  public Presentation pptToPdf(Presentation presentation, XMLSlideShow ppt) {
-    try {
-      // getting the dimensions and size of the slide
-      Dimension pgsize = ppt.getPageSize();
-      List<XSLFSlide> slides = ppt.getSlides();
-
-      // take first slide and draw it directly into PDF via awt.Graphics2D interface.
-      Document document = new Document();
-      ByteArrayOutputStream out = new ByteArrayOutputStream();
-      PdfWriter pdfWriter = PdfWriter.getInstance(document, out);
-      document.setPageSize(new Rectangle((float) pgsize.getWidth(), (float) pgsize.getHeight()));
-      document.open();
-
-      for (XSLFSlide slide : slides) {
-        PdfGraphics2D graphics = (PdfGraphics2D) pdfWriter.getDirectContent()
-            .createGraphics((float) pgsize.getWidth(), (float) pgsize.getHeight());
-        slide.draw(graphics);
-        graphics.dispose();
-        document.newPage();
-      }
-
-      document.close();
-      out.close();
-      byte[] pdf = out.toByteArray();
-      presentation.setPdf(pdf);
-
-    } catch (Exception e) {
-      e.printStackTrace();
-      presentation.setError(true);
-      presentation.setErrorMessage("Error while generating the presentation .pdf file");
     }
 
-    return presentation;
-  }
+    public Presentation pptToPdf(Presentation presentation, XMLSlideShow ppt) {
+        try {
+            // getting the dimensions and size of the slide
+            Dimension pgsize = ppt.getPageSize();
+            List<XSLFSlide> slides = ppt.getSlides();
+
+            // take first slide and draw it directly into PDF via awt.Graphics2D interface.
+            Document document = new Document();
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            PdfWriter pdfWriter = PdfWriter.getInstance(document, out);
+            document.setPageSize(new Rectangle((float) pgsize.getWidth(), (float) pgsize.getHeight()));
+            document.open();
+
+            for (XSLFSlide slide : slides) {
+                PdfGraphics2D graphics = (PdfGraphics2D) pdfWriter.getDirectContent()
+                        .createGraphics((float) pgsize.getWidth(), (float) pgsize.getHeight());
+                slide.draw(graphics);
+                graphics.dispose();
+                document.newPage();
+            }
+
+            document.close();
+            out.close();
+            byte[] pdf = out.toByteArray();
+            presentation.setPdf(pdf);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            presentation.setError(true);
+            presentation.setErrorMessage("Error while generating the presentation .pdf file");
+        }
+
+        return presentation;
+    }
 }

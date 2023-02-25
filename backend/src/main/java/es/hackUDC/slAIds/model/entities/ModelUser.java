@@ -24,14 +24,6 @@ public class ModelUser {
     private String email;
     private RoleType role;
 
-    // @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    // @JoinColumn(name = "user_id")
-    // private List<Presentation> presentations;
-
-    // public void setPresentations(List<Presentation> presentations) {
-    // this.presentations = presentations;
-    // }
-
     public ModelUser() {
     }
 
