@@ -26,12 +26,12 @@ import es.hackUDC.slAIds.model.services.TransferObjects.SlideText;
 public class GenerationService {
 
     @Autowired
-    //private ChatService chatService;
+    // private ChatService chatService;
     private ChatServiceMock chatService;
-    
+
     @Autowired
-    private ImageServiceBasic imageService;
-    
+    private ImageService imageService;
+
     @Autowired
     private PresentationDao presentationDao;
 
@@ -50,16 +50,16 @@ public class GenerationService {
         return index;
 
     }
-    
+
     public PromptResponse<SlideText> generateSlide(String slideTitle, String slidePrompt, String conversationId,
             String parentId, int minWords, int maxWords, boolean bulletPoints) {
-    	
-    	if(bulletPoints) {
-    		return generateSlideBullets(slideTitle, slidePrompt, conversationId, parentId, minWords, maxWords);
-    	}else {
-    		return generateSlideText(slideTitle, slidePrompt, conversationId, parentId, minWords, maxWords);
-    	}
-    	
+
+        if (bulletPoints) {
+            return generateSlideBullets(slideTitle, slidePrompt, conversationId, parentId, minWords, maxWords);
+        } else {
+            return generateSlideText(slideTitle, slidePrompt, conversationId, parentId, minWords, maxWords);
+        }
+
     }
 
     public PromptResponse<SlideText> generateSlideText(String slideTitle, String slidePrompt, String conversationId,
@@ -74,31 +74,38 @@ public class GenerationService {
                 .get());
 
     }
-    
+
     public PromptResponse<SlideText> generateSlideBullets(String slideTitle, String slidePrompt, String conversationId,
-    		String parentId, int minWords, int maxWords) {
-    	
-    	String requestSlidePrompt = "Generate between 3 and 5 informative, condense, direct, sentences,"
-    			+ "without reapeating any information already given in this conversation, with the title \""
-    			+ slideTitle + "\" and about: " + slidePrompt + ". In the text separate"
-    			+ " each sentence by a newline. The total length of the text must be between "
-    			+ minWords + " and " + maxWords + " words.";
-    			
-    	return (chatService.executeWithConversation(requestSlidePrompt, SlideText.class, conversationId, parentId).get());	
-    	
+            String parentId, int minWords, int maxWords) {
+
+        String requestSlidePrompt = "Generate between 3 and 5 informative, condense, direct, sentences,"
+                + "without reapeating any information already given in this conversation, with the title \""
+                + slideTitle + "\" and about: " + slidePrompt + ". In the text separate"
+                + " each sentence by a newline. The total length of the text must be between "
+                + minWords + " and " + maxWords + " words.";
+
+        return (chatService.executeWithConversation(requestSlidePrompt, SlideText.class, conversationId, parentId)
+                .get());
+
     }
-    
-   /* public PromptResponse<ImagePrompt> generateImagePrompt(String slideText, String conversationId, String parentId) {
-    	
-    	String requestImagePrompt = "Generate a text to give as input to a Image generative Artificial"
-    			+ " Intelligence, to generate an image for a presentation to ilustrate the following text : "
-    			+ slideText;
-    	
-    	chatService.executeWithConversation(requestImagePrompt, ImagePrompt.class, conversationId, parentId).get();
-    	
-    	return null;
-    	
-    }*/
+
+    /*
+     * public PromptResponse<ImagePrompt> generateImagePrompt(String slideText,
+     * String conversationId, String parentId) {
+     * 
+     * String requestImagePrompt =
+     * "Generate a text to give as input to a Image generative Artificial"
+     * +
+     * " Intelligence, to generate an image for a presentation to ilustrate the following text : "
+     * + slideText;
+     * 
+     * chatService.executeWithConversation(requestImagePrompt, ImagePrompt.class,
+     * conversationId, parentId).get();
+     * 
+     * return null;
+     * 
+     * }
+     */
 
     public Presentation generatePresentation(String presentationTitle, String presentationPrompt, int numSlides,
             int minWords, int maxWords, boolean bulletPoints, Presentation presentation) {
@@ -110,10 +117,10 @@ public class GenerationService {
 
         presentation.setTitle(presentationTitle);
         presentation.setDescriptionPrompt(presentationPrompt);
-        
-        img = imageService.getImage(presentationPrompt).get(); 
+
+        img = imageService.getImage(presentationPrompt).get();
         presentation.setFrontImg(img);
-        
+
         PromptResponse<IndexTransfer> responseIndex = generateIndex(presentationPrompt, numSlides);
 
         presentation.setIndex(
@@ -128,12 +135,12 @@ public class GenerationService {
 
             String slideTitle = presentation.getIndex().getSlideTitles().get(i);
             String slideDescription = presentation.getIndex().getSlideDescriptions().get(i);
-            
+
             responseSlideText = generateSlide(slideTitle, slideDescription, conversationId, parentId, minWords,
                     maxWords, bulletPoints);
-            
+
             img = imageService.getImage(slideTitle).get();
-            
+
             slides.add(new Slide(slideTitle, responseSlideText.response().getText(), (i + 1), img));
 
             parentId = responseSlideText.parentId();

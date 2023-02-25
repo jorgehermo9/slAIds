@@ -97,6 +97,7 @@ public class SecurityConfig {
         http.cors().and().csrf().disable()
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/users/**").permitAll()
+                        .requestMatchers("/chat/prompt").permitAll()
                         .requestMatchers("/presentations/**").permitAll()
                         .anyRequest().authenticated())
                 .apply(new MyCustomDsl());
