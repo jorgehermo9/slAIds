@@ -1,4 +1,5 @@
 import { z } from "zod";
+import SlideRequestDto from "./SlideRequestDto";
 
 export const SlideRequestSchema = z
   .object({
@@ -8,7 +9,9 @@ export const SlideRequestSchema = z
     primaryColor: z.string(),
     secondaryColor: z.string().nullable(),
     tertiaryColor: z.string().nullable(),
-    maxSlides: z.number().nullable(),
+    numSlides: z.number(),
+    minWords: z.number(),
+    maxWords: z.number(),
   })
   .strict();
 
@@ -23,6 +26,24 @@ export const getDefaultSlideRequest = (): SlideRequest => {
     primaryColor: "",
     secondaryColor: null,
     tertiaryColor: null,
-    maxSlides: null
+    numSlides: 1,
+    minWords: 50,
+    maxWords: 60,
+  };
+};
+
+export const toSlideRequestDto = (
+  slideRequest: SlideRequest
+): SlideRequestDto => {
+  return {
+    title: slideRequest.title,
+    prompt: slideRequest.description,
+    fontFamily: slideRequest.fontFamily,
+    primaryColor: slideRequest.primaryColor,
+    secondaryColor: slideRequest.secondaryColor,
+    tertiaryColor: slideRequest.tertiaryColor,
+    numSlides: slideRequest.numSlides,
+    minWords: slideRequest.minWords,
+    maxWords: slideRequest.maxWords,
   };
 };

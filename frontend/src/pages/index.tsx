@@ -27,7 +27,7 @@ export default function Home() {
 
   const properties = [
     {
-      label: "Resume",
+      label: "Prompt",
       icon: <NotesIcon />,
     },
     {

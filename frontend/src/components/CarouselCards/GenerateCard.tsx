@@ -4,6 +4,7 @@ import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import PresentationFile from "@/entities/PresentationFile";
 import { NotificationContext } from "../NotificationManager/NotificationManager";
 import { useContext } from "react";
+import SlideService from "@/services/SlideService";
 
 interface Props {
   slideRequest: SlideRequest;
@@ -16,6 +17,7 @@ export const GenerateCard = ({
   slideRequest,
   setSlideRequest,
   setIsPreviewOpen,
+  setPresentationFile,
 }: Props) => {
   const { createSuccessNotification, createErrorNotification } =
     useContext(NotificationContext)!;
@@ -25,8 +27,17 @@ export const GenerateCard = ({
       <button
         className={styles.generateButton}
         onClick={() => {
-          createSuccessNotification("Presentation generated!");
-          setIsPreviewOpen(true);
+          SlideService.generatePresentation(slideRequest)
+            .then(() => {
+              createSuccessNotification("Presentation generated!");
+            })
+            .catch(() =>
+              createErrorNotification(
+                "Error while generating presentation",
+                5000
+              )
+            );
+          // setIsPreviewOpen(true);
         }}
       >
         Generate
