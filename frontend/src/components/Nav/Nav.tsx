@@ -32,9 +32,12 @@ export const Nav = () => {
           </Link>
         )}
         {token && (
-          <Link className={styles.buttonLogin} href="/" onClick={handleClick}>
-            Log out
-          </Link>
+          <>
+            <Link className={styles.buttonLogin} href="/" onClick={handleClick}>
+              Log out
+            </Link>
+            <Link className={styles.buttonLogin} href="/slides">My slides</Link>
+          </>
         )}
       </div>
     </nav>
