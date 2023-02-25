@@ -1,12 +1,15 @@
-import SlideRequest from "@/entities/SlideRequest";
+import PresentationRequest from "@/entities/PresentationRequest";
 import styles from "./carouselCard.module.scss";
 
 interface Props {
-  slideRequest: SlideRequest;
-  setSlideRequest: (slideRequest: SlideRequest) => void;
+  presentationRequest: PresentationRequest;
+  setPresentationRequest: (presentationRequest: PresentationRequest) => void;
 }
 
-export const ResumeCard = ({ slideRequest, setSlideRequest }: Props) => {
+export const ResumeCard = ({
+  presentationRequest,
+  setPresentationRequest,
+}: Props) => {
   return (
     <div className={styles.cardContainer}>
       <div className={styles.formField}>
@@ -14,13 +17,16 @@ export const ResumeCard = ({ slideRequest, setSlideRequest }: Props) => {
           Title
         </label>
         <input
-          value={slideRequest.title}
+          value={presentationRequest.title}
           type="text"
           id="titleInput"
           className={styles.input}
           placeholder="FIC slides for 2023"
           onChange={(e) => {
-            setSlideRequest({ ...slideRequest, title: e.target.value });
+            setPresentationRequest({
+              ...presentationRequest,
+              title: e.target.value,
+            });
           }}
         />
       </div>
@@ -31,12 +37,15 @@ export const ResumeCard = ({ slideRequest, setSlideRequest }: Props) => {
         </label>
 
         <textarea
-          value={slideRequest.description}
+          value={presentationRequest.description}
           id="descriptionTextArea"
           className={styles.textArea}
-          placeholder="This slides are for the FIC database department, they will be used to teach the new interns how to use sql."
+          placeholder="This presentations are for the FIC database department, they will be used to teach the new interns how to use sql."
           onChange={(e) => {
-            setSlideRequest({ ...slideRequest, description: e.target.value });
+            setPresentationRequest({
+              ...presentationRequest,
+              description: e.target.value,
+            });
           }}
         />
       </div>

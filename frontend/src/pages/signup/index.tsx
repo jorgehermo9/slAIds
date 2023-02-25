@@ -38,7 +38,6 @@ export default function Signup() {
 
   return (
     <>
-      <Nav />
       <div className={styles.cardContainer}>
         <div className={styles.card}>
           <div className={styles.formField}>

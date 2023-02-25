@@ -124,22 +124,28 @@
 }
 
 .generateButton {
-  font-size: 2rem;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
+  gap: 2rem;
+  width: 60%;
+  height: 5rem;
+  margin: auto;
+
   background-color: var(--blue);
   border-radius: var(--border-radius);
-  width: 20rem;
-  height: 5rem;
   color: var(--bg);
-  padding: 15px 32px;
+  font-size: 1.6rem;
   transition: all 0.3s;
-  cursor: pointer;
 }
 
 .icon {
-  font-size: 2rem;
-  margin-top: 8px;
+  font-size: 1.6rem;
+}
+
+.spinner {
+  width: 1.8rem !important;
+  height: 1.8rem !important;
+  color: var(--bg);
 }

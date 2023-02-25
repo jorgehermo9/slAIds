@@ -1,27 +1,30 @@
-import SlideRequest from "@/entities/SlideRequest";
+import PresentationRequest from "@/entities/PresentationRequest";
 import styles from "./carouselCard.module.scss";
 
 interface Props {
-  slideRequest: SlideRequest;
-  setSlideRequest: (slideRequest: SlideRequest) => void;
+  presentationRequest: PresentationRequest;
+  setPresentationRequest: (presentationRequest: PresentationRequest) => void;
 }
 
-export const OptionsCard = ({ slideRequest, setSlideRequest }: Props) => {
+export const OptionsCard = ({
+  presentationRequest,
+  setPresentationRequest,
+}: Props) => {
   return (
     <div className={styles.cardContainer}>
       <div className={styles.formField}>
-        <label htmlFor="numSlides" className={styles.inputLabel}>
+        <label htmlFor="numPresentations" className={styles.inputLabel}>
           Number of slides
         </label>
         <input
-          value={slideRequest.numSlides}
+          value={presentationRequest.numSlides}
           type="number"
           min="1"
           id="numSlides"
           className={styles.input}
           onChange={(e) => {
-            setSlideRequest({
-              ...slideRequest,
+            setPresentationRequest({
+              ...presentationRequest,
               numSlides: parseInt(e.target.value),
             });
           }}
@@ -34,14 +37,14 @@ export const OptionsCard = ({ slideRequest, setSlideRequest }: Props) => {
             Minimum words
           </label>
           <input
-            value={slideRequest.minWords}
+            value={presentationRequest.minWords}
             type="number"
             min="1"
             id="minWords"
             className={styles.input}
             onChange={(e) => {
-              setSlideRequest({
-                ...slideRequest,
+              setPresentationRequest({
+                ...presentationRequest,
                 minWords: parseInt(e.target.value),
               });
             }}
@@ -52,14 +55,14 @@ export const OptionsCard = ({ slideRequest, setSlideRequest }: Props) => {
             Maximum words
           </label>
           <input
-            value={slideRequest.maxWords}
+            value={presentationRequest.maxWords}
             type="number"
             min="1"
             id="maxWords"
             className={styles.input}
             onChange={(e) => {
-              setSlideRequest({
-                ...slideRequest,
+              setPresentationRequest({
+                ...presentationRequest,
                 maxWords: parseInt(e.target.value),
               });
             }}
@@ -78,8 +81,8 @@ export const OptionsCard = ({ slideRequest, setSlideRequest }: Props) => {
             id="bulletPoints"
             className={styles.checkbox}
             onChange={(e) => {
-              setSlideRequest({
-                ...slideRequest,
+              setPresentationRequest({
+                ...presentationRequest,
                 bulletPoints: e.target.checked,
               });
             }}

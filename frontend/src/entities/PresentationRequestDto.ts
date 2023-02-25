@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const SlideRequestDtoSchema = z
+export const PresentationRequestDtoSchema = z
   .object({
     title: z.string(),
     prompt: z.string(),
@@ -15,5 +15,5 @@ export const SlideRequestDtoSchema = z
   })
   .strict();
 
-type SlideRequestDto = z.infer<typeof SlideRequestDtoSchema>;
+type SlideRequestDto = z.infer<typeof PresentationRequestDtoSchema>;
 export default SlideRequestDto;

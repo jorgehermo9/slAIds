@@ -43,8 +43,6 @@ export default function Login() {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
 
-      <Nav />
-
       <div className={styles.cardContainer}>
         <div className={styles.card}>
           <div className={styles.formField}>

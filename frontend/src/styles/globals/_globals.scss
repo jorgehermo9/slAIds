@@ -84,3 +84,9 @@ textarea {
 
   resize: none; /*remove the resize handle on the bottom right*/
 }
+
+svg {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
