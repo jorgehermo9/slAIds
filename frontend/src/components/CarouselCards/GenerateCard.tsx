@@ -30,8 +30,7 @@ export const GenerateCard = ({
           setTimeout(() => waitForPresentation(id), 500);
           return;
         }
-        createSuccessNotification("SLides generated successfully", 5000);
-        // setBillId(id);
+        createSuccessNotification("Slides generated successfully", 5000);
         setIsGenerating(false);
       })
       .catch(() => {
@@ -45,7 +44,7 @@ export const GenerateCard = ({
     setIsGenerating(true);
 
     SlideService.generatePresentation(slideRequest)
-      .then(() => {})
+      .then((id) => waitForPresentation(id))
       .catch(() =>
         createErrorNotification("Error while generating presentation", 5000)
       );
@@ -53,7 +52,7 @@ export const GenerateCard = ({
 
   return (
     <div className={styles.cardContainer}>
-      <button className={styles.generateButton} onClick={() => {}}>
+      <button className={styles.generateButton} onClick={handleClick}>
         Generate
         <SendRoundedIcon className={styles.icon} />
       </button>

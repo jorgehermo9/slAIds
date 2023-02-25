@@ -7,7 +7,9 @@ import SlideRequestDto from "@/entities/SlideRequestDto";
 export default abstract class SlideService {
   private static endpoint = "/api";
 
-  static async generatePresentation(slideRequest: SlideRequest): Promise<void> {
+  static async generatePresentation(
+    slideRequest: SlideRequest
+  ): Promise<number> {
     const slideRequestDto: SlideRequestDto = toSlideRequestDto(slideRequest);
     return fetch(`${this.endpoint}/presentations/generate`, {
       method: "POST",
@@ -18,17 +20,20 @@ export default abstract class SlideService {
     })
       .then((res) => {
         if (!res.ok) throw new Error(res.statusText);
-        res.json();
+        return res.text();
       })
-      .then((res) => console.log(res));
+      .then((res) => parseInt(res));
   }
 
   static async isAvailable(id: Slide["id"]): Promise<boolean> {
-    return fetch(`${this.endpoint}/presentations/${id}/is_available`, {
+    return fetch(`${this.endpoint}/presentations/${id}/is-available`, {
       method: "GET",
     })
-      .then((res) => res.json())
-      .then((res) => res.available);
+      .then((res) => {
+        if (!res.ok) throw new Error(res.statusText);
+        return res.text();
+      })
+      .then((res) => res === "true");
   }
 
   static async getPresentation(id: Slide["id"]): Promise<Slide> {

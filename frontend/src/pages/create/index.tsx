@@ -6,7 +6,7 @@ import { GenerateCard } from "@/components/CarouselCards/GenerateCard";
 
 import SlideRequest, { getDefaultSlideRequest } from "@/entities/SlideRequest";
 import { useState } from "react";
-import styles from "./styles/home.module.scss";
+import styles from "../styles/home.module.scss";
 import NotesIcon from "@mui/icons-material/Notes";
 import ColorLensIcon from "@mui/icons-material/ColorLens";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
