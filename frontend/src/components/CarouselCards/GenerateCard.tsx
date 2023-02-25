@@ -27,7 +27,7 @@ export const GenerateCard = ({
     SlideService.isAvailable(id)
       .then((isAvailable) => {
         if (!isAvailable) {
-          setTimeout(() => waitForPresentation(id), 500);
+          setTimeout(() => waitForPresentation(id), 5000);
           return;
         }
         createSuccessNotification("Slides generated successfully", 5000);
