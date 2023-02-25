@@ -5,6 +5,7 @@ import PresentationFile from "@/entities/PresentationFile";
 import { NotificationContext } from "../NotificationManager/NotificationManager";
 import { useContext, useState } from "react";
 import SlideService from "@/services/SlideService";
+import Slide from "@/entities/Slide";
 
 interface Props {
   slideRequest: SlideRequest;
@@ -23,15 +24,19 @@ export const GenerateCard = ({
     useContext(NotificationContext)!;
   const [isGenerating, setIsGenerating] = useState(false);
 
-  function waitForPresentation(id: number) {
+  function waitForPresentation(id: Slide["id"]) {
     SlideService.isAvailable(id)
       .then((isAvailable) => {
         if (!isAvailable) {
-          setTimeout(() => waitForPresentation(id), 5000);
+          setTimeout(() => waitForPresentation(id), 2000);
           return;
         }
         createSuccessNotification("Slides generated successfully", 5000);
         setIsGenerating(false);
+        SlideService.getPresentationFile(id).then((presentationFile) => {
+          setPresentationFile(presentationFile);
+          setIsPreviewOpen(true);
+        });
       })
       .catch(() => {
         setIsGenerating(false);

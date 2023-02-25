@@ -23,7 +23,7 @@ export default function Home() {
   );
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [presentationFile, setPresentationFile] =
-    useState<PresentationFile | null>(new Blob());
+    useState<PresentationFile | null>(null);
 
   const properties = [
     {

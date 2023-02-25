@@ -37,7 +37,7 @@ export default abstract class SlideService {
   }
 
   static async getPresentation(id: Slide["id"]): Promise<Slide> {
-    return fetch(`${this.endpoint}/slides/${id}`, {
+    return fetch(`${this.endpoint}/presentations/${id}`, {
       method: "GET",
     })
       .then((res) => res.json())
@@ -45,5 +45,13 @@ export default abstract class SlideService {
         const slideDto = SlideDtoSchema.parse(res);
         return toSlide(res);
       });
+  }
+
+  static async getPresentationFile(id: Slide["id"]): Promise<PresentationFile> {
+    return fetch(`${this.endpoint}/presentations/${id}/pdf`, {
+      method: "GET",
+    })
+      .then((res) => res.blob())
+      .then((res) => res);
   }
 }

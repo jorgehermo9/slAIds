@@ -42,7 +42,7 @@ export const Preview = ({ presentationFile, onClose }: Props) => {
         <h1 className={styles.previewTitle}>Preview</h1>
         <Document
           className={styles.viewContainer}
-          file={"./presentation.pdf"}
+          file={presentationFile}
           onLoadSuccess={onDocumentLoadSuccess}
         >
           <div className={styles.previewSlidesContainer}>
