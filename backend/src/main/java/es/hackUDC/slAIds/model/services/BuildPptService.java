@@ -1,6 +1,7 @@
 package es.hackUDC.slAIds.model.services;
 
 import java.awt.Dimension;
+import java.awt.geom.Rectangle2D;
 import java.io.ByteArrayOutputStream;
 import java.util.List;
 
@@ -29,18 +30,15 @@ public class BuildPptService {
 
     public Presentation buildPpt(Presentation presentation) {
 
+    	float imgWidth = 360;
+    	float imgHeight = 220;
+    	
         XMLSlideShow ppt = new XMLSlideShow();
         XSLFTextShape titleShape;
         XSLFTextShape contentShape;
         XSLFPictureShape picture;
         XSLFPictureData pictureData;
 
-        for(XSLFSlideMaster master : ppt.getSlideMasters()) {
-        	for(XSLFSlideLayout layout : master.getSlideLayouts()) {
-        		System.out.println(layout.getType());
-        	}
-        }
-                
         XSLFSlideMaster defaultMaster = ppt.getSlideMasters().get(0);
 
         XSLFSlideLayout frontPageLayout = defaultMaster.getLayout(SlideLayout.TITLE_ONLY);
@@ -66,14 +64,19 @@ public class BuildPptService {
         for (Slide modelSlide : presentation.getSlides()) {
             slide = ppt.createSlide(slidesLayout);
             titleShape = slide.getPlaceholder(0);
-            contentShape = slide.getPlaceholder(2);
+            contentShape = slide.getPlaceholder(1);
             pictureData = ppt.addPicture(modelSlide.getImg(), PictureData.PictureType.PNG);
             picture = slide.createPicture(pictureData);
-            picture.setAnchor(new Rectangle(320, 230, 100, 92));
+            Rectangle2D.Float rect = new Rectangle2D.Float(360-(imgWidth/2), 540-imgHeight-10, imgWidth, imgHeight);
+            picture.setAnchor(rect);
             titleShape.setText(modelSlide.getTitle()).setFontSize(40.0);
             contentShape.setText(modelSlide.getText()).setFontSize(20.0);
         }
 
+        Dimension pgsize = ppt.getPageSize();
+        System.out.println(pgsize.width);
+        System.out.println(pgsize.height);
+        
         try {
             // Create a binary Data structure to store the pptx
             ByteArrayOutputStream out = new ByteArrayOutputStream();
