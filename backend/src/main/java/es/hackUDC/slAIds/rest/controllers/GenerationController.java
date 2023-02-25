@@ -54,7 +54,6 @@ public class GenerationController {
         float imgHeight = 220;
 
         Optional<ModelUser> modelUser = modelUserDao.findById(userId);
-
         if (!modelUser.isPresent()) {
             throw new InstanceNotFoundException("User not found", userId);
         }
