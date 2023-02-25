@@ -1,7 +1,6 @@
 package es.hackUDC.slAIds.rest.controllers;
 
 import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;

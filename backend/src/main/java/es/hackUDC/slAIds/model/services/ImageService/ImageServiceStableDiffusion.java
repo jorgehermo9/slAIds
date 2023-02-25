@@ -1,6 +1,5 @@
 package es.hackUDC.slAIds.model.services.ImageService;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -11,12 +10,9 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-<<<<<<< Updated upstream
-=======
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
->>>>>>> Stashed changes
 @Service
 public class ImageServiceStableDiffusion implements ImageService {
 

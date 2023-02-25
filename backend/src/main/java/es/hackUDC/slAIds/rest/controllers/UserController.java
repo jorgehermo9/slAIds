@@ -46,91 +46,92 @@ import es.hackUDC.slAIds.rest.dtos.UserDto;
 @RequestMapping("/users")
 public class UserController {
 
-  private final static String INCORRECT_LOGIN_EXCEPTION_CODE = "project.exceptions.IncorrectLoginException";
-  private final static String INCORRECT_PASSWORD_EXCEPTION_CODE = "project.exceptions.IncorrectPasswordException";
+    private final static String INCORRECT_LOGIN_EXCEPTION_CODE = "project.exceptions.IncorrectLoginException";
+    private final static String INCORRECT_PASSWORD_EXCEPTION_CODE = "project.exceptions.IncorrectPasswordException";
 
-  @Autowired
-  private MessageSource messageSource;
+    @Autowired
+    private MessageSource messageSource;
 
-  @Autowired
-  private JwtGenerator jwtGenerator;
+    @Autowired
+    private JwtGenerator jwtGenerator;
 
-  @Autowired
-  private UserService userService;
+    @Autowired
+    private UserService userService;
 
-  @ExceptionHandler(IncorrectLoginException.class)
-  @ResponseStatus(HttpStatus.NOT_FOUND)
-  @ResponseBody
-  public ErrorsDto handleIncorrectLoginException(IncorrectLoginException exception, Locale locale) {
+    @ExceptionHandler(IncorrectLoginException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseBody
+    public ErrorsDto handleIncorrectLoginException(IncorrectLoginException exception, Locale locale) {
 
-    String errorMessage = messageSource.getMessage(INCORRECT_LOGIN_EXCEPTION_CODE, null,
-        INCORRECT_LOGIN_EXCEPTION_CODE, locale);
+        String errorMessage = messageSource.getMessage(INCORRECT_LOGIN_EXCEPTION_CODE, null,
+                INCORRECT_LOGIN_EXCEPTION_CODE, locale);
 
-    return new ErrorsDto(errorMessage);
+        return new ErrorsDto(errorMessage);
 
-  }
+    }
 
-  @ExceptionHandler(IncorrectPasswordException.class)
-  @ResponseStatus(HttpStatus.NOT_FOUND)
-  @ResponseBody
-  public ErrorsDto handleIncorrectPasswordException(IncorrectPasswordException exception, Locale locale) {
+    @ExceptionHandler(IncorrectPasswordException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseBody
+    public ErrorsDto handleIncorrectPasswordException(IncorrectPasswordException exception, Locale locale) {
 
-    String errorMessage = messageSource.getMessage(INCORRECT_PASSWORD_EXCEPTION_CODE, null,
-        INCORRECT_PASSWORD_EXCEPTION_CODE, locale);
+        String errorMessage = messageSource.getMessage(INCORRECT_PASSWORD_EXCEPTION_CODE, null,
+                INCORRECT_PASSWORD_EXCEPTION_CODE, locale);
 
-    return new ErrorsDto(errorMessage);
+        return new ErrorsDto(errorMessage);
 
-  }
+    }
 
-  @ExceptionHandler(DuplicateInstanceException.class)
-  @ResponseStatus(HttpStatus.FORBIDDEN)
-  @ResponseBody
-  public ErrorsDto handleDuplicateInstanceException(DuplicateInstanceException exception, Locale locale) {
-    return new ErrorsDto("The user: " + exception.getKey() + " already exists");
-  }
+    @ExceptionHandler(DuplicateInstanceException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ResponseBody
+    public ErrorsDto handleDuplicateInstanceException(DuplicateInstanceException exception, Locale locale) {
+        return new ErrorsDto("The user: " + exception.getKey() + " already exists");
+    }
 
-  @PostMapping("/signup")
-  public ResponseEntity<AuthenticatedUserDto> signUp(
-      @Validated({ UserDto.AllValidations.class }) @RequestBody UserDto userDto) throws DuplicateInstanceException {
+    @PostMapping("/signup")
+    public ResponseEntity<AuthenticatedUserDto> signUp(
+            @Validated({ UserDto.AllValidations.class }) @RequestBody UserDto userDto)
+            throws DuplicateInstanceException {
 
-    ModelUser user = toUser(userDto);
+        ModelUser user = toUser(userDto);
 
-    userService.signUp(user);
+        userService.signUp(user);
 
-    URI location = ServletUriComponentsBuilder
-        .fromCurrentRequest().path("/{id}")
-        .buildAndExpand(user.getId()).toUri();
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest().path("/{id}")
+                .buildAndExpand(user.getId()).toUri();
 
-    return ResponseEntity.created(location).body(toAuthenticatedUserDto(generateServiceToken(user), user));
+        return ResponseEntity.created(location).body(toAuthenticatedUserDto(generateServiceToken(user), user));
 
-  }
+    }
 
-  @PostMapping("/login")
-  public AuthenticatedUserDto login(@Validated @RequestBody LoginParamsDto params)
-      throws IncorrectLoginException {
+    @PostMapping("/login")
+    public AuthenticatedUserDto login(@Validated @RequestBody LoginParamsDto params)
+            throws IncorrectLoginException {
 
-    ModelUser user = userService.login(params.getUserName(), params.getPassword());
+        ModelUser user = userService.login(params.getUserName(), params.getPassword());
 
-    return toAuthenticatedUserDto(generateServiceToken(user), user);
+        return toAuthenticatedUserDto(generateServiceToken(user), user);
 
-  }
+    }
 
-  @PostMapping("/loginFromServiceToken")
-  public AuthenticatedUserDto loginFromServiceToken(@RequestAttribute Long userId,
-      @RequestAttribute String serviceToken) throws InstanceNotFoundException {
+    @PostMapping("/loginFromServiceToken")
+    public AuthenticatedUserDto loginFromServiceToken(@RequestAttribute Long userId,
+            @RequestAttribute String serviceToken) throws InstanceNotFoundException {
 
-    ModelUser user = userService.loginFromId(userId);
+        ModelUser user = userService.loginFromId(userId);
 
-    return toAuthenticatedUserDto(serviceToken, user);
+        return toAuthenticatedUserDto(serviceToken, user);
 
-  }
+    }
 
-  private String generateServiceToken(ModelUser user) {
+    private String generateServiceToken(ModelUser user) {
 
-    JwtInfo jwtInfo = new JwtInfo(user.getId(), user.getUserName(), user.getRole().toString());
+        JwtInfo jwtInfo = new JwtInfo(user.getId(), user.getUserName(), user.getRole().toString());
 
-    return jwtGenerator.generate(jwtInfo);
+        return jwtGenerator.generate(jwtInfo);
 
-  }
+    }
 
 }
