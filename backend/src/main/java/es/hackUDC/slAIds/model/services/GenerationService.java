@@ -24,9 +24,9 @@ import es.hackUDC.slAIds.model.services.TransferObjects.SlideText;
 @Transactional
 public class GenerationService {
 
-  @Autowired
-  private ChatService chatService;
-//   private ChatServiceMock chatService;
+    @Autowired
+    private ChatService chatService;
+    // private ChatServiceMock chatService;
 
     @Autowired
     private ImageServiceImpl imageService;
@@ -121,7 +121,8 @@ public class GenerationService {
             responseSlideText = generateSlide(slideTitle, slideDescription, conversationId, parentId, minWords,
                     maxWords, bulletPoints);
 
-            img = imageService.getImage(slideTitle, imgWidth, imgHeight).get();
+            String imagePrompt = slideTitle;
+            img = imageService.getImage(imagePrompt, imgWidth, imgHeight).get();
 
             slides.add(new Slide(slideTitle, responseSlideText.response().getText(), (i + 1), img));
 
