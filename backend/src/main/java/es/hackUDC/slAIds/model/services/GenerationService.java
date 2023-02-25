@@ -2,7 +2,6 @@ package es.hackUDC.slAIds.model.services;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +14,8 @@ import es.hackUDC.slAIds.model.entities.PresentationDao;
 import es.hackUDC.slAIds.model.entities.Slide;
 import es.hackUDC.slAIds.model.services.ChatService.ChatService;
 import es.hackUDC.slAIds.model.services.ChatService.PromptResponse;
-import es.hackUDC.slAIds.model.services.transferObjects.IndexTransfer;
-import es.hackUDC.slAIds.model.services.transferObjects.SlideText;
+import es.hackUDC.slAIds.model.services.TransferObjects.IndexTransfer;
+import es.hackUDC.slAIds.model.services.TransferObjects.SlideText;
 
 @Service
 @Transactional
@@ -24,7 +23,7 @@ public class GenerationService {
 
     @Autowired
     private ChatService chatService;
-    
+
     @Autowired
     private PresentationDao presentationDao;
 
@@ -48,8 +47,8 @@ public class GenerationService {
             String parentId, int minWords, int maxWords) {
 
         String requestSlidePrompt = "Generate and informative, condensed, direct, without repeating information "
-        		+ "already given in this conversation, paragraph, between " 
-        		+ minWords + " and " + maxWords + " words,"
+                + "already given in this conversation, paragraph, between "
+                + minWords + " and " + maxWords + " words,"
                 + " with the title \"" + slideTitle + "\" about: " + slidePrompt + ".";
 
         return (chatService.executeWithConversation(requestSlidePrompt, SlideText.class, conversationId, parentId)
@@ -57,9 +56,10 @@ public class GenerationService {
 
     }
 
-    public Presentation generatePresentation(String presentationTitle, String presentationPrompt, int numSlides, int minWords, int maxWords, Presentation presentation) {
+    public Presentation generatePresentation(String presentationTitle, String presentationPrompt, int numSlides,
+            int minWords, int maxWords, Presentation presentation) {
 
-        //Presentation presentation = new Presentation();
+        // Presentation presentation = new Presentation();
         String parentId;
         String conversationId;
 
@@ -68,7 +68,8 @@ public class GenerationService {
 
         PromptResponse<IndexTransfer> responseIndex = generateIndex(presentationPrompt, numSlides);
 
-        presentation.setIndex(new Index(responseIndex.response().getSlideTitles(),responseIndex.response().getSlideDescriptions()));
+        presentation.setIndex(
+                new Index(responseIndex.response().getSlideTitles(), responseIndex.response().getSlideDescriptions()));
         parentId = responseIndex.parentId();
         conversationId = responseIndex.conversationId();
 
@@ -80,7 +81,8 @@ public class GenerationService {
             String slideTitle = presentation.getIndex().getSlideTitles().get(i);
             String slideDescription = presentation.getIndex().getSlideDescriptions().get(i);
 
-            responseSlideText = generateSlideText(slideTitle, slideDescription, conversationId, parentId, minWords, maxWords);
+            responseSlideText = generateSlideText(slideTitle, slideDescription, conversationId, parentId, minWords,
+                    maxWords);
             slides.add(new Slide(slideTitle, responseSlideText.response().getText(), (i + 1)));
 
             parentId = responseSlideText.parentId();
@@ -89,24 +91,22 @@ public class GenerationService {
 
         presentation.setSlides(slides);
 
-        presentationDao.save(presentation);
-        
         return presentation;
     }
-    
+
     public boolean isAvailable(Long presentationId) {
-    	
-    	Presentation presentation = presentationDao.findById(presentationId).get();
-    	
-    	return (Objects.isNull(presentation.getIndex()));
-    	
+
+        Presentation presentation = presentationDao.findById(presentationId).get();
+
+        return presentation.getIsAvailable();
+
     }
-    
+
     public Presentation getGeneratedPresentation(Long presentationId) {
-    	
-    	Presentation presentation = presentationDao.findById(presentationId).get();
-    	
-    	return (presentation);
+
+        Presentation presentation = presentationDao.findById(presentationId).get();
+
+        return presentation;
     }
 
 }

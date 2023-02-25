@@ -1,6 +1,14 @@
 package es.hackUDC.slAIds.rest.controllers;
 
+import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,7 +23,7 @@ import es.hackUDC.slAIds.model.services.GenerationService;
 import es.hackUDC.slAIds.rest.dtos.generationRequestDto;
 
 @RestController
-@RequestMapping("/generate")
+@RequestMapping("/presentations")
 public class GenerationController {
 
     @Autowired
@@ -23,54 +31,71 @@ public class GenerationController {
 
     @Autowired
     private PresentationDao presentationDao;
-    
+
     @Autowired
     private BuildPptService buildPptService;
 
-    @PostMapping("")
+    @PostMapping("/generate")
     public Long generatePresentation(
             @RequestBody generationRequestDto generationRequestDto) {
 
-
         Presentation presentation = new Presentation();
         presentationDao.save(presentation);
-                
-        
+
+        System.out.println(presentation.getId());
+
+        // Start a new thread to generate the presentation asynchronously
         Thread t1 = new Thread(new Runnable() {
             @Override
             public void run() {
-                generationService.generatePresentation(
-                		generationRequestDto.title(),
+                Presentation generatedPresentation = generationService.generatePresentation(
+                        generationRequestDto.title(),
                         generationRequestDto.prompt(),
                         generationRequestDto.numSlides(),
                         generationRequestDto.minWords(),
                         generationRequestDto.maxWords(),
                         presentation);
+                Presentation builtPresentation = buildPptService.buildPpt(generatedPresentation);
+                presentation.setIsAvailable(true);
+                presentationDao.save(builtPresentation);
             }
-        });  
+        });
         t1.start();
-        
-        //buildPptService.buildPpt(presentation);
-        
+
         return presentation.getId();
 
     }
-    
-    @GetMapping("/{presentationId}/is-available")
-    public boolean isAvailable(
-    	@PathVariable Long presentationId) {
-    	
-    	return (generationService.isAvailable(presentationId));
-    	
-    }
-    
+
     @GetMapping("/{presentationId}")
     public Presentation getGeneratedPresentation(
-    		@PathVariable Long presentationId) {
-    	
-    	return (generationService.getGeneratedPresentation(presentationId));
-    	
+            @PathVariable Long presentationId) {
+
+        return generationService.getGeneratedPresentation(presentationId);
     }
-    
+
+    @GetMapping("/{presentationId}/isAvailable")
+    public boolean isAvailable(
+            @PathVariable Long presentationId) {
+
+        return generationService.isAvailable(presentationId);
+
+    }
+
+    @GetMapping("/{presentationId}/download")
+    public ResponseEntity<Resource> downloadPresentation(
+            @PathVariable Long presentationId) throws IOException {
+        Presentation presentation = generationService.getGeneratedPresentation(presentationId);
+
+        byte[] pptx = presentation.getPptx();
+
+        InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(pptx));
+
+        return ResponseEntity.ok()
+                .contentLength(pptx.length)
+                .header("Content-Disposition", "attachment; filename=\"presentation.pptx\"")
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(resource);
+
+    }
 
 }

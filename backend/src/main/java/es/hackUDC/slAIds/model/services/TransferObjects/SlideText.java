@@ -1,4 +1,4 @@
-package es.hackUDC.slAIds.model.services.transferObjects;
+package es.hackUDC.slAIds.model.services.TransferObjects;
 
 public class SlideText {
 

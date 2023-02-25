@@ -3,81 +3,125 @@ package es.hackUDC.slAIds.model.entities;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "slides")
 public class Presentation {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
-	
-	private String title;
-	
-	private String descriptionPrompt;
-	
-	@OneToOne(cascade = CascadeType.ALL)
-	private Index index;
-	
-	@OneToMany(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "presentation_id")
-	private List<Slide> slides;
-	
-	public Presentation() {}
-	
-	public Presentation(String title, String descriptionPrompt, Index index, List<Slide> slides) {
-		this.title = title;
-		this.descriptionPrompt = descriptionPrompt;
-		this.index = index;
-		this.slides = slides;
-	}
-	
-	public String getTitle() {
-		return title;
-	}
-	public void setTitle(String title) {
-		this.title = title;
-	}
-	public String getDescriptionPrompt() {
-		return descriptionPrompt;
-	}
-	public void setDescriptionPrompt(String descriptionPrompt) {
-		this.descriptionPrompt = descriptionPrompt;
-	}
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
-	public Long getId() {
-		return id;
-	}
+    @Column(columnDefinition = "TEXT")
+    private String title;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    @Column(columnDefinition = "TEXT")
+    private String descriptionPrompt;
 
-	public Index getIndex() {
-		return index;
-	}
+    @OneToOne(cascade = CascadeType.ALL)
+    private Index index;
 
-	public void setIndex(Index index) {
-		this.index = index;
-	}
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "presentation_id")
+    private List<Slide> slides;
 
-	public List<Slide> getSlides() {
-		return slides;
-	}
+    private Boolean isAvailable = false;
 
-	public void setSlides(List<Slide> slides) {
-		this.slides = slides;
-	}
-	
+    private byte[] pptx;
+
+    private Boolean error;
+
+    @Column(columnDefinition = "TEXT")
+    private String errorMessage;
+
+    public Boolean getIsAvailable() {
+        return isAvailable;
+    }
+
+    public void setIsAvailable(Boolean isAvailable) {
+        this.isAvailable = isAvailable;
+    }
+
+    public Boolean getError() {
+        return error;
+    }
+
+    public void setError(Boolean error) {
+        this.error = error;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
+
+    public Presentation() {
+    }
+
+    public Presentation(String title, String descriptionPrompt, Index index, List<Slide> slides) {
+        this.title = title;
+        this.descriptionPrompt = descriptionPrompt;
+        this.index = index;
+        this.slides = slides;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescriptionPrompt() {
+        return descriptionPrompt;
+    }
+
+    public void setDescriptionPrompt(String descriptionPrompt) {
+        this.descriptionPrompt = descriptionPrompt;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Index getIndex() {
+        return index;
+    }
+
+    public void setIndex(Index index) {
+        this.index = index;
+    }
+
+    public List<Slide> getSlides() {
+        return slides;
+    }
+
+    public void setSlides(List<Slide> slides) {
+        this.slides = slides;
+    }
+
+    public byte[] getPptx() {
+        return pptx;
+    }
+
+    public void setPptx(byte[] pptx) {
+        this.pptx = pptx;
+    }
 
 }

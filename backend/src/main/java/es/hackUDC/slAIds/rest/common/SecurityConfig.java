@@ -91,29 +91,30 @@ import java.util.List;
 @Configuration
 public class SecurityConfig {
 
-  @Bean
-  @Order(1)
-  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    http.cors().and().csrf().disable()
-        .authorizeHttpRequests((authorize) -> authorize
-            .requestMatchers("/users/**").permitAll()
-            .anyRequest().authenticated())
-        .apply(new MyCustomDsl());
-    return http.build();
-  }
+    @Bean
+    @Order(1)
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.cors().and().csrf().disable()
+                .authorizeHttpRequests((authorize) -> authorize
+                        .requestMatchers("/users/**").permitAll()
+                        .requestMatchers("/presentations/**").permitAll()
+                        .anyRequest().authenticated())
+                .apply(new MyCustomDsl());
+        return http.build();
+    }
 }
 
 class MyCustomDsl extends AbstractHttpConfigurer<MyCustomDsl, HttpSecurity> {
-  @Autowired
-  private JwtGenerator jwtGenerator;
+    @Autowired
+    private JwtGenerator jwtGenerator;
 
-  @Override
-  public void configure(HttpSecurity http) throws Exception {
-    AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
-    http.addFilter(new JwtFilter(authenticationManager, jwtGenerator));
-  }
+    @Override
+    public void configure(HttpSecurity http) throws Exception {
+        AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
+        http.addFilter(new JwtFilter(authenticationManager, jwtGenerator));
+    }
 
-  public static MyCustomDsl customDsl() {
-    return new MyCustomDsl();
-  }
+    public static MyCustomDsl customDsl() {
+        return new MyCustomDsl();
+    }
 }
