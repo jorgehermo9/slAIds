@@ -33,7 +33,11 @@ public class ImageServiceStableDiffusion implements ImageService {
 
 record StableDiffusionRequest(String prompt, int batch_size, int n_iter, int steps, float width, float height) {
 
+<<<<<<< HEAD
     private static final String STABLE_DIFFUSION_URL = "http://172.20.10.6:7860/sdapi/v1/txt2img";
+=======
+  private static final String STABLE_DIFFUSION_URL = "http://localhost:7860/sdapi/v1/txt2img";
+>>>>>>> 74d6b30 (Fast committed)
 
     public StableDiffusionResponse executePostRequest(String prompt)
             throws IOException, InterruptedException {
@@ -63,9 +67,18 @@ record StableDiffusionRequest(String prompt, int batch_size, int n_iter, int ste
 @JsonIgnoreProperties(ignoreUnknown = true)
 record StableDiffusionResponse(List<String> images) {
 
+<<<<<<< HEAD
     public byte[] getImage() {
         // get first element of images array and decode base64 string to byte array
         String base64Image = images.get(0);
         return java.util.Base64.getDecoder().decode(base64Image);
     }
 }
+=======
+  public byte[] getImage() {
+    // get first element of images array and decode base64 string to byte array
+    String base64Image = images.get(0);
+    return java.util.Base64.getDecoder().decode(base64Image);
+  }
+}
+>>>>>>> 74d6b30 (Fast committed)

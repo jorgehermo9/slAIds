@@ -22,6 +22,7 @@ export default abstract class PresentationSerivce {
       body: JSON.stringify(presentationRequestDto),
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${sessionStorage.getItem("serviceToken")}`,
       },
     })
       .then((res) => {
@@ -34,6 +35,9 @@ export default abstract class PresentationSerivce {
   static async isAvailable(id: Presentation["id"]): Promise<boolean> {
     return fetch(`${this.endpoint}/presentations/${id}/is-available`, {
       method: "GET",
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("serviceToken")}`,
+      },
     })
       .then((res) => {
         if (!res.ok) throw new Error(res.statusText);
@@ -45,6 +49,9 @@ export default abstract class PresentationSerivce {
   static async getPresentation(id: Presentation["id"]): Promise<Presentation> {
     return fetch(`${this.endpoint}/presentations/${id}`, {
       method: "GET",
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("serviceToken")}`,
+      },
     })
       .then((res) => res.json())
       .then((res) => {
@@ -56,6 +63,9 @@ export default abstract class PresentationSerivce {
   static async getAllPresentations(): Promise<Presentation[]> {
     return fetch(`${this.endpoint}/presentations`, {
       method: "GET",
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("serviceToken")}`,
+      },
     })
       .then((res) => res.json())
       .then((res) => {
@@ -73,6 +83,9 @@ export default abstract class PresentationSerivce {
   ): Promise<PresentationFile> {
     return fetch(`${this.endpoint}/presentations/${id}/pdf`, {
       method: "GET",
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("serviceToken")}`,
+      },
     })
       .then((res) => res.blob())
       .then((res) => res);
