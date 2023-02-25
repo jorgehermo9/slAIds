@@ -46,9 +46,9 @@ public class GenerationService {
     public PromptResponse<SlideText> generateSlideText(String slideTitle, String slidePrompt, String conversationId,
             String parentId, int minWords, int maxWords) {
 
-        String requestSlidePrompt = "Generate 5 sentences informative, condensed, direct, without repeating information "
-        		+ "already given in this conversation, separated by \"/\" "//, between " 
-        		//+ minWords + " and " + maxWords + " words,"
+        String requestSlidePrompt = "Generate and informative, condensed, direct, without repeating information "
+        		+ "already given in this conversation, paragraph, between " 
+        		+ minWords + " and " + maxWords + " words,"
                 + " with the title \"" + slideTitle + "\" about: " + slidePrompt + ".";
 
         return (chatService.executeWithConversation(requestSlidePrompt, SlideText.class, conversationId, parentId)

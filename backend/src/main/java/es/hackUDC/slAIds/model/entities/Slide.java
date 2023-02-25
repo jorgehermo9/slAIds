@@ -1,5 +1,6 @@
 package es.hackUDC.slAIds.model.entities;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -14,8 +15,10 @@ public class Slide {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
+	@Column(columnDefinition="LONGTEXT")
 	private String title;
 	
+	@Column(columnDefinition="LONGTEXT")
 	private String text;
 	
 	private int number;
