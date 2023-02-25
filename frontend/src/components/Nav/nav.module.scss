@@ -1,8 +1,7 @@
-//create me a sticky nav bar with the logo in the right
-
 .navbar {
-  position: sticky;
+  position: fixed;
   top: 0;
+  width: 100%;
   background-color: #fff;
   display: flex;
   justify-content: space-between;

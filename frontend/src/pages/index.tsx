@@ -1,51 +1,9 @@
-import { Carousel } from "@/components/Carousel/Carousel";
-import { ResumeCard } from "@/components/CarouselCards/ResumeCard";
-import { StyleCard } from "@/components/CarouselCards/StyleCard";
-import { OptionsCard } from "@/components/CarouselCards/OptionsCard";
-import { GenerateCard } from "@/components/CarouselCards/GenerateCard";
-
-import SlideRequest, { getDefaultSlideRequest } from "@/entities/SlideRequest";
-import { useState } from "react";
-import styles from "./styles/home.module.scss";
-import NotesIcon from "@mui/icons-material/Notes";
-import ColorLensIcon from "@mui/icons-material/ColorLens";
-import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
-import DoneRoundedIcon from "@mui/icons-material/DoneRounded";
-import PresentationFile from "@/entities/PresentationFile";
-import { Preview } from "@/components/Preview/Preview";
-import { AnimatePresence } from "framer-motion";
-import Head from "next/head";
-import NotificationManager from "@/components/NotificationManager/NotificationManager";
 import { Nav } from "@/components/Nav/Nav";
-import { Login } from "@/components/Login/Login";
+import styles from "./styles/login.module.scss";
+import Head from "next/head";
+import Link from "next/link";
 
-export default function Home() {
-  const [slideRequest, setSlideRequest] = useState<SlideRequest>(
-    getDefaultSlideRequest()
-  );
-  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
-  const [presentationFile, setPresentationFile] =
-    useState<PresentationFile | null>(new Blob());
-
-  const properties = [
-    {
-      label: "Prompt",
-      icon: <NotesIcon />,
-    },
-    {
-      label: "Style",
-      icon: <ColorLensIcon />,
-    },
-    {
-      label: "Options",
-      icon: <SettingsRoundedIcon />,
-    },
-    {
-      label: "Generate",
-      icon: <DoneRoundedIcon />,
-    },
-  ];
-
+export default function Login() {
   return (
     <>
       <Head>
@@ -55,43 +13,37 @@ export default function Home() {
 
       <Nav />
 
-      <NotificationManager>
-        <AnimatePresence>
-          {isPreviewOpen && presentationFile && (
-            <Preview
-              presentationFile={presentationFile}
-              onClose={() => setIsPreviewOpen(false)}
+      <div className={styles.cardContainer}>
+        <div className={styles.card}>
+          <div className={styles.formField}>
+            <label htmlFor="usernameInput" className={styles.title}>
+              Username
+            </label>
+            <input
+              type="text"
+              id="usernameInput"
+              className={styles.input}
+              placeholder="user12"
             />
-          )}
-        </AnimatePresence>
-        <div className={styles.externalContainer}>
-          <div className={styles.title}>
-            <span className={styles.bold}>Create</span>
-            <span className={styles.thin}>your</span>
-            <span className={styles.bold}>slides</span>
           </div>
-          <Carousel properties={properties}>
-            <ResumeCard
-              slideRequest={slideRequest}
-              setSlideRequest={setSlideRequest}
+          <div className={styles.formField}>
+            <label htmlFor="passwordInput" className={styles.title}>
+              Password
+            </label>
+            <input
+              type="password"
+              id="passwordInput"
+              className={styles.input}
+              placeholder="%der351"
             />
-            <StyleCard
-              slideRequest={slideRequest}
-              setSlideRequest={setSlideRequest}
-            />
-            <OptionsCard
-              slideRequest={slideRequest}
-              setSlideRequest={setSlideRequest}
-            />
-            <GenerateCard
-              slideRequest={slideRequest}
-              setSlideRequest={setSlideRequest}
-              setPresentationFile={setPresentationFile}
-              setIsPreviewOpen={setIsPreviewOpen}
-            />
-          </Carousel>
+          </div>
+          <div className={styles.linkWrapper}>
+            <Link className={styles.link} href="/signup">
+              Don&apos;t have an account?
+            </Link>
+          </div>
         </div>
-      </NotificationManager>
+      </div>
     </>
   );
 }
