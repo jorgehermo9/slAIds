@@ -8,15 +8,16 @@ import { AnimatePresence } from "framer-motion";
 import { Preview } from "../Preview/Preview";
 import PresentationFile from "@/entities/PresentationFile";
 import DownloadIcon from "@mui/icons-material/Download";
+import PresentationListDto from "@/entities/PresentationListDto";
 
 export const PresentationList = () => {
   const { createErrorNotification } = useContext(NotificationContext)!;
-  const [presentations, setPresentation] = useState<Presentation[]>([]);
+  const [presentations, setPresentation] = useState<PresentationListDto[]>([]);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [presentationFile, setPresentationFile] =
     useState<PresentationFile | null>();
 
-  const handleClickPreview = (presentation: Presentation) => {
+  const handleClickPreview = (presentation: PresentationListDto) => {
     PresentationService.getPresentationFile(presentation.id)
       .then((res) => {
         setPresentationFile(res);

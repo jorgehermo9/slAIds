@@ -4,6 +4,7 @@ import PresentationDto, {
   toPresentation,
 } from "@/entities/PresentationDto";
 import PresentationFile from "@/entities/PresentationFile";
+import PresentationListDto from "@/entities/PresentationListDto";
 import PresentationRequest, {
   toPresentationRequestDto,
 } from "@/entities/PresentationRequest";
@@ -60,7 +61,7 @@ export default abstract class PresentationSerivce {
       });
   }
 
-  static async getAllPresentations(): Promise<Presentation[]> {
+  static async getAllPresentations(): Promise<PresentationListDto[]> {
     return fetch(`${this.endpoint}/presentations`, {
       method: "GET",
       headers: {
@@ -69,12 +70,10 @@ export default abstract class PresentationSerivce {
     })
       .then((res) => res.json())
       .then((res) => {
-        const presentationDtos: PresentationDto[] = res.map(
+        const presentationDtos: PresentationListDto[] = res.map(
           (presentationDto: any) => PresentationDtoSchema.parse(presentationDto)
         );
-        return presentationDtos.map((presentationDto) =>
-          toPresentation(presentationDto)
-        );
+        return presentationDtos;
       });
   }
 
