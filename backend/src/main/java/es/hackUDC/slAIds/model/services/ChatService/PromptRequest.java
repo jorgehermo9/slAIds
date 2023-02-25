@@ -34,21 +34,19 @@ record PromptRequest<T>(String promptText, Class<T> targetClass, String conversa
         String basePrompt = "Your response should be only in JSON format and should have the following " +
                 fields.length + " key(s): ";
 
-        String fieldsPrompt = "";
+        StringBuilder prompt = new StringBuilder(basePrompt);
         if (fields.length > 0) {
-            StringBuilder sb = new StringBuilder(basePrompt);
             for (Field field : fields) {
-                sb.append(field.getName());
-                sb.append(", ");
+                prompt.append(field.getName());
+                prompt.append(", ");
             }
-            sb.delete(sb.length() - 2, sb.length());
-            sb.append(". ");
-            fieldsPrompt = sb.toString();
+            prompt.delete(prompt.length() - 2, prompt.length());
+            prompt.append(". ");
         }
 
         String endPrompt = "Do not respond anything more than JSON";
-
-        return basePrompt + fieldsPrompt + endPrompt;
+        prompt.append(endPrompt);
+        return prompt.toString();
 
     }
 
@@ -64,6 +62,7 @@ record PromptRequest<T>(String promptText, Class<T> targetClass, String conversa
 
     private static <T> Optional<PromptResponse<T>> executePostRequest(PromptRequest<T> request)
             throws IOException, InterruptedException {
+
         ObjectMapper mapper = new ObjectMapper();
         PromptRequestDto requestDto = new PromptRequestDto(request);
         String json = mapper.writeValueAsString(requestDto);

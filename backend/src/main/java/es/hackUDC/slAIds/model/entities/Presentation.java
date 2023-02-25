@@ -33,6 +33,16 @@ public class Presentation {
     @JoinColumn(name = "presentation_id")
     private List<Slide> slides;
 
+    private Boolean isAvailable = false;
+
+    private byte[] pptx;
+    private byte[] pdf;
+
+    private Boolean error;
+
+    @Column(columnDefinition = "TEXT")
+    private String errorMessage;
+
     public Presentation() {
     }
 
@@ -42,15 +52,14 @@ public class Presentation {
         this.index = index;
         this.slides = slides;
     }
-    
-    private Boolean isAvailable = false;
 
-    private byte[] pptx;
+    public byte[] getPdf() {
+        return pdf;
+    }
 
-    private Boolean error;
-
-    @Column(columnDefinition = "TEXT")
-    private String errorMessage;
+    public void setPdf(byte[] pdf) {
+        this.pdf = pdf;
+    }
 
     public Boolean getIsAvailable() {
         return isAvailable;

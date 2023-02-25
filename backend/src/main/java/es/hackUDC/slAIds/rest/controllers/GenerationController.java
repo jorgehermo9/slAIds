@@ -82,8 +82,8 @@ public class GenerationController {
 
     }
 
-    @GetMapping("/{presentationId}/download")
-    public ResponseEntity<Resource> downloadPresentation(
+    @GetMapping("/{presentationId}/download/pptx")
+    public ResponseEntity<Resource> downloadPptx(
             @PathVariable Long presentationId) throws IOException {
         Presentation presentation = generationService.getGeneratedPresentation(presentationId);
 
@@ -99,4 +99,37 @@ public class GenerationController {
 
     }
 
+    @GetMapping("/{presentationId}/download/pdf")
+    public ResponseEntity<Resource> downloadPdf(
+            @PathVariable Long presentationId) throws IOException {
+        Presentation presentation = generationService.getGeneratedPresentation(presentationId);
+
+        byte[] pdf = presentation.getPdf();
+
+        InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(pdf));
+
+        return ResponseEntity.ok()
+                .contentLength(pdf.length)
+                .header("Content-Disposition", "attachment; filename=\"presentation.pdf\"")
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(resource);
+
+    }
+
+    @GetMapping("/{presentationId}/pdf")
+    public byte[] getPdf(
+            @PathVariable Long presentationId) throws IOException {
+        Presentation presentation = generationService.getGeneratedPresentation(presentationId);
+
+        return presentation.getPdf();
+
+    }
+
+    @GetMapping("/{presentationId}/pptx")
+    public byte[] getPptx(
+            @PathVariable Long presentationId) throws IOException {
+        Presentation presentation = generationService.getGeneratedPresentation(presentationId);
+
+        return presentation.getPptx();
+    }
 }
