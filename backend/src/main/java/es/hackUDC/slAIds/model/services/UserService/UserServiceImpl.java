@@ -65,32 +65,4 @@ public class UserServiceImpl implements UserService {
     return permissionChecker.checkUser(id);
   }
 
-  @Override
-  public ModelUser updateProfile(Long id, String firstName, String lastName, String email)
-      throws InstanceNotFoundException {
-
-    ModelUser user = permissionChecker.checkUser(id);
-
-    user.setFirstName(firstName);
-    user.setLastName(lastName);
-    user.setEmail(email);
-
-    return user;
-
-  }
-
-  @Override
-  public void changePassword(Long id, String oldPassword, String newPassword)
-      throws InstanceNotFoundException, IncorrectPasswordException {
-
-    ModelUser user = permissionChecker.checkUser(id);
-
-    if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
-      throw new IncorrectPasswordException();
-    } else {
-      user.setPassword(passwordEncoder.encode(newPassword));
-    }
-
-  }
-
 }

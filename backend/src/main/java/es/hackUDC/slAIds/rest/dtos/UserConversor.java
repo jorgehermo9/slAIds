@@ -8,13 +8,13 @@ public class UserConversor {
   }
 
   public final static UserDto toUserDto(ModelUser user) {
-    return new UserDto(user.getId(), user.getUserName(), user.getFirstName(), user.getLastName(), user.getEmail(),
+    return new UserDto(user.getId(), user.getUserName(), user.getEmail(),
         user.getRole().toString());
   }
 
   public final static ModelUser toUser(UserDto userDto) {
 
-    return new ModelUser(userDto.getUserName(), userDto.getPassword(), userDto.getFirstName(), userDto.getLastName(),
+    return new ModelUser(userDto.getUserName(), userDto.getPassword(),
         userDto.getEmail());
   }
 

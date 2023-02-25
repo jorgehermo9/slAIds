@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +34,7 @@ import es.hackUDC.slAIds.model.exceptions.IncorrectPasswordException;
 import es.hackUDC.slAIds.model.exceptions.PermissionException;
 import es.hackUDC.slAIds.model.services.UserService.UserService;
 import es.hackUDC.slAIds.rest.common.ErrorsDto;
+import es.hackUDC.slAIds.rest.common.FieldErrorDto;
 import es.hackUDC.slAIds.rest.common.JwtGenerator;
 import es.hackUDC.slAIds.rest.common.JwtInfo;
 import es.hackUDC.slAIds.rest.dtos.AuthenticatedUserDto;
@@ -80,6 +82,13 @@ public class UserController {
 
   }
 
+  @ExceptionHandler(DuplicateInstanceException.class)
+  @ResponseStatus(HttpStatus.FORBIDDEN)
+  @ResponseBody
+  public ErrorsDto handleDuplicateInstanceException(DuplicateInstanceException exception, Locale locale) {
+    return new ErrorsDto("The user: " + exception.getKey() + " already exists");
+  }
+
   @PostMapping("/signup")
   public ResponseEntity<AuthenticatedUserDto> signUp(
       @Validated({ UserDto.AllValidations.class }) @RequestBody UserDto userDto) throws DuplicateInstanceException {
@@ -113,34 +122,6 @@ public class UserController {
     ModelUser user = userService.loginFromId(userId);
 
     return toAuthenticatedUserDto(serviceToken, user);
-
-  }
-
-  @PutMapping("/{id}")
-  public UserDto updateProfile(@RequestAttribute Long userId, @PathVariable Long id,
-      @Validated({ UserDto.UpdateValidations.class }) @RequestBody UserDto userDto)
-      throws InstanceNotFoundException, PermissionException {
-
-    if (!id.equals(userId)) {
-      throw new PermissionException();
-    }
-
-    return toUserDto(userService.updateProfile(id, userDto.getFirstName(), userDto.getLastName(),
-        userDto.getEmail()));
-
-  }
-
-  @PostMapping("/{id}/changePassword")
-  @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void changePassword(@RequestAttribute Long userId, @PathVariable Long id,
-      @Validated @RequestBody ChangePasswordParamsDto params)
-      throws PermissionException, InstanceNotFoundException, IncorrectPasswordException {
-
-    if (!id.equals(userId)) {
-      throw new PermissionException();
-    }
-
-    userService.changePassword(id, params.getOldPassword(), params.getNewPassword());
 
   }
 

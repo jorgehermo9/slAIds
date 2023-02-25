@@ -2,7 +2,6 @@ package es.hackUDC.slAIds.rest.common;
 
 import java.util.Date;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
@@ -22,7 +21,8 @@ public class JwtGeneratorImpl implements JwtGenerator {
     return Jwts.builder()
         .claim("userId", info.getUserId())
         .claim("role", info.getRole())
-        .setExpiration(new Date(System.currentTimeMillis() + expirationMinutes * 60 * 1000))
+        .setExpiration(new Date(System.currentTimeMillis() + expirationMinutes * 60 *
+            1000))
         .signWith(SignatureAlgorithm.HS512, signKey.getBytes())
         .compact();
 
