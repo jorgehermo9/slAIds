@@ -2,8 +2,6 @@ package es.hackUDC.slAIds.rest.controllers;
 
 import static es.hackUDC.slAIds.rest.dtos.UserConversor.toAuthenticatedUserDto;
 import static es.hackUDC.slAIds.rest.dtos.UserConversor.toUser;
-import static es.hackUDC.slAIds.rest.dtos.UserConversor.toUserDto;
-
 import java.net.URI;
 import java.util.Locale;
 
@@ -11,13 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,14 +25,11 @@ import es.hackUDC.slAIds.model.entities.ModelUser;
 import es.hackUDC.slAIds.model.exceptions.DuplicateInstanceException;
 import es.hackUDC.slAIds.model.exceptions.IncorrectLoginException;
 import es.hackUDC.slAIds.model.exceptions.IncorrectPasswordException;
-import es.hackUDC.slAIds.model.exceptions.PermissionException;
 import es.hackUDC.slAIds.model.services.UserService.UserService;
 import es.hackUDC.slAIds.rest.common.ErrorsDto;
-import es.hackUDC.slAIds.rest.common.FieldErrorDto;
 import es.hackUDC.slAIds.rest.common.JwtGenerator;
 import es.hackUDC.slAIds.rest.common.JwtInfo;
 import es.hackUDC.slAIds.rest.dtos.AuthenticatedUserDto;
-import es.hackUDC.slAIds.rest.dtos.ChangePasswordParamsDto;
 import es.hackUDC.slAIds.rest.dtos.LoginParamsDto;
 import es.hackUDC.slAIds.rest.dtos.UserDto;
 

@@ -9,11 +9,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import es.hackUDC.slAIds.model.entities.Index;
-import es.hackUDC.slAIds.model.entities.ModelUser;
 import es.hackUDC.slAIds.model.entities.Presentation;
 import es.hackUDC.slAIds.model.entities.PresentationDao;
 import es.hackUDC.slAIds.model.entities.Slide;
-import es.hackUDC.slAIds.model.services.ChatService.ChatService;
 import es.hackUDC.slAIds.model.services.ChatService.ChatServiceMock;
 import es.hackUDC.slAIds.model.services.ChatService.PromptResponse;
 import es.hackUDC.slAIds.model.services.ImageService.ImageServiceImpl;

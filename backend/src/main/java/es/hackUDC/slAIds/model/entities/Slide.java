@@ -2,11 +2,9 @@ package es.hackUDC.slAIds.model.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Slide {
@@ -22,8 +20,8 @@ public class Slide {
     private String text;
 
     private int number;
-    
-    private byte[] img; 
+
+    private byte[] img;
 
     public Slide() {
     }
@@ -73,13 +71,13 @@ public class Slide {
     public void setNumber(int number) {
         this.number = number;
     }
-    
+
     public void setImg(byte[] img) {
-    	this.img = img;
+        this.img = img;
     }
-    
+
     public byte[] getImg() {
-    	return this.img;
+        return this.img;
     }
 
 }

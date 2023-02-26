@@ -6,23 +6,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.ProviderManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.authentication.configuration.GlobalAuthenticationConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 // @Configuration
 // @EnableWebSecurity
@@ -91,51 +82,51 @@ import java.util.List;
 @Configuration
 public class SecurityConfig {
 
-  @Bean
-  @Order(1)
-  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    http.cors().and().csrf().disable()
-        .authorizeHttpRequests((authorize) -> authorize
-            .requestMatchers("/users/**").permitAll()
-            .requestMatchers("**/pptx").permitAll()
-            .requestMatchers("**/pdf").permitAll()
-            .requestMatchers("/chat/prompt").permitAll()
-            .requestMatchers(HttpMethod.POST, "/presentations/**").hasRole("USER")
-            .anyRequest().authenticated())
-        .apply(new MyCustomDsl());
-    return http.build();
-  }
+    @Bean
+    @Order(1)
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.cors().and().csrf().disable()
+                .authorizeHttpRequests((authorize) -> authorize
+                        .requestMatchers("/users/**").permitAll()
+                        .requestMatchers("**/pptx").permitAll()
+                        .requestMatchers("**/pdf").permitAll()
+                        .requestMatchers("/chat/prompt").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/presentations/**").hasRole("USER")
+                        .anyRequest().authenticated())
+                .apply(new MyCustomDsl());
+        return http.build();
+    }
 }
 
 class MyCustomDsl extends AbstractHttpConfigurer<MyCustomDsl, HttpSecurity> {
 
-  @Autowired
-  private JwtGenerator jwtGenerator;
+    @Autowired
+    private JwtGenerator jwtGenerator;
 
-  @Override
-  public void configure(HttpSecurity http) throws Exception {
-    AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
-    http.addFilter(new JwtFilter(authenticationManager, jwtGenerator));
-  }
+    @Override
+    public void configure(HttpSecurity http) throws Exception {
+        AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
+        http.addFilter(new JwtFilter(authenticationManager, jwtGenerator));
+    }
 
-  public static MyCustomDsl customDsl() {
-    return new MyCustomDsl();
-  }
+    public static MyCustomDsl customDsl() {
+        return new MyCustomDsl();
+    }
 
-  @Bean
-  public CorsConfigurationSource corsConfigurationSource() {
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
 
-    CorsConfiguration config = new CorsConfiguration();
-    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
-    config.setAllowCredentials(true);
-    config.setAllowedOriginPatterns(Arrays.asList("*"));
-    config.addAllowedHeader("*");
-    config.addAllowedMethod("*");
+        config.setAllowCredentials(true);
+        config.setAllowedOriginPatterns(Arrays.asList("*"));
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
 
-    source.registerCorsConfiguration("/**", config);
+        source.registerCorsConfiguration("/**", config);
 
-    return source;
+        return source;
 
-  }
+    }
 }

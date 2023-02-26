@@ -22,67 +22,60 @@ import io.jsonwebtoken.Jwts;
 
 public class JwtFilter extends BasicAuthenticationFilter {
 
-  private JwtGenerator jwtGenerator;
+    public JwtFilter(AuthenticationManager authenticationManager, JwtGenerator jwtGenerator) {
 
-  public JwtFilter(AuthenticationManager authenticationManager, JwtGenerator jwtGenerator) {
+        super(authenticationManager);
 
-    super(authenticationManager);
-
-    this.jwtGenerator = jwtGenerator;
-
-  }
-
-  @Override
-  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-      throws ServletException, IOException {
-
-    String authHeaderValue = request.getHeader(HttpHeaders.AUTHORIZATION);
-
-    System.out.println("authHeaderValue: " + authHeaderValue);
-
-    if (authHeaderValue == null || !authHeaderValue.startsWith("Bearer ")) {
-      filterChain.doFilter(request, response);
-      return;
     }
 
-    try {
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
 
-      String serviceToken = authHeaderValue.replace("Bearer ", "");
+        String authHeaderValue = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-      Claims claims = Jwts.parser()
-          .setSigningKey("Bu:GW8bgPlEw".getBytes())
-          .parseClaimsJws(serviceToken)
-          .getBody();
+        if (authHeaderValue == null || !authHeaderValue.startsWith("Bearer ")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
-      JwtInfo jwtInfo = new JwtInfo(
-          ((Integer) claims.get("userId")).longValue(),
-          claims.getSubject(),
-          (String) claims.get("role"));
+        try {
 
-      request.setAttribute("serviceToken", serviceToken);
-      request.setAttribute("userId", jwtInfo.getUserId());
+            String serviceToken = authHeaderValue.replace("Bearer ", "");
 
-      configureSecurityContext(jwtInfo.getUserName(), jwtInfo.getRole());
+            Claims claims = Jwts.parser()
+                    .setSigningKey("Bu:GW8bgPlEw".getBytes())
+                    .parseClaimsJws(serviceToken)
+                    .getBody();
 
-    } catch (Exception e) {
-      System.out.println("EXCEPTION: " + e.getMessage());
-      response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-      return;
+            JwtInfo jwtInfo = new JwtInfo(
+                    ((Integer) claims.get("userId")).longValue(),
+                    claims.getSubject(),
+                    (String) claims.get("role"));
+
+            request.setAttribute("serviceToken", serviceToken);
+            request.setAttribute("userId", jwtInfo.getUserId());
+
+            configureSecurityContext(jwtInfo.getUserName(), jwtInfo.getRole());
+
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
+        }
+
+        filterChain.doFilter(request, response);
+
     }
 
-    filterChain.doFilter(request, response);
+    private void configureSecurityContext(String userName, String role) {
 
-  }
+        Set<GrantedAuthority> authorities = new HashSet<>();
 
-  private void configureSecurityContext(String userName, String role) {
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
 
-    Set<GrantedAuthority> authorities = new HashSet<>();
+        SecurityContextHolder.getContext().setAuthentication(
+                new UsernamePasswordAuthenticationToken(userName, null, authorities));
 
-    authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
-
-    SecurityContextHolder.getContext().setAuthentication(
-        new UsernamePasswordAuthenticationToken(userName, null, authorities));
-
-  }
+    }
 
 }

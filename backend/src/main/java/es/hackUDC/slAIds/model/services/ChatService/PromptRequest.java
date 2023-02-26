@@ -14,8 +14,13 @@ import es.hackUDC.slAIds.model.services.ChatService.PromptResponse.PromptRespons
 
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Value;
+
 record PromptRequest<T>(String promptText, Class<T> targetClass, String conversationId,
         String parentId) {
+
+    @Value("${chat.api.host}")
+    private static String ChatAPIHost;
 
     public PromptRequest(String promptText, Class<T> targetClass) {
         this(promptText, targetClass, null, null);
@@ -58,8 +63,6 @@ record PromptRequest<T>(String promptText, Class<T> targetClass, String conversa
         }
     }
 
-    private static final String ChatAPIURL = "http://localhost:8000/chat";
-
     private static <T> Optional<PromptResponse<T>> executePostRequest(PromptRequest<T> request)
             throws IOException, InterruptedException {
 
@@ -69,14 +72,11 @@ record PromptRequest<T>(String promptText, Class<T> targetClass, String conversa
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest httpRequest = HttpRequest.newBuilder()
                 .version(HttpClient.Version.HTTP_1_1)
-                .uri(URI.create(ChatAPIURL))
+                .uri(URI.create(ChatAPIHost + "/chat"))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(json))
                 .build();
         HttpResponse<String> response = client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-
-        System.out.println(json);
-        System.out.println(response.body());
 
         PromptResponseDto responseDto = mapper.readValue(response.body(), PromptResponseDto.class);
         return PromptResponse.parse(responseDto, response.body(), request.targetClass);
