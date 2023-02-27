@@ -10,7 +10,7 @@ RUN npm install
 
 COPY ./ ./
 
-ENV API_HOST backend
+ENV API_HOST slaids-backend
 
 RUN npm run build
 

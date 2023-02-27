@@ -1,8 +1,8 @@
 version: '3.7'
 services:
-  db:
+  slaids-db:
     image: postgres
-    container_name: slaids-database
+    container_name: slaids-db
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -14,24 +14,24 @@ services:
       retries: 10
       start_period: 30s
 
-  backend:
+  slaids-backend:
     depends_on:
-      db:
+      slaids-db:
         condition: service_healthy
     build: backend/
     image: slaids/backend
     container_name: slaids-backend
     environment:
-      DATABASE_HOST: db
+      DATABASE_HOST: slaids-db
       DATABASE_PORT: 5432
       DATABASE_NAME: slaids_db
       DATABASE_USER: postgres
       DATABASE_PASSWORD: postgres
-      CHAT_API_HOST: chatapi
+      CHAT_API_HOST: slaids-chat-api
       CHAT_API_PORT: 8000
       IMAGE_SERVICE: basic
 
-  chatapi:
+  slaids-chat-api:
     build: backend/chatgpt_api/
     image: slaids/chatgpt_api
     container_name: slaids-chat-api
@@ -40,7 +40,7 @@ services:
       PASSWORD: ${CHATGPT_PASSWORD}
       PORT: 8000
 
-  frontend:
+  slaids-frontend:
     build: frontend/
     image: slaids/frontend
     container_name: slaids-frontend
