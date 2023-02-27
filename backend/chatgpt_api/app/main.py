@@ -34,10 +34,13 @@ def conversation(prompt: Prompt):
 
     try:
         if prompt.conversation_id is None and len(chatbot.get_conversations()) > 0:
+            print("Reset conversation")
             chatbot.reset_chat()
 
+        print("Prompt: ", prompt.text)
         for data in chatbot.ask(prompt.text, prompt.conversation_id, prompt.parent_id):
             response = data
+        print("Response generated")
 
         text_response = response["message"]
         conversation_id = response["conversation_id"]
