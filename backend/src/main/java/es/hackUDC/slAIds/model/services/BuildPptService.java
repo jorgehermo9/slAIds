@@ -66,13 +66,16 @@ public class BuildPptService {
             slide = ppt.createSlide(slidesLayout);
             titleShape = slide.getPlaceholder(0);
             contentShape = slide.getPlaceholder(1);
-            pictureData = ppt.addPicture(modelSlide.getImg(), PictureData.PictureType.PNG);
+            titleShape.setText(modelSlide.getTitle()).setFontSize(40.0);
+            contentShape.setText(modelSlide.getText()).setFontSize(20.0);
+            byte[] slideImage = modelSlide.getImg();
+            if (slideImage == null)
+                continue;
+            pictureData = ppt.addPicture(slideImage, PictureData.PictureType.PNG);
             picture = slide.createPicture(pictureData);
             Rectangle2D.Float rect = new Rectangle2D.Float(360 - (imgWidth / 2), 540 - imgHeight - 10, imgWidth,
                     imgHeight);
             picture.setAnchor(rect);
-            titleShape.setText(modelSlide.getTitle()).setFontSize(40.0);
-            contentShape.setText(modelSlide.getText()).setFontSize(20.0);
         }
 
         try {
