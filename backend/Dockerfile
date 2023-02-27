@@ -8,6 +8,6 @@ COPY .mvn .mvn
 RUN ./mvnw dependency:go-offline
 COPY src/ /app/src
 RUN ./mvnw package -DskipTests
-COPY --from=build /app/target/slAIds-1.0.0.jar /app
+COPY /app/target/slAIds-1.0.0.jar /app
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","/app/slAIds-1.0.0.jar"]
