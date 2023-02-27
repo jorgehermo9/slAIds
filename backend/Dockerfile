@@ -1,15 +1,13 @@
-# Build stage
-FROM maven:3.8.3-openjdk-17 AS build
+FROM openjdk:17
 WORKDIR /app
 # Copy pom first in order to cache dependencies
 COPY pom.xml .
-RUN mvn dependency:go-offline
+COPY mvnw .
+COPY mvnw.cmd .
+COPY .mvn .mvn
+RUN ./mvnw dependency:go-offline
 COPY src/ /app/src
-RUN mvn package -DskipTests
-
-# Run Jar stage
-FROM openjdk:17
-WORKDIR /app
+RUN ./mvnw package -DskipTests
 COPY --from=build /app/target/slAIds-1.0.0.jar /app
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","/app/slAIds-1.0.0.jar"]
