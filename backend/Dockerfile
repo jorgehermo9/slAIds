@@ -1,3 +1,5 @@
+
+
 FROM eclipse-temurin:17
 WORKDIR /app
 # Copy pom first in order to cache dependencies
@@ -8,6 +10,5 @@ COPY .mvn .mvn
 RUN ./mvnw dependency:go-offline
 COPY src/ /app/src
 RUN ./mvnw package -DskipTests
-COPY /app/src/target/slAIds-1.0.0.jar /app
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","/app/slAIds-1.0.0.jar"]
+ENTRYPOINT ["java","-jar","/app/target/slAIds-1.0.0.jar"]
