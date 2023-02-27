@@ -98,7 +98,8 @@ public class GenerationService {
         presentation.setTitle(presentationTitle);
         presentation.setDescriptionPrompt(presentationPrompt);
 
-        img = imageService.getImage(presentationPrompt, imgWidth, imgHeight).get();
+        // FIXME: Find another way of opt-out service image
+        img = imageService.getImage(presentationPrompt, imgWidth, imgHeight).orElse(null);
         presentation.setFrontImg(img);
 
         PromptResponse<IndexTransfer> responseIndex = generateIndex(presentationPrompt, numSlides);
@@ -120,7 +121,9 @@ public class GenerationService {
                     maxWords, bulletPoints);
 
             String imagePrompt = "Inspirative beautiful photo about " + presentation.getTitle() + ", " + slideTitle;
-            img = imageService.getImage(imagePrompt, imgWidth, imgHeight).get();
+
+            // FIXME: Find another way of opt-out service image
+            img = imageService.getImage(imagePrompt, imgWidth, imgHeight).orElse(null);
 
             slides.add(new Slide(slideTitle, responseSlideText.response().getText(), (i + 1), img));
 

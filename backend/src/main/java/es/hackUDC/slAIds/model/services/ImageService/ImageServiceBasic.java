@@ -21,7 +21,7 @@ public class ImageServiceBasic implements ImageService {
 
             // TODO: find a propertly way to configure this in pptx
             // Use null to not render any image at all.
-            return Optional.of(null);
+            return Optional.empty();
         } catch (Exception e) {
             e.printStackTrace();
             return Optional.empty();
