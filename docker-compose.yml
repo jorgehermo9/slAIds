@@ -1,9 +1,12 @@
+version: '3.7'
 services:
   db:
     image: postgres
-    container_name: slides-database
+    container_name: slaids-database
     environment:
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: slaids_db
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U postgres" ]
       interval: 1s
@@ -16,12 +19,30 @@ services:
       db:
         condition: service_healthy
     build: backend/
-    image: slides/backend
-    container_name: slides-backend
+    image: slaids/backend
+    container_name: slaids-backend
+    environment:
+      DATABASE_HOST: db
+      DATABASE_PORT: 5432
+      DATABASE_NAME: slaids_db
+      DATABASE_USER: postgres
+      DATABASE_PASSWORD: postgres
+      CHAT_API_HOST: chatapi
+      CHAT_API_PORT: 8000
+      IMAGE_SERVICE: basic
+
+  chatapi:
+    build: backend/chatgpt_api/
+    image: slaids/chatgpt_api
+    container_name: slaids-chat-api
+    environment:
+      EMAIL: ${CHATGPT_EMAIL}
+      PASSWORD: ${CHATGPT_PASSWORD}
+      PORT: 8000
 
   frontend:
     build: frontend/
-    image: slides/frontend
-    container_name: slides-frontend
+    image: slaids/frontend
+    container_name: slaids-frontend
     ports:
       - 3000:3000

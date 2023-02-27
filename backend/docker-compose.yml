@@ -5,10 +5,11 @@ services:
     image: slaids/chatgpt_api
     container_name: chatgpt_api
     environment:
-      EMAIL: ${EMAIL}
-      PASSWORD: ${PASSWORD}
+      EMAIL: ${CHATGPT_EMAIL}
+      PASSWORD: ${CHATGPT_PASSWORD}
+      PORT: 8000
     ports:
-      - 8000:80
+      - 8000:8000
 
   postgres:
     image: postgres:12.2

@@ -8,7 +8,7 @@ export const Nav = () => {
 
   useEffect(() => {
     setToken(sessionStorage.getItem("serviceToken"));
-  }, [token]);
+  }, []);
 
   const handleClick = () => {
     sessionStorage.removeItem("serviceToken");

@@ -6,21 +6,13 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import es.hackUDC.slAIds.model.services.ChatService.PromptResponse.PromptResponseDto;
-
 import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Value;
 
 record PromptRequest<T>(String promptText, Class<T> targetClass, String conversationId,
         String parentId) {
-
-    @Value("${chat.api.host}")
-    private static String ChatAPIHost;
 
     public PromptRequest(String promptText, Class<T> targetClass) {
         this(promptText, targetClass, null, null);
@@ -63,16 +55,19 @@ record PromptRequest<T>(String promptText, Class<T> targetClass, String conversa
         }
     }
 
-    private static <T> Optional<PromptResponse<T>> executePostRequest(PromptRequest<T> request)
+    private static <T> Optional<PromptResponse<T>> executePostRequest(PromptRequest<T> request,
+            ChatServiceConfig chatServiceConfig)
             throws IOException, InterruptedException {
 
+        String endpoint = "http://" + chatServiceConfig.chatAPIHost() + "/chat";
+        System.out.println("Endpoint: " + endpoint);
         ObjectMapper mapper = new ObjectMapper();
         PromptRequestDto requestDto = new PromptRequestDto(request);
         String json = mapper.writeValueAsString(requestDto);
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest httpRequest = HttpRequest.newBuilder()
                 .version(HttpClient.Version.HTTP_1_1)
-                .uri(URI.create(ChatAPIHost + "/chat"))
+                .uri(URI.create(endpoint))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(json))
                 .build();
@@ -82,9 +77,9 @@ record PromptRequest<T>(String promptText, Class<T> targetClass, String conversa
         return PromptResponse.parse(responseDto, response.body(), request.targetClass);
     }
 
-    public Optional<PromptResponse<T>> execute() {
+    public Optional<PromptResponse<T>> execute(ChatServiceConfig chatServiceConfig) {
         try {
-            return executePostRequest(this);
+            return executePostRequest(this, chatServiceConfig);
         } catch (Exception e) {
             e.printStackTrace();
             return Optional.empty();

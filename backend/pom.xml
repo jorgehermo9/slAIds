@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>es.hackUDC</groupId>
 	<artifactId>slAIds</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>slAIds</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
@@ -85,6 +85,11 @@
 	</dependencies>
 
 	<build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

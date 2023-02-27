@@ -90,14 +90,4 @@ export default abstract class PresentationSerivce {
       .then((res) => res);
   }
 
-  static async getPresentationDownloadPdf(id): Promise<PresentationFile> {
-    return fetch(`/api/presentations/${id}/download/pdf`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${sessionStorage.getItem("serviceToken")}`,
-      },
-    })
-      .then((res) => res.blob())
-      .then((res) => res);
-  }
 }

@@ -6,7 +6,6 @@ import java.net.URI;
 import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -37,46 +36,43 @@ import es.hackUDC.slAIds.rest.dtos.UserDto;
 @RequestMapping("/users")
 public class UserController {
 
-    private final static String INCORRECT_LOGIN_EXCEPTION_CODE = "project.exceptions.IncorrectLoginException";
-    private final static String INCORRECT_PASSWORD_EXCEPTION_CODE = "project.exceptions.IncorrectPasswordException";
-
-    @Autowired
-    private MessageSource messageSource;
-
     @Autowired
     private JwtGenerator jwtGenerator;
 
     @Autowired
     private UserService userService;
 
+    @ExceptionHandler(InstanceNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseBody
+    public ErrorsDto handleIncorrectLoginException(InstanceNotFoundException exception) {
+
+        return new ErrorsDto("The user: " + exception.getKey() + " does not exist");
+
+    }
+
     @ExceptionHandler(IncorrectLoginException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ResponseBody
-    public ErrorsDto handleIncorrectLoginException(IncorrectLoginException exception, Locale locale) {
+    public ErrorsDto handleIncorrectLoginException(IncorrectLoginException exception) {
 
-        String errorMessage = messageSource.getMessage(INCORRECT_LOGIN_EXCEPTION_CODE, null,
-                INCORRECT_LOGIN_EXCEPTION_CODE, locale);
-
-        return new ErrorsDto(errorMessage);
+        return new ErrorsDto("Incorrect login");
 
     }
 
     @ExceptionHandler(IncorrectPasswordException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ResponseBody
-    public ErrorsDto handleIncorrectPasswordException(IncorrectPasswordException exception, Locale locale) {
+    public ErrorsDto handleIncorrectPasswordException(IncorrectPasswordException exception) {
 
-        String errorMessage = messageSource.getMessage(INCORRECT_PASSWORD_EXCEPTION_CODE, null,
-                INCORRECT_PASSWORD_EXCEPTION_CODE, locale);
-
-        return new ErrorsDto(errorMessage);
+        return new ErrorsDto("Incorrect password");
 
     }
 
     @ExceptionHandler(DuplicateInstanceException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ResponseBody
-    public ErrorsDto handleDuplicateInstanceException(DuplicateInstanceException exception, Locale locale) {
+    public ErrorsDto handleDuplicateInstanceException(DuplicateInstanceException exception) {
         return new ErrorsDto("The user: " + exception.getKey() + " already exists");
     }
 

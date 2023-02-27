@@ -15,70 +15,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 
-// @Configuration
-// @EnableWebSecurity
-// public class SecurityConfig {
-
-//   // @Bean
-//   // public AuthenticationManager
-//   // authenticationManager(AuthenticationConfiguration authConfig) throws
-//   // Exception {
-//   // final List<GlobalAuthenticationConfigurerAdapter> configurers = new
-//   // ArrayList<>();
-//   // configurers.add(new GlobalAuthenticationConfigurerAdapter() {
-//   // @Override
-//   // public void configure(AuthenticationManagerBuilder auth) throws Exception {
-//   // // auth.doSomething()
-//   // }
-//   // });
-//   // return authConfig.getAuthenticationManager();
-//   // }
-//   @Bean
-//   public AuthenticationManager authenticationManagerCustom(HttpSecurity http) throws Exception {
-//     return http.getSharedObject(AuthenticationManagerBuilder.class)
-//         .build();
-//   }
-
-//   @Bean
-//   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
-//     return http
-//         // other configuration options
-//         .authorizeHttpRequests(authCustomizer -> authCustomizer
-//             .requestMatchers(HttpMethod.POST, "/api/subscriptions").permitAll())
-//         .build();
-//   }
-
-//   @Autowired
-//   SecurityFilterChain securityFilterChain;
-
-//   protected void configure(HttpSecurity http) throws Exception {
-
-//     http.cors().and().csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-//         .addFilter(new JwtFilter(authenticationManagerCustom, jwtGenerator))
-//         // Authorize GET to /chat/prompt GET request with sprin 3.0 security
-//         .authorizeRequests().requestMatchers("/chat/prompt").permitAll();
-//   }
-
-//   @Bean
-//   public CorsConfigurationSource corsConfigurationSource() {
-
-//     CorsConfiguration config = new CorsConfiguration();
-//     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-
-//     config.setAllowCredentials(true);
-//     config.setAllowedOriginPatterns(Arrays.asList("*"));
-//     config.addAllowedHeader("*");
-//     config.addAllowedMethod("*");
-
-//     source.registerCorsConfiguration("/**", config);
-
-//     return source;
-
-//   }
-
-// }
-
 @Configuration
 public class SecurityConfig {
 
@@ -88,9 +24,6 @@ public class SecurityConfig {
         http.cors().and().csrf().disable()
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/users/**").permitAll()
-                        .requestMatchers("**/pptx").permitAll()
-                        .requestMatchers("**/pdf").permitAll()
-                        .requestMatchers("/chat/prompt").permitAll()
                         .requestMatchers(HttpMethod.POST, "/presentations/**").hasRole("USER")
                         .anyRequest().authenticated())
                 .apply(new MyCustomDsl());

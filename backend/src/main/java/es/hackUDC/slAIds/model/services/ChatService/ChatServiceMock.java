@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import es.hackUDC.slAIds.model.services.TransferObjects.IndexTransfer;
 import es.hackUDC.slAIds.model.services.TransferObjects.SlideText;
 
+// Mock class for testing purposes, to avoid calling the ChatGPT api and get blocked
 @Service
 public class ChatServiceMock {
 

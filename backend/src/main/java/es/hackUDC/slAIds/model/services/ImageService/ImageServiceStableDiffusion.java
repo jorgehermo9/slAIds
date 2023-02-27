@@ -8,6 +8,7 @@ import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -16,11 +17,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Service
 public class ImageServiceStableDiffusion implements ImageService {
 
+    @Autowired
+    private ImageServiceConfig imageServiceConfig;
+
     @Override
     public Optional<byte[]> getImage(String prompt, float width, float height) {
-        StableDiffusionRequest stableDiffusionRequest = new StableDiffusionRequest(prompt, 1, 1, 30, 7,width, height);
+        StableDiffusionRequest stableDiffusionRequest = new StableDiffusionRequest(prompt, 1, 1, 30, 7, width, height);
         try {
-            StableDiffusionResponse stableDiffusionResponse = stableDiffusionRequest.executePostRequest();
+            StableDiffusionResponse stableDiffusionResponse = stableDiffusionRequest
+                    .executePostRequest(imageServiceConfig);
 
             return Optional.of(stableDiffusionResponse.getImage());
         } catch (IOException | InterruptedException e) {
@@ -31,24 +36,24 @@ public class ImageServiceStableDiffusion implements ImageService {
 
 }
 
-record StableDiffusionRequest(String prompt, int batch_size, int n_iter, int steps, int cfg_scale,float width, float height) {
+record StableDiffusionRequest(String prompt, int batch_size, int n_iter, int steps, int cfg_scale, float width,
+        float height) {
 
-    private static final String STABLE_DIFFUSION_URL = "http://localhost:7860/sdapi/v1/txt2img";
-
-    public StableDiffusionResponse executePostRequest()
+    public StableDiffusionResponse executePostRequest(ImageServiceConfig imageServiceConfig)
             throws IOException, InterruptedException {
+
+        String endpoint = "http://" + imageServiceConfig.imageAPIHost() + "/sdapi/v1/txt2img";
 
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(this);
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest httpRequest = HttpRequest.newBuilder()
                 .version(HttpClient.Version.HTTP_1_1)
-                .uri(URI.create(STABLE_DIFFUSION_URL))
+                .uri(URI.create(endpoint))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(json))
                 .build();
 
-        System.out.println(json);
         HttpResponse<String> response = client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
         StableDiffusionResponse stableDiffusionResponse = mapper.readValue(response.body(),
                 StableDiffusionResponse.class);

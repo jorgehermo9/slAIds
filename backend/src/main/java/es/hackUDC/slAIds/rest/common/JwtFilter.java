@@ -34,6 +34,13 @@ public class JwtFilter extends BasicAuthenticationFilter {
 
         String authHeaderValue = request.getHeader(HttpHeaders.AUTHORIZATION);
 
+        if (authHeaderValue == null) {
+            authHeaderValue = request.getParameter("token");
+            if (authHeaderValue != null) {
+                authHeaderValue = "Bearer " + authHeaderValue;
+            }
+        }
+
         if (authHeaderValue == null || !authHeaderValue.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;

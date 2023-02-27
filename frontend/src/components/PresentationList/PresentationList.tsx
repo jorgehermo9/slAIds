@@ -40,12 +40,11 @@ export const PresentationList = () => {
       );
   }, [createErrorNotification]);
 
-  const handleClickDownloadButton = (id) => {
-    PresentationService.getPresentationDownloadPdf(id).then((res) => {
-      const file = URL.createObjectURL(res);
-      location.assign(file);
-    });
-  };
+  const [token, setToken] = useState<string | null>(null);
+  useEffect(() => {
+    setToken(sessionStorage.getItem("serviceToken"));
+  }, []);
+  
 
   return (
     <>
@@ -74,14 +73,18 @@ export const PresentationList = () => {
                   onClick={() => handleClickPreview(presentation)}
                   className={styles.itemIcon}
                 />
-                <button
-                  onClick={() => handleClickDownloadButton(presentation.id)}
+                <a
+                    href={`/api/presentations/${presentation.id}/download/pdf?token=${token}`}
+                    download={`${presentation.title}.pdf`}
                   className={`${styles.pdfButton} ${styles.downloadsButton}`}
                 >
                   <span>pdf</span>
                   <DownloadIcon />
-                </button>
-                <a className={`${styles.pptButton} ${styles.downloadsButton}`}>
+                </a>
+                <a 
+                 href={`/api/presentations/${presentation.id}/download/pptx?token=${token}`}
+                 download={`${presentation.title}.pdf`}
+                 className={`${styles.pptButton} ${styles.downloadsButton}`}>
                   <span>ppt</span>
                   <DownloadIcon />
                 </a>
