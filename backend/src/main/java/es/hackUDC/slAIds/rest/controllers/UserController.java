@@ -3,7 +3,6 @@ package es.hackUDC.slAIds.rest.controllers;
 import static es.hackUDC.slAIds.rest.dtos.UserConversor.toAuthenticatedUserDto;
 import static es.hackUDC.slAIds.rest.dtos.UserConversor.toUser;
 import java.net.URI;
-import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
