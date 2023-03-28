@@ -7,13 +7,8 @@ export const Nav = () => {
   const [token, setToken] = useState<string | null>(null);
   const router = useRouter();
 
-  useEffect(() => {
-    setToken(sessionStorage.getItem("serviceToken"));
-  }, [router]);
-
-  const handleClick = () => {
-    sessionStorage.removeItem("serviceToken");
-  };
+  const handleLogOut = () => sessionStorage.removeItem("serviceToken");
+  useEffect(() => setToken(sessionStorage.getItem("serviceToken")), [router]);
 
   return (
     <nav className={styles.navbar}>
@@ -24,10 +19,19 @@ export const Nav = () => {
       <div className={styles.buttonsWrapper}>
         {token && (
           <>
-            <Link className={styles.buttonLogin} href="/" onClick={handleClick}>
+            <Link
+              className={styles.buttonLogin}
+              href="/"
+              onClick={handleLogOut}
+              rel="noopener noreferrer"
+            >
               Log out
             </Link>
-            <Link className={styles.buttonLogin} href="/slides">
+            <Link
+              className={styles.buttonLogin}
+              href="/slides"
+              rel="noopener noreferrer"
+            >
               My slides
             </Link>
           </>

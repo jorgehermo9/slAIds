@@ -18,6 +18,25 @@ import PresentationRequest, {
 } from "@/entities/PresentationRequest";
 import { useRouter } from "next/router";
 
+const properties = [
+  {
+    label: "Prompt",
+    icon: <NotesIcon />,
+  },
+  {
+    label: "Style",
+    icon: <ColorLensIcon />,
+  },
+  {
+    label: "Options",
+    icon: <SettingsRoundedIcon />,
+  },
+  {
+    label: "Generate",
+    icon: <DoneRoundedIcon />,
+  },
+];
+
 export default function Home() {
   const [presentationRequest, setPresentationRequest] =
     useState<PresentationRequest>(getDefaultPresentationRequest());
@@ -31,25 +50,6 @@ export default function Home() {
       router.push("/");
     }
   }, [router]);
-
-  const properties = [
-    {
-      label: "Prompt",
-      icon: <NotesIcon />,
-    },
-    {
-      label: "Style",
-      icon: <ColorLensIcon />,
-    },
-    {
-      label: "Options",
-      icon: <SettingsRoundedIcon />,
-    },
-    {
-      label: "Generate",
-      icon: <DoneRoundedIcon />,
-    },
-  ];
 
   return (
     <>
