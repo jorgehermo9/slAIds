@@ -1,13 +1,16 @@
 import { Nav } from "@/components/Nav/Nav";
+import { Title } from "@/components/Title/Title";
 import UserService from "@/services/UserService";
 import { Router, useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import styles from "../styles/login.module.scss";
 
 export default function Signup() {
-  const [userName, setUserName] = useState("");
-  const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
+  const [userSingupRequest, setUserSingupRequest] = useState({
+    userName: "",
+    password: "",
+    email: "",
+  });
   const [tokenSetter, setTokenSetter] = useState("");
   const router = useRouter();
 
@@ -23,14 +26,9 @@ export default function Signup() {
     }
   }, [tokenSetter]);
 
-  const handleSubmit = () => {
-    const user = {
-      userName,
-      password,
-      email,
-    };
-
-    UserService.signup(user).then((res) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    UserService.signup(userSingupRequest).then((res) => {
       setTokenSetter(res);
       router.push("/");
     });
@@ -39,20 +37,27 @@ export default function Signup() {
   return (
     <>
       <div className={styles.cardContainer}>
-        <div className={styles.card}>
+        <Title />
+
+        <form className={styles.card} onSubmit={handleSubmit}>
+          <h2 className={styles.formTitle}>Signup</h2>
+
           <div className={styles.formField}>
             <label htmlFor="usernameInput" className={styles.title}>
               Username
             </label>
             <input
-              value={userName}
+              value={userSingupRequest.userName}
               type="text"
               id="usernameInput"
               className={styles.input}
               placeholder="user12"
-              onChange={(e) => {
-                setUserName(e.target.value);
-              }}
+              onChange={(e) =>
+                setUserSingupRequest({
+                  ...userSingupRequest,
+                  userName: e.target.value,
+                })
+              }
             />
           </div>
           <div className={styles.formField}>
@@ -60,36 +65,43 @@ export default function Signup() {
               Password
             </label>
             <input
-              value={password}
+              value={userSingupRequest.password}
               type="password"
               id="passwordInput"
               className={styles.input}
               placeholder="%der351"
               onChange={(e) => {
-                setPassword(e.target.value);
+                setUserSingupRequest({
+                  ...userSingupRequest,
+                  password: e.target.value,
+                });
               }}
             />
           </div>
+
           <div className={styles.formField}>
             <label htmlFor="emailInput" className={styles.title}>
               E-mail
             </label>
             <input
-              value={email}
+              value={userSingupRequest.email}
               type="text"
               id="emailInput"
               className={styles.input}
               placeholder="user12@gmail.com"
               onChange={(e) => {
-                setEmail(e.target.value);
+                setUserSingupRequest({
+                  ...userSingupRequest,
+                  email: e.target.value,
+                });
               }}
             />
           </div>
 
-          <button className={styles.button} onClick={handleSubmit}>
+          <button type="submit" className={styles.button}>
             Create account
           </button>
-        </div>
+        </form>
       </div>
     </>
   );

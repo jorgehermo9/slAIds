@@ -1,50 +1,43 @@
-import { Nav } from "@/components/Nav/Nav";
 import styles from "./styles/login.module.scss";
 import Head from "next/head";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import Home from "./create";
+import { FormEvent, useEffect, useState } from "react";
 import UserService from "@/services/UserService";
 import { useRouter } from "next/router";
+import { Title } from "@/components/Title/Title";
 
 export default function Login() {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
-  const [token, setToken] = useState("");
   const router = useRouter();
 
   useEffect(() => {
-    if (sessionStorage.getItem("serviceToken") !== null) {
+    if (sessionStorage.getItem("serviceToken")) {
       router.push("/create");
     }
   }, [router]);
 
-  useEffect(() => {
-    if (token !== "") {
-      sessionStorage.setItem("serviceToken", token);
-    }
-  }, [token]);
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-  const handleClick = () => {
     const user = {
       userName,
       password,
     };
     UserService.login(user).then((res) => {
-      setToken(res);
-      router.push("/");
+      sessionStorage.setItem("serviceToken", res);
+      router.push("/create");
     });
   };
 
   return (
     <>
-      <Head>
-        <title>slAIds</title>
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-      </Head>
-
       <div className={styles.cardContainer}>
-        <div className={styles.card}>
+        <Title />
+
+        <form className={styles.card} onSubmit={handleSubmit}>
+          <h2 className={styles.formTitle}>Login</h2>
+
           <div className={styles.formField}>
             <label htmlFor="usernameInput" className={styles.title}>
               Username
@@ -75,7 +68,7 @@ export default function Login() {
               }}
             />
           </div>
-          <button className={styles.button} onClick={handleClick}>
+          <button type="submit" className={styles.button}>
             Log in
           </button>
           <div className={styles.linkWrapper}>
@@ -83,7 +76,7 @@ export default function Login() {
               Don&apos;t have an account?
             </Link>
           </div>
-        </div>
+        </form>
       </div>
     </>
   );

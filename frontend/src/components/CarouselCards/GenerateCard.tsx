@@ -62,27 +62,11 @@ export const GenerateCard = ({
     <div className={styles.cardContainer}>
       <button className={styles.generateButton} onClick={handleClick}>
         <span>Generate</span>
-        <AnimatePresence>
-          {isGenerating ? (
-            <motion.div
-              transition={{ duration: 0.3 }}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-            >
-              <CircularProgress className={styles.spinner} />
-            </motion.div>
-          ) : (
-            <motion.div
-              transition={{ duration: 0.3 }}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-            >
-              <SendRoundedIcon className={styles.icon} />
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {isGenerating ? (
+          <CircularProgress className={styles.spinner} />
+        ) : (
+          <SendRoundedIcon className={styles.icon} />
+        )}
       </button>
     </div>
   );

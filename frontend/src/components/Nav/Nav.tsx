@@ -1,42 +1,35 @@
 import React, { useEffect, useState } from "react";
-import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import styles from "./nav.module.scss";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 export const Nav = () => {
   const [token, setToken] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     setToken(sessionStorage.getItem("serviceToken"));
-  }, []);
+  }, [router]);
 
   const handleClick = () => {
     sessionStorage.removeItem("serviceToken");
-    setToken(null);
   };
 
   return (
     <nav className={styles.navbar}>
-      <div>
-        <AccountCircleRoundedIcon className={styles.user} />
-      </div>
+      <span className={styles.logo} onClick={() => router.push("/create")}>
+        slAIds
+      </span>
+
       <div className={styles.buttonsWrapper}>
-        {!token && (
-          <Link className={styles.buttonLogin} href="/">
-            Login
-          </Link>
-        )}
-        {!token && (
-          <Link className={styles.buttonSignup} href="/signup">
-            Sign Up
-          </Link>
-        )}
         {token && (
           <>
             <Link className={styles.buttonLogin} href="/" onClick={handleClick}>
               Log out
             </Link>
-            <Link className={styles.buttonLogin} href="/slides">My slides</Link>
+            <Link className={styles.buttonLogin} href="/slides">
+              My slides
+            </Link>
           </>
         )}
       </div>

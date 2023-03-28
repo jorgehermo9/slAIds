@@ -5,7 +5,7 @@ import { OptionsCard } from "@/components/CarouselCards/OptionsCard";
 import { GenerateCard } from "@/components/CarouselCards/GenerateCard";
 
 import { useEffect, useState } from "react";
-import styles from "../styles/home.module.scss";
+import styles from "../styles/create.module.scss";
 import NotesIcon from "@mui/icons-material/Notes";
 import ColorLensIcon from "@mui/icons-material/ColorLens";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
@@ -13,7 +13,6 @@ import DoneRoundedIcon from "@mui/icons-material/DoneRounded";
 import PresentationFile from "@/entities/PresentationFile";
 import { Preview } from "@/components/Preview/Preview";
 import { AnimatePresence } from "framer-motion";
-import NotificationManager from "@/components/NotificationManager/NotificationManager";
 import PresentationRequest, {
   getDefaultPresentationRequest,
 } from "@/entities/PresentationRequest";
@@ -27,11 +26,11 @@ export default function Home() {
     useState<PresentationFile | null>(null);
   const router = useRouter();
 
-  // useEffect(() => {
-  //   if (sessionStorage.getItem("presentationRequest") === null) {
-  //     router.push("/");
-  //   }
-  // }, [router]);
+  useEffect(() => {
+    if (!sessionStorage.getItem("serviceToken")) {
+      router.push("/");
+    }
+  }, [router]);
 
   const properties = [
     {
