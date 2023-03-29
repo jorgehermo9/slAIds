@@ -101,8 +101,10 @@ public class GenerationService {
         presentation.setTitle(presentationTitle);
         presentation.setDescriptionPrompt(presentationPrompt);
 
+        String frontImagePrompt = "Inspirative beautiful photo about " + presentation.getTitle();
+
         // FIXME: Find another way of opt-out service image
-        img = imageService.getImage(presentationPrompt, imgWidth, imgHeight).orElse(null);
+        img = imageService.getImage(frontImagePrompt, imgWidth, imgHeight).orElse(null);
         presentation.setFrontImg(img);
 
         String systemInitialization = "Your are an assistant that generates text for slides presentations about "
@@ -126,7 +128,9 @@ public class GenerationService {
             responseSlideText = generateSlide(chat, slideTitle, slideDescription, minWords,
                     maxWords, bulletPoints);
 
-            String imagePrompt = "Inspirative beautiful photo about " + presentation.getTitle() + ", " + slideTitle;
+            // String imagePrompt = "Inspirative beautiful photo about " +
+            // presentation.getTitle() + ", " + slideTitle;
+            String imagePrompt = "Inspirative beautiful photo about " + presentation.getTitle();
 
             // FIXME: Find another way of opt-out service image
             img = imageService.getImage(imagePrompt, imgWidth, imgHeight).orElse(null);
