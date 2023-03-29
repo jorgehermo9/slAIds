@@ -103,7 +103,7 @@ public class GenerationService {
 
         String frontImagePrompt = "Inspirative beautiful photo about " + presentation.getTitle();
 
-        // FIXME: Find another way of opt-out service image
+        // FIXME: Find another way of opt-out service image instead of null and return
         img = imageService.getImage(frontImagePrompt, imgWidth, imgHeight).orElse(null);
         presentation.setFrontImg(img);
 

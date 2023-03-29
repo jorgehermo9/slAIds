@@ -39,7 +39,7 @@ public class BuildPptService {
         XSLFTextShape contentShape;
         XSLFPictureShape picture;
         XSLFPictureData pictureData;
-
+        Rectangle2D.Float rect;
         XSLFSlideMaster defaultMaster = ppt.getSlideMasters().get(0);
 
         XSLFSlideLayout frontPageLayout = defaultMaster.getLayout(SlideLayout.TITLE_ONLY);
@@ -47,6 +47,14 @@ public class BuildPptService {
         titleShape = slide.getPlaceholder(0);
 
         titleShape.setText(presentation.getTitle()).setFontSize(60.0);
+
+        if (presentation.getFrontImg() != null) {
+            pictureData = ppt.addPicture(presentation.getFrontImg(), PictureData.PictureType.PNG);
+            picture = slide.createPicture(pictureData);
+            rect = new Rectangle2D.Float(360 - (imgWidth / 2), 540 - imgHeight - 10, imgWidth,
+                    imgHeight);
+            picture.setAnchor(rect);
+        }
 
         // Create index slide
         XSLFSlideLayout indexLayout = defaultMaster.getLayout(SlideLayout.TITLE_AND_CONTENT);
@@ -73,7 +81,7 @@ public class BuildPptService {
                 continue;
             pictureData = ppt.addPicture(slideImage, PictureData.PictureType.PNG);
             picture = slide.createPicture(pictureData);
-            Rectangle2D.Float rect = new Rectangle2D.Float(360 - (imgWidth / 2), 540 - imgHeight - 10, imgWidth,
+            rect = new Rectangle2D.Float(360 - (imgWidth / 2), 540 - imgHeight - 10, imgWidth,
                     imgHeight);
             picture.setAnchor(rect);
         }
