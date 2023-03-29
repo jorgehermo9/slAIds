@@ -31,15 +31,6 @@ services:
       CHAT_API_PORT: 8000
       IMAGE_SERVICE: basic
 
-  slaids-chat-api:
-    build: backend/chatgpt_api/
-    image: slaids/chatgpt_api
-    container_name: slaids-chat-api
-    environment:
-      EMAIL: ${CHATGPT_EMAIL}
-      PASSWORD: ${CHATGPT_PASSWORD}
-      PORT: 8000
-
   slaids-frontend:
     build: frontend/
     image: slaids/frontend
