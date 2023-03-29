@@ -83,6 +83,9 @@ public class GenerationController {
 
         Presentation presentation = new Presentation();
         presentation.setModelUser(modelUser.get());
+        presentation.setIsAvailable(false);
+        presentation.setTitle(generationRequestDto.title());
+
         presentationDao.save(presentation);
 
         // Start a new thread to generate the presentation asynchronously
@@ -203,7 +206,6 @@ public class GenerationController {
             throws IOException, InstanceNotFoundException {
 
         List<Presentation> presentationList = presentationDao.findByModelUserId(userId);
-
         return PresentationConversor.toPresentationDtoList(presentationList);
     }
 }

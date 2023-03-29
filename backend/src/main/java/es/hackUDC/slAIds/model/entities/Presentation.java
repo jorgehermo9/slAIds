@@ -36,7 +36,7 @@ public class Presentation {
 
     private byte[] frontImg;
 
-    private Boolean isAvailable = false;
+    private Boolean isAvailable;
 
     private byte[] pptx;
 

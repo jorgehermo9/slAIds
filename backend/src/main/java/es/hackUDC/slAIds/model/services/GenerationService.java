@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,8 +13,8 @@ import es.hackUDC.slAIds.model.entities.Index;
 import es.hackUDC.slAIds.model.entities.Presentation;
 import es.hackUDC.slAIds.model.entities.PresentationDao;
 import es.hackUDC.slAIds.model.entities.Slide;
+import es.hackUDC.slAIds.model.services.ChatService.Chat;
 import es.hackUDC.slAIds.model.services.ChatService.ChatService;
-import es.hackUDC.slAIds.model.services.ChatService.PromptResponse;
 import es.hackUDC.slAIds.model.services.ImageService.ImageServiceImpl;
 import es.hackUDC.slAIds.model.services.TransferObjects.IndexTransfer;
 import es.hackUDC.slAIds.model.services.TransferObjects.SlideText;
@@ -21,6 +22,9 @@ import es.hackUDC.slAIds.model.services.TransferObjects.SlideText;
 @Service
 @Transactional
 public class GenerationService {
+
+    @Autowired
+    Environment env;
 
     @Autowired
     private ChatService chatService;
@@ -32,48 +36,44 @@ public class GenerationService {
     @Autowired
     private PresentationDao presentationDao;
 
-    public PromptResponse<IndexTransfer> generateIndex(String indexPrompt, int numSlides) {
+    public IndexTransfer generateIndex(Chat chat, String indexPrompt, int numSlides) {
 
-        String requestIndexPrompt = "Generate an index for a presentations about "
+        String requestIndexPrompt = "Generate an index for a presentation about "
                 + indexPrompt
                 + " of length "
                 + numSlides
                 + " pages.";
 
-        Optional<PromptResponse<IndexTransfer>> optIndex = chatService.execute(requestIndexPrompt, IndexTransfer.class);
+        Optional<IndexTransfer> index = chatService.execute(chat, requestIndexPrompt, IndexTransfer.class);
 
-        PromptResponse<IndexTransfer> index = optIndex.get();
-
-        return index;
+        return index.get();
 
     }
 
-    public PromptResponse<SlideText> generateSlide(String slideTitle, String slidePrompt, String conversationId,
-            String parentId, int minWords, int maxWords, boolean bulletPoints) {
+    public SlideText generateSlide(Chat chat, String slideTitle, String slidePrompt, int minWords, int maxWords,
+            boolean bulletPoints) {
 
         if (bulletPoints) {
-            return generateSlideBullets(slideTitle, slidePrompt, conversationId, parentId, minWords, maxWords);
+            return generateSlideBullets(chat, slideTitle, slidePrompt, minWords, maxWords);
         } else {
-            return generateSlideText(slideTitle, slidePrompt, conversationId, parentId, minWords, maxWords);
+            return generateSlideText(chat, slideTitle, slidePrompt, minWords, maxWords);
         }
 
     }
 
-    public PromptResponse<SlideText> generateSlideText(String slideTitle, String slidePrompt, String conversationId,
-            String parentId, int minWords, int maxWords) {
+    public SlideText generateSlideText(Chat chat, String slideTitle, String slidePrompt, int minWords, int maxWords) {
 
         String requestSlidePrompt = "Generate an informative, condensed, direct, without repeating information "
                 + "already given in this conversation, paragraph, between "
                 + minWords + " and " + maxWords + " words,"
                 + " with the title \"" + slideTitle + "\" about: " + slidePrompt + ".";
 
-        return (chatService.executeWithConversation(requestSlidePrompt, SlideText.class, conversationId, parentId)
-                .get());
-
+        Optional<SlideText> slide = chatService.execute(chat, requestSlidePrompt, SlideText.class);
+        return slide.get();
     }
 
-    public PromptResponse<SlideText> generateSlideBullets(String slideTitle, String slidePrompt, String conversationId,
-            String parentId, int minWords, int maxWords) {
+    public SlideText generateSlideBullets(Chat chat, String slideTitle, String slidePrompt, int minWords,
+            int maxWords) {
 
         String requestSlidePrompt = "Generate between 3 and 5 informative, condense, direct, sentences,"
                 + "without reapeating any information already given in this conversation, with the title \""
@@ -81,8 +81,8 @@ public class GenerationService {
                 + " each sentence by a newline. The total length of the text must be between "
                 + minWords + " and " + maxWords + " words.";
 
-        return (chatService.executeWithConversation(requestSlidePrompt, SlideText.class, conversationId, parentId)
-                .get());
+        Optional<SlideText> slide = chatService.execute(chat, requestSlidePrompt, SlideText.class);
+        return slide.get();
 
     }
 
@@ -91,8 +91,6 @@ public class GenerationService {
             Presentation presentation) {
 
         // Presentation presentation = new Presentation();
-        String parentId;
-        String conversationId;
         byte[] img = null;
 
         presentation.setTitle(presentationTitle);
@@ -102,22 +100,26 @@ public class GenerationService {
         img = imageService.getImage(presentationPrompt, imgWidth, imgHeight).orElse(null);
         presentation.setFrontImg(img);
 
-        PromptResponse<IndexTransfer> responseIndex = generateIndex(presentationPrompt, numSlides);
+        String systemInitialization = "Your are an assistant that generates text for slides presentations about "
+                + "the topic the user provides. Also, you must respond always in a JSON format. The text of " +
+                "the slides must not start with 'This slide...' or similar.";
+        String API_KEY = env.getProperty("openai.api.key");
+        Chat chat = new Chat(systemInitialization, API_KEY);
+
+        IndexTransfer responseIndex = generateIndex(chat, presentationPrompt, numSlides);
 
         presentation.setIndex(
-                new Index(responseIndex.response().getSlideTitles(), responseIndex.response().getSlideDescriptions()));
-        parentId = responseIndex.parentId();
-        conversationId = responseIndex.conversationId();
+                new Index(responseIndex.getSlideTitles(), responseIndex.getSlideDescriptions()));
 
         List<Slide> slides = new ArrayList<Slide>();
-        PromptResponse<SlideText> responseSlideText;
+        SlideText responseSlideText;
 
         for (int i = 0; i < numSlides; i++) {
 
             String slideTitle = presentation.getIndex().getSlideTitles().get(i);
             String slideDescription = presentation.getIndex().getSlideDescriptions().get(i);
 
-            responseSlideText = generateSlide(slideTitle, slideDescription, conversationId, parentId, minWords,
+            responseSlideText = generateSlide(chat, slideTitle, slideDescription, minWords,
                     maxWords, bulletPoints);
 
             String imagePrompt = "Inspirative beautiful photo about " + presentation.getTitle() + ", " + slideTitle;
@@ -125,10 +127,7 @@ public class GenerationService {
             // FIXME: Find another way of opt-out service image
             img = imageService.getImage(imagePrompt, imgWidth, imgHeight).orElse(null);
 
-            slides.add(new Slide(slideTitle, responseSlideText.response().getText(), (i + 1), img));
-
-            parentId = responseSlideText.parentId();
-            conversationId = responseSlideText.conversationId();
+            slides.add(new Slide(slideTitle, responseSlideText.getText(), (i + 1), img));
         }
 
         presentation.setSlides(slides);
