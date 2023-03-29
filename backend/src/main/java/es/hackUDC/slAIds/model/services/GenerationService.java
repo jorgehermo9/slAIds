@@ -130,7 +130,7 @@ public class GenerationService {
 
             // String imagePrompt = "Inspirative beautiful photo about " +
             // presentation.getTitle() + ", " + slideTitle;
-            String imagePrompt = "Inspirative beautiful photo about " + presentation.getTitle();
+            String imagePrompt = "Inspirative beautiful photo about " + presentation.getTitle() + ", " + slideTitle;
 
             // FIXME: Find another way of opt-out service image
             img = imageService.getImage(imagePrompt, imgWidth, imgHeight).orElse(null);

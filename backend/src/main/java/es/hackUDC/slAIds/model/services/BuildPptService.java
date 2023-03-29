@@ -49,10 +49,12 @@ public class BuildPptService {
         titleShape.setText(presentation.getTitle()).setFontSize(60.0);
 
         if (presentation.getFrontImg() != null) {
+            float frontImgWidth = imgWidth * 1.5f;
+            float frontImgHeight = imgHeight * 1.5f;
             pictureData = ppt.addPicture(presentation.getFrontImg(), PictureData.PictureType.PNG);
             picture = slide.createPicture(pictureData);
-            rect = new Rectangle2D.Float(360 - (imgWidth / 2), 540 - imgHeight - 10, imgWidth,
-                    imgHeight);
+            rect = new Rectangle2D.Float(360 - (frontImgWidth / 2), 540 - frontImgHeight - 10, frontImgWidth,
+                    frontImgHeight);
             picture.setAnchor(rect);
         }
 
