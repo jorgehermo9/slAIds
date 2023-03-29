@@ -22,6 +22,7 @@ public class ImageServiceStableDiffusion implements ImageService {
 
     @Override
     public Optional<byte[]> getImage(String prompt, float width, float height) {
+        System.out.println("Querying StableDiffusion for prompt: " + prompt);
         StableDiffusionRequest stableDiffusionRequest = new StableDiffusionRequest(prompt, 1, 1, 30, 7, width, height);
         try {
             StableDiffusionResponse stableDiffusionResponse = stableDiffusionRequest

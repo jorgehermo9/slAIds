@@ -38,4 +38,16 @@ record PromptRequest<T>(String promptText, Class<T> targetClass) {
             return Optional.empty();
         }
     }
+
+    public Optional<T> executeTemporary(Chat chat) {
+        try {
+            String promptTextWithJson = promptText + "\n" + generateJsonPromptText(targetClass);
+            String response = chat.processTemporaryPrompt(promptTextWithJson);
+            T targetObject = new ObjectMapper().readValue(response, targetClass);
+            return Optional.of(targetObject);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Optional.empty();
+        }
+    }
 }

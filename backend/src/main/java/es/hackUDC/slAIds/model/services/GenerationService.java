@@ -38,13 +38,15 @@ public class GenerationService {
 
     public IndexTransfer generateIndex(Chat chat, String indexPrompt, int numSlides) {
 
-        String requestIndexPrompt = "Generate an index for a presentation about "
+        String requestIndexPrompt = "Generate an index for a presentation about \""
                 + indexPrompt
-                + " of length "
+                + "\" of length "
                 + numSlides
-                + " pages.";
+                + " pages. The text of each slide description must not start with \"This slide...\" or similar.";
 
-        Optional<IndexTransfer> index = chatService.execute(chat, requestIndexPrompt, IndexTransfer.class);
+        // TODO: execute or executeTemporary here? With temporary cost is almost a half,
+        // but maybe the prompt is not as good...
+        Optional<IndexTransfer> index = chatService.executeTemporary(chat, requestIndexPrompt, IndexTransfer.class);
 
         return index.get();
 
@@ -63,25 +65,28 @@ public class GenerationService {
 
     public SlideText generateSlideText(Chat chat, String slideTitle, String slidePrompt, int minWords, int maxWords) {
 
-        String requestSlidePrompt = "Generate an informative, condensed, direct, without repeating information "
-                + "already given in this conversation, paragraph, between "
+        String requestSlidePrompt = "Generate an informative, condensed, direct paragraph for a presentation slide, between "
                 + minWords + " and " + maxWords + " words,"
-                + " with the title \"" + slideTitle + "\" about: " + slidePrompt + ".";
+                + " with the title \"" + slideTitle + "\" about: \"" + slidePrompt + "\"."
+                + "Assume the previous slides shown in the index are already generated."
+                + "The text of the slide must not start with \"This slide...\" or similar.";
 
-        Optional<SlideText> slide = chatService.execute(chat, requestSlidePrompt, SlideText.class);
+        Optional<SlideText> slide = chatService.executeTemporary(chat, requestSlidePrompt, SlideText.class);
         return slide.get();
     }
 
     public SlideText generateSlideBullets(Chat chat, String slideTitle, String slidePrompt, int minWords,
             int maxWords) {
 
-        String requestSlidePrompt = "Generate between 3 and 5 informative, condense, direct, sentences,"
-                + "without reapeating any information already given in this conversation, with the title \""
-                + slideTitle + "\" and about: " + slidePrompt + ". In the text separate"
-                + " each sentence by a newline. The total length of the text must be between "
-                + minWords + " and " + maxWords + " words.";
+        String requestSlidePrompt = "Generate between 3 and 5 informative, condense, direct sentences "
+                + "for a presentation slide, with the title \""
+                + slideTitle + "\" about: \"" + slidePrompt + "\". In the text separate "
+                + "each sentence by a newline. The total length of the text must be between "
+                + minWords + " and " + maxWords + " words."
+                + "Assume the previous slides shown in the index are already generated."
+                + "The text of the slide must not start with \"This slide...\" or similar.";
 
-        Optional<SlideText> slide = chatService.execute(chat, requestSlidePrompt, SlideText.class);
+        Optional<SlideText> slide = chatService.executeTemporary(chat, requestSlidePrompt, SlideText.class);
         return slide.get();
 
     }
@@ -101,8 +106,7 @@ public class GenerationService {
         presentation.setFrontImg(img);
 
         String systemInitialization = "Your are an assistant that generates text for slides presentations about "
-                + "the topic the user provides. Also, you must respond always in a JSON format. The text of " +
-                "the slides must not start with 'This slide...' or similar.";
+                + "the topic the user provides. Also, you must respond always in a JSON format";
         String API_KEY = env.getProperty("openai.api.key");
         Chat chat = new Chat(systemInitialization, API_KEY);
 
@@ -131,6 +135,8 @@ public class GenerationService {
         }
 
         presentation.setSlides(slides);
+
+        System.out.println("Total token usage: " + chat.getTotalUsage());
 
         return presentation;
     }

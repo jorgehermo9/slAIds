@@ -12,4 +12,10 @@ public class ChatService {
         PromptRequest<T> request = new PromptRequest<T>(prompt, targetClass);
         return request.execute(chat);
     }
+
+    public <T> Optional<T> executeTemporary(Chat chat, String prompt, Class<T> targetClass) {
+
+        PromptRequest<T> request = new PromptRequest<T>(prompt, targetClass);
+        return request.executeTemporary(chat);
+    }
 }

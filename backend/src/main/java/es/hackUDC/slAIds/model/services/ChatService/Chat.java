@@ -22,13 +22,21 @@ public class Chat {
         this.API_KEY = API_KEY;
     }
 
-    // TODO: use a process prompt method that does not prepend to the message
-    // history,
-    // so not all messages are sent in the context and tokens are not wasted
-    // (moneymoney)
     public String processPrompt(String prompt) {
-        message_history.add(new Message("user", prompt));
+        Message assistantResponse = doProcessPrompt(prompt);
+        return assistantResponse.content();
+    }
 
+    public String processTemporaryPrompt(String prompt) {
+        Message assistantResponse = doProcessPrompt(prompt);
+        // Remove the last two messages from the history
+        message_history.remove(message_history.size() - 1);
+        message_history.remove(message_history.size() - 1);
+        return assistantResponse.content();
+    }
+
+    private Message doProcessPrompt(String prompt) {
+        message_history.add(new Message("user", prompt));
         System.out.println("User: " + prompt);
         ChatGPTRequest request = new ChatGPTRequest("gpt-3.5-turbo", message_history, 0.7f);
         ChatGPTResponse response = getResponse(request);
@@ -37,7 +45,7 @@ public class Chat {
         System.out.println("Usage: " + response.usage().totalTokens() + " tokens");
         totalUsage += response.usage().totalTokens();
         message_history.add(assistantResponse);
-        return assistantResponse.content();
+        return assistantResponse;
     }
 
     private ChatGPTResponse getResponse(ChatGPTRequest request) {

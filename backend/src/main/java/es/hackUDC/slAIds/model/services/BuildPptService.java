@@ -6,6 +6,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 import org.apache.poi.sl.usermodel.PictureData;
+import org.apache.poi.sl.usermodel.TextShape.TextAutofit;
 import org.apache.poi.xslf.usermodel.SlideLayout;
 import org.apache.poi.xslf.usermodel.XMLSlideShow;
 import org.apache.poi.xslf.usermodel.XSLFPictureData;
@@ -59,8 +60,7 @@ public class BuildPptService {
             indexText.append(slideTitle).append("\n");
         }
         indexText.append("\n");
-        contentShape.setText(indexText.toString()).setFontSize(20.0);
-
+        contentShape.setText(indexText.toString());
         XSLFSlideLayout slidesLayout = defaultMaster.getLayout(SlideLayout.TITLE_AND_CONTENT);
         for (Slide modelSlide : presentation.getSlides()) {
             slide = ppt.createSlide(slidesLayout);
