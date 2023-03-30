@@ -46,7 +46,7 @@ public class GenerationService {
 
         // TODO: execute or executeTemporary here? With temporary cost is almost a half,
         // but maybe the prompt is not as good...
-        Optional<IndexTransfer> index = chatService.executeTemporary(chat, requestIndexPrompt, IndexTransfer.class);
+        Optional<IndexTransfer> index = chatService.execute(chat, requestIndexPrompt, IndexTransfer.class);
 
         return index.get();
 
